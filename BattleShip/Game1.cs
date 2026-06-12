@@ -8,7 +8,7 @@ using BattleShip.Features.GameOption;
 using BattleShip.GameData;
 namespace BattleShip;
 
-
+//Test if Second Pc sees it
 public class Game1 : Core
 {
 
