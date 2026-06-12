@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas>
+    <Texture>images/blueCross</Texture>
+    <Regions>
+     <Region name="blueCross" x="0" y="0" width ="80" height="80"/>
+    </Regions>
+    <Animations>
+    </Animations>
+</TextureAtlas>

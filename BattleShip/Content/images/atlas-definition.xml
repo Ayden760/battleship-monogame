@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas>
+    <Texture>images/yellowCross</Texture>
+    <Regions>
+     <Region name="yellowCross" x="0" y="0" width ="80" height="80"/>
+    </Regions>
+    <Animations>
+        
+    </Animations>
+</TextureAtlas>
