@@ -14,49 +14,44 @@ public class CreateShipsController
         ShipSetter.CheckAllSet();
 
 
-        //all inside comment for testing
 
 
 
-        //need to implement that when ai has no more space but more ships to place it will delete all ships and start over
-        AiShipSetter.SetAiShips();
-        Data.Ship.Ai.ShipsSet = true;
-
-        /*
-         if (!Data.Ship.Player1.ShipsSet)
-         {
-             Data.Ship.CurrentPlayer = Data.Ship.Player1;
-             Check_User_Input();
-         }
-         else if (Data.Ship.Player2 != null)
-         {
-             if (!Data.Ship.Player2.ShipsSet)
-             {
-                 Data.Ship.CurrentPlayer = Data.Ship.Player2;
-                 Check_User_Input();
-             }
-             else
-             {
-                 ShouldSwitchToGameScene = true;
-             }
+        if (!Data.Ship.Player1.ShipsSet)
+        {
+            Data.Ship.CurrentPlayer = Data.Ship.Player1;
+            Check_User_Input();
+        }
+        else if (Data.Ship.Player2 != null)
+        {
+            if (!Data.Ship.Player2.ShipsSet)
+            {
+                Data.Ship.CurrentPlayer = Data.Ship.Player2;
+                Check_User_Input();
+            }
+            else
+            {
+                ShouldSwitchToGameScene = true;
+            }
 
 
-         }
-         else if (Data.Settings.Ai_Mode)
-         {
-             //create Ai fields
-             if (!Data.Ship.Ai.ShipsSet)
-             {
-                 AiShipSetter.SetAiShips();
-                 Data.Ship.Ai.ShipsSet = true;
-             }
-             else
-             {
-                 ShouldSwitchToGameScene = true;
-             }
+        }
+        else if (Data.Settings.Ai_Mode)
+        {
+            //create Ai fields
+            if (!Data.Ship.Ai.ShipsSet)
+            {
+                AiShipSetter.SetAiShips();
+                Data.Ship.Ai.ShipsSet = true;
+            }
+            else
+            {
+                ShouldSwitchToGameScene = true;
+            }
 
-             // set ships for the AI via a function that randomly places all the ships and uses the already made ShipPlacer class
-         }*/
+            // set ships for the AI via a function that randomly places all the ships and uses the already made ShipPlacer class
+        }
+
 
     }
     public void HandleShipClicked(int type)

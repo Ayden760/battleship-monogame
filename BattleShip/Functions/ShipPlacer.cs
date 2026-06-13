@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using BattleShip.GameData;
 namespace BattleShip.Functions;
+
 using System;
 using System.Linq;
 
 public static class ShipPlacer
 {
+
     public static bool PlaceShip(
     int y,
     int x,
@@ -13,12 +15,12 @@ public static class ShipPlacer
     List<ShipBase> shipBases,
     int length)
     {
-        Random rng = new Random();
+
 
         // get all directions and shuffel them
         List<Direction> directions = Enum.GetValues(typeof(Direction))
             .Cast<Direction>()
-            .OrderBy(_ => rng.Next())
+            .OrderBy(_ => Random.Shared.Next())
             .ToList();
 
         foreach (var dir in directions)

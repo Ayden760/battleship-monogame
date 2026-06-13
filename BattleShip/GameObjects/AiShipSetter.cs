@@ -21,46 +21,70 @@ public static class AiShipSetter
 
 
         shipsToPlace.Clear();
-        for (int i = 0; i < settings.Two_tile; i++)
+        for (int i = 0; i < settings.Five_tile; i++)
         {
-            shipsToPlace.Add(2);
-        }
-        for (int i = 0; i < settings.Three_tile; i++)
-        {
-            shipsToPlace.Add(3);
+            shipsToPlace.Add(5);
         }
         for (int i = 0; i < settings.Four_tile; i++)
         {
             shipsToPlace.Add(4);
         }
-        for (int i = 0; i < settings.Five_tile; i++)
+        for (int i = 0; i < settings.Three_tile; i++)
         {
-            shipsToPlace.Add(5);
+            shipsToPlace.Add(3);
         }
+        for (int i = 0; i < settings.Two_tile; i++)
+        {
+            shipsToPlace.Add(2);
+        }
+
+
+
     }
     public static List<ShipBase> PlaceAllShipsRandomly()
     {
-
+        int attempts = 0;
+        bool CouldNotPlaceAllShips;
         List<ShipBase> placedShips = new List<ShipBase>();
-        foreach (int shipLength in shipsToPlace)
+
+
+        do
         {
-            bool placed = false;
-            while (!placed)
+            CouldNotPlaceAllShips = false;
+
+            foreach (int shipLength in shipsToPlace)
             {
-                Random rng = new Random();
-                int x = rng.Next(0, 10);
-                int y = rng.Next(0, 10);
-
-                ShipBase shipBase = new ShipBase(shipLength);
-                if (ShipPlacer.PlaceShip(y, x, ref shipBase, placedShips, shipLength))
+                attempts = 0;
+                bool placed = false;
+                while (!placed)
                 {
-                    shipBase.IsPlaced = true;
-                    placedShips.Add(shipBase);
-                    placed = true;
-                }
-            }
-        }
+                    attempts++;
 
+                    int x = Random.Shared.Next(0, 10);
+                    int y = Random.Shared.Next(0, 10);
+
+                    ShipBase shipBase = new ShipBase(shipLength);
+                    if (ShipPlacer.PlaceShip(y, x, ref shipBase, placedShips, shipLength))
+                    {
+                        shipBase.IsPlaced = true;
+                        placedShips.Add(shipBase);
+                        placed = true;
+                    }
+                    if (attempts > 500)
+                    {
+
+                        CouldNotPlaceAllShips = true;
+                        break;
+                    }
+                }
+                if (CouldNotPlaceAllShips)
+                {
+                    placedShips.Clear();
+                    break;
+                }
+
+            }
+        } while (CouldNotPlaceAllShips);
         return placedShips;
 
 
