@@ -81,7 +81,7 @@ public static class ShipSetter
             //Schiff neu setzen
             Set_Mode = false;
             ShipBase shipBase = new ShipBase(CurrentShip_Length);
-            bool Can_Set = ShipPlacer.ShipPlacing(y, x, ref shipBase, _shipBases, CurrentShip_Length);
+            bool Can_Set = ShipPlacer.PlaceShip(y, x, ref shipBase, _shipBases, CurrentShip_Length);
             if (Can_Set)
             {
                 bool NotAlreadySet = true;

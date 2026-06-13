@@ -2,9 +2,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
 using MonoGameLibrary.Input;
-
 namespace BattleShip.InputChecker;
-
 using Data = GameData.GameData;
 
 public static class GameController

@@ -1,10 +1,7 @@
-using BattleShip.Scenes;
 using Microsoft.Xna.Framework;
 using MonoGameGum;
 using MonoGameLibrary;
 using MonoGameLibrary.Scenes;
-using BattleShip.GameData;
-using Microsoft.Xna.Framework.Graphics;
 using BattleShip.GameObjects;
 using BattleShip.Features.Game;
 

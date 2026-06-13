@@ -1,15 +1,12 @@
-
-
 using System.Collections.Generic;
 using BattleShip.GameData;
 namespace BattleShip.Functions;
-
 using System;
 using System.Linq;
 
 public static class ShipPlacer
 {
-    public static bool ShipPlacing(
+    public static bool PlaceShip(
     int y,
     int x,
     ref ShipBase shipBase,

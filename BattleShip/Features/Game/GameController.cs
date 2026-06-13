@@ -1,13 +1,4 @@
-
-using BattleShip.GameObjects;
-using System;
 using BattleShip.GameData;
-using Microsoft.Xna.Framework.Graphics;
-using BattleShip.InputChecker;
-
-using MonoGameLibrary;
-
-
 namespace BattleShip.Features.Game;
 
 using Data = GameData.GameData;

@@ -1,11 +1,6 @@
-using BattleShip.Scenes;
 using Microsoft.Xna.Framework;
 using MonoGameGum;
-using MonoGameLibrary;
 using MonoGameLibrary.Scenes;
-using BattleShip.GameData;
-using Microsoft.Xna.Framework.Graphics;
-
 namespace BattleShip.Features.GameOption;
 
 public class GameOptionScene : Scene

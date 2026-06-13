@@ -1,9 +1,7 @@
-
 using System.Collections.Generic;
 using System;
 using BattleShip.GameData;
 namespace BattleShip.Functions;
-
 using Data = GameData.GameData;
 
 public static class GameValidations

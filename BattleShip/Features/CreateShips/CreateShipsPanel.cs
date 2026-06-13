@@ -1,5 +1,3 @@
-
-using System;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
 using MonoGameGum.GueDeriving;
@@ -9,8 +7,6 @@ using BattleShip.GameData;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
 namespace BattleShip.Features.CreateShips;
-
-using Data = GameData.GameData;
 using BattleShip.UiHelper;
 
 public class CreateShipsPanel : Panel

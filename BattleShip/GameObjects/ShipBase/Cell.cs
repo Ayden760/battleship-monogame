@@ -1,6 +1,3 @@
-
-
-
 public struct Cell
 {
     public int X { get; set; }

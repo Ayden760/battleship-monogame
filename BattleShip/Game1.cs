@@ -1,13 +1,10 @@
-﻿using BattleShip.Scenes;
-using Microsoft.Xna.Framework.Media;
-using MonoGameLibrary;
+﻿using MonoGameLibrary;
 using Gum.Forms;
 using Gum.Forms.Controls;
 using MonoGameGum;
 using BattleShip.Features.GameOption;
 using BattleShip.GameData;
 namespace BattleShip;
-
 
 public class Game1 : Core
 {

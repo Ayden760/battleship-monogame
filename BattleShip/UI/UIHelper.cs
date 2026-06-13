@@ -1,5 +1,4 @@
 namespace BattleShip.UiHelper;
-
 using MonoGameGum.GueDeriving;
 
 public static class UiHelper

@@ -2,10 +2,7 @@ using System.Linq;
 using BattleShip.Functions;
 using BattleShip.InputChecker;
 using BattleShip.GameData;
-
 namespace BattleShip.GameObjects;
-
-using System;
 using System.Collections.Generic;
 
 public class Player

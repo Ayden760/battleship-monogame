@@ -1,5 +1,3 @@
-
-using BattleShip.GameObjects;
 using BattleShip.GameData;
 namespace BattleShip.Features.GameOption;
 
