@@ -73,14 +73,13 @@ public static class GameValidations
         }
         return (false, -1);
     }
-    public static bool Check_Set_Hit(List<ShipBase> shipBases, int x, int y, ref FieldState[,] enemyField)
+    public static (bool madeHit, bool madeMove) Check_Set_Hit(List<ShipBase> shipBases, int x, int y, ref FieldState[,] enemyField)
     {
         if (enemyField[y, x] == FieldState.Hit ||
             enemyField[y, x] == FieldState.Miss)
         {
-            return false;
+            return (false, false);
         }
-
         bool hit = false;
 
         foreach (ShipBase shipBase in shipBases)
@@ -104,7 +103,7 @@ public static class GameValidations
         {
             enemyField[y, x] = FieldState.Miss;
         }
-        return hit;
+        return (hit, true);
 
     }
     public static void SetSurroundingCellsAsWater(ShipBase shipBase, ref FieldState[,] enemyField)

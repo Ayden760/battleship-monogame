@@ -49,8 +49,9 @@ public class Player
                 y -= 1;
                 x -= 1;
 
-                MadeMove = true;
-                MadeHit = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+                var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+                MadeHit = madeHit;
+                MadeMove = madeMove;
             }
         }
 

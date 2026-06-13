@@ -30,8 +30,8 @@ public class GameController
         {
             return;
         }
-        CheckWin();
         Data.Ship.CurrentPlayer.Update(Data.Ship.OldPlayer.ShipBases);
+         CheckWin();
     }
     public void HandleTurn()
     {
