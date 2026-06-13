@@ -156,7 +156,7 @@ public class CreateShipsPanel : Panel
         _ship3Text.Text = ShipSetter.Three_tile.ToString();
         _ship4Text.Text = ShipSetter.Four_tile.ToString();
         _ship5Text.Text = ShipSetter.Five_tile.ToString();
-        _currentPlayerText.Text = $"Player {Data.Ship.CurrentPlayer.Name}'s Turn";
+        _currentPlayerText.Text = _controller.GetCurrentPlayerText();
     }
 
 

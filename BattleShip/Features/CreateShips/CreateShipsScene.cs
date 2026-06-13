@@ -6,6 +6,7 @@ using MonoGameLibrary.Scenes;
 using BattleShip.GameData;
 using Microsoft.Xna.Framework.Graphics;
 using BattleShip.GameObjects;
+using BattleShip.Features.Game;
 
 namespace BattleShip.Features.CreateShips;
 

@@ -66,5 +66,9 @@ public class CreateShipsController
         }
 
     }
+    public string GetCurrentPlayerText()
+    {
+        return $"Player {Data.Ship.CurrentPlayer.Name}'s Turn";
+    }
 
 }

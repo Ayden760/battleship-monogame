@@ -40,7 +40,6 @@ public class GameSettings
         DistanceMode = gameOptions.DistanceMode;
         Difficulty = gameOptions.Difficulty;
         BonusShotOnHit = gameOptions.BonusShotOnHit;
-
     }
 
 

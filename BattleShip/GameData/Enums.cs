@@ -21,4 +21,10 @@ namespace BattleShip.GameData
         Four,
         Five
     }
+     public enum GameState
+    {
+        Playing,
+        Paused,
+        GameOver
+    }
 }
