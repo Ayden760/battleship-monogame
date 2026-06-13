@@ -40,13 +40,7 @@ public class CreateShipsScene : Scene
     }
     public override void Draw(GameTime gameTime)
     {
-        Core.GraphicsDevice.Clear(Color.CornflowerBlue);
-        Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
-        Assets.Tilemap3x.Draw(Core.SpriteBatch);
-        ShipSetter.DrawShips();
-
-        Core.SpriteBatch.End();
-        GumService.Default.Draw();
+        _panel.Draw(gameTime);
+    
     }
 }

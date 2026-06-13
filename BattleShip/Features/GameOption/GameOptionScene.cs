@@ -28,19 +28,6 @@ public class GameOptionScene : Scene
     }
     public override void Draw(GameTime gameTime)
     {
-        Core.GraphicsDevice.Clear(Color.CornflowerBlue);
-        Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        string text = "OPTIONS";
-        Vector2 size = Assets.ArialBig.MeasureString(text);
-        Core.SpriteBatch.DrawString(
-                Assets.ArialBig,
-                text,
-                new Vector2(
-                    (Core.GraphicsDevice.Viewport.Width - size.X) / 2,
-                    10),
-                Color.White);
-
-        Core.SpriteBatch.End();
-        GumService.Default.Draw();
+      _panel.Draw(gameTime);
     }
 }

@@ -5,8 +5,9 @@ using MonoGameLibrary;
 using MonoGameGum.GueDeriving;
 using Gum.Forms.Controls;
 using BattleShip.GameObjects;
-
 using BattleShip.GameData;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGameGum;
 namespace BattleShip.Features.CreateShips;
 
 using Data = GameData.GameData;
@@ -157,6 +158,17 @@ public class CreateShipsPanel : Panel
         _ship4Text.Text = ShipSetter.Four_tile.ToString();
         _ship5Text.Text = ShipSetter.Five_tile.ToString();
         _currentPlayerText.Text = _controller.GetCurrentPlayerText();
+    }
+    public void Draw(GameTime gameTime)
+    {
+            Core.GraphicsDevice.Clear(Color.CornflowerBlue);
+        Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+        Assets.Tilemap3x.Draw(Core.SpriteBatch);
+        ShipSetter.DrawShips();
+
+        Core.SpriteBatch.End();
+        GumService.Default.Draw();
     }
 
 

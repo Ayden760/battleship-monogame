@@ -27,6 +27,6 @@ public class GameScene : Scene
     }
     public override void Draw(GameTime gameTime)
     {
-        _panel.Draw();
+        _panel.Draw(gameTime);
     }
 }

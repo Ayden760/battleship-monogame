@@ -68,7 +68,7 @@ public class GamePanel : Panel
         _currentPlayerText.Text = _controller.GetCurrentPlayerText();
     }
 
-    public void Draw()
+    public void Draw(GameTime gameTime)
     {
            Core.GraphicsDevice.Clear(Color.CornflowerBlue);
         Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
