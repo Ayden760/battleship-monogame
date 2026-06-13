@@ -38,11 +38,11 @@ public class GameOptionController
                     Options.Three_tile++;
                     break;
                 case ShipType.Four:
-                    if (Options.Four_tile < 5)
+                    if (Options.Four_tile < 3)
                         Options.Four_tile++;
                     break;
                 case ShipType.Five:
-                    if (Options.Five_tile < 4)
+                    if (Options.Five_tile < 2)
                         Options.Five_tile++;
                     break;
             }

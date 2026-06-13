@@ -3,13 +3,14 @@ using BattleShip.Functions;
 using BattleShip.InputChecker;
 using BattleShip.GameData;
 namespace BattleShip.GameObjects;
+
 using System.Collections.Generic;
 
 public class Player
 {
     public string Name { get; set; }
 
-    private FieldState[,] _Field;       //Feld wo geschossen wird
+    private FieldState[,] _Field;
     public List<ShipBase> ShipBases { get; set; } = new List<ShipBase>();
     public bool ShipsSet { get; set; } = false;
     public bool MadeMove { get; set; }
@@ -63,7 +64,6 @@ public class Player
         int tileSize = 20 * 3;
         int pixelX = 0;
         int pixelY = 0;
-        //bei getroffenen Gegnerschiffen darauf achten das Start Middle und End verwendet werden für Später!
         for (int y = 0; y < _Field.GetLength(0); y++)
         {
             for (int x = 0; x < _Field.GetLength(1); x++)

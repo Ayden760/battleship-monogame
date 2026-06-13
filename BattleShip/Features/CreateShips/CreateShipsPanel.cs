@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
+using System;
 using MonoGameGum.GueDeriving;
 using Gum.Forms.Controls;
 using BattleShip.GameObjects;
@@ -7,6 +8,8 @@ using BattleShip.GameData;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
 namespace BattleShip.Features.CreateShips;
+
+using Data = GameData.GameData;
 using BattleShip.UiHelper;
 
 public class CreateShipsPanel : Panel
@@ -157,11 +160,22 @@ public class CreateShipsPanel : Panel
     }
     public void Draw(GameTime gameTime)
     {
-            Core.GraphicsDevice.Clear(Color.CornflowerBlue);
+        Core.GraphicsDevice.Clear(Color.CornflowerBlue);
         Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         Assets.Tilemap3x.Draw(Core.SpriteBatch);
-        ShipSetter.DrawShips();
+
+
+        //for testing
+        if (Data.Ship.Ai.ShipsSet)
+        {
+            Data.Ship.Ai.DrawShips();
+
+        }
+        else
+        {
+            ShipSetter.DrawShips();
+        }
 
         Core.SpriteBatch.End();
         GumService.Default.Draw();

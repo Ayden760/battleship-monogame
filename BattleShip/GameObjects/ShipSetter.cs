@@ -78,7 +78,7 @@ public static class ShipSetter
         if (Set_Mode)
         {
 
-            //Schiff neu setzen
+            //set ships new
             Set_Mode = false;
             ShipBase shipBase = new ShipBase(CurrentShip_Length);
             bool Can_Set = ShipPlacer.PlaceShip(y, x, ref shipBase, _shipBases, CurrentShip_Length);
@@ -115,7 +115,7 @@ public static class ShipSetter
             }
             else
             {
-                //konnte nicht gesetzt werden
+                //could not place ship, show message?
             }
         }
 

@@ -17,6 +17,7 @@ public class CreateShipsScene : Scene
     {
         base.Initialize();
         ShipSetter.InitializeFromSettings(Data.Settings);
+        AiShipSetter.InitializeFromSettings(Data.Settings);
         _controller = new CreateShipsController();
         Data.Ship.CurrentPlayer = Data.Ship.Player1;
 
@@ -38,6 +39,6 @@ public class CreateShipsScene : Scene
     public override void Draw(GameTime gameTime)
     {
         _panel.Draw(gameTime);
-    
+
     }
 }
