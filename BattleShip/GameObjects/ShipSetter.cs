@@ -200,6 +200,17 @@ public static class ShipSetter
         }
     }
 
+    public static void GenerateShipsForCurrentPlayer()
+    {
+        _shipBases.Clear();
+        _shipBases = AiShipSetter.PlaceAllShipsRandomly();
+        Two_tile = 0;
+        Three_tile = 0;
+        Four_tile = 0;
+        Five_tile = 0;
+
+    }
+
 
 
 

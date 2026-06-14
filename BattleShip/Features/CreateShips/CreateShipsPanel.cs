@@ -145,6 +145,21 @@ public class CreateShipsPanel : Panel
         Confirm_Placement.Click += (_, _) => _controller.ConfirmClicked();
         AddChild(Confirm_Placement);
         RefreshUi();
+
+
+
+
+        //Button for generating ships for the Player
+        Button Generate_Ships = new Button();
+        Generate_Ships.Anchor(Gum.Wireframe.Anchor.BottomLeft);
+        Generate_Ships.Y = -20;
+        Generate_Ships.X = 10;
+        Generate_Ships.Width = 40;
+        Generate_Ships.Height = 10;
+        UiHelper.SetTextFontScale(Generate_Ships, 0.5f);
+        Generate_Ships.Text = "Generate Ships";
+        Generate_Ships.Click += (_, _) => _controller.GenerateShipsClicked();
+        AddChild(Generate_Ships);
     }
 
 
@@ -164,18 +179,8 @@ public class CreateShipsPanel : Panel
         Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         Assets.Tilemap3x.Draw(Core.SpriteBatch);
+        ShipSetter.DrawShips();
 
-
-        //for testing
-        if (Data.Ship.Ai.ShipsSet)
-        {
-            Data.Ship.Ai.DrawShips();
-
-        }
-        else
-        {
-            ShipSetter.DrawShips();
-        }
 
         Core.SpriteBatch.End();
         GumService.Default.Draw();

@@ -13,10 +13,6 @@ public class CreateShipsController
 
         ShipSetter.CheckAllSet();
 
-
-
-
-
         if (!Data.Ship.Player1.ShipsSet)
         {
             Data.Ship.CurrentPlayer = Data.Ship.Player1;
@@ -36,7 +32,7 @@ public class CreateShipsController
 
 
         }
-        else if (Data.Settings.Ai_Mode)
+        else if (Data.Ship.Ai != null)
         {
             //create Ai fields
             if (!Data.Ship.Ai.ShipsSet)
@@ -83,6 +79,11 @@ public class CreateShipsController
     public string GetCurrentPlayerText()
     {
         return $"Player {Data.Ship.CurrentPlayer.Name}'s Turn";
+    }
+    public void GenerateShipsClicked()
+    {
+        ShipSetter.GenerateShipsForCurrentPlayer();
+
     }
 
 }
