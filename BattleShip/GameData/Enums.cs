@@ -27,4 +27,11 @@ namespace BattleShip.GameData
         Paused,
         GameOver
     }
+    enum AIState
+    {
+        Searching,
+        FoundHit,
+        Targeting,
+        DoneShip
+    }
 }

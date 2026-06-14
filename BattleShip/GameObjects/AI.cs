@@ -16,14 +16,13 @@ public class AI : Player
 {
 
 
-    private Direction HitDirection;
-    private bool foundDirection = false;
+    private Direction currentDirection;
+
     private int x;
     private int y;
+    private AIState state = AIState.Searching;
     private int firstHitx;
     private int firstHity;
-    private bool foundShip = false;
-    private bool lastMoveWasHit = false;
 
     private ShipBase currentTargetShip = null;
 
@@ -39,142 +38,162 @@ public class AI : Player
     public AI(int rows, int columns, string name)
     : base(rows, columns, name)
     {
-
-
     }
     public override void Update(List<ShipBase> shipBases)
     {
         AIUpdate(shipBases);
     }
-
     public void AIUpdate(List<ShipBase> shipBases)
     {
+        if (MadeMove)
+            return;
 
-
-        if (!MadeMove)
+        switch (state)
         {
+            case AIState.Searching:
+                Searching(shipBases);
+                break;
 
+            case AIState.FoundHit:
+                PickDirection(shipBases);
+                break;
 
-
-            if (!foundShip)
-            {
-                do
-                {
-                    x = Random.Shared.Next(0, 10);
-                    y = Random.Shared.Next(0, 10);
-                }
-                while ((x + y) % 2 != 0);
-                firstHitx = x;
-                firstHity = y;
-
-                var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
-                MadeHit = madeHit;
-                foundShip = madeHit;
-                MadeMove = madeMove;
-
-
-                //made so the ai knows what ship it currently trys to destroy
-                if (madeHit && currentTargetShip == null)
-                {
-                    var result = GameValidations.IsThereShip(shipBases, x, y);
-                    if (result.found)
-                    {
-                        currentTargetShip = shipBases[result.location];
-                    }
-                }
-
-            }
-            else
-            {
-
-                if (!foundDirection)
-                {
-
-                    y = firstHity;
-                    x = firstHitx;
-
-                    do
-                    {
-                        // select random direction from available directions
-                        int index = Random.Shared.Next(availableDirections.Count);
-                        HitDirection = availableDirections[index];
-                        //remove selected direction
-                        availableDirections.RemoveAt(index);
-
-
-
-                    } while (!TryApplyDirection(HitDirection, ref x, ref y));
-
-
-
-                    var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
-                    MadeHit = madeHit;
-                    MadeMove = madeMove;
-                    if (madeHit)
-                    {
-
-                        foundDirection = true;
-                        lastMoveWasHit = true;
-                    }
-
-
-                }
-                else
-                {
-
-
-                    if (!lastMoveWasHit)
-                    {
-
-                        ChangeDirections();
-                        ResetToFirstHit();
-                    }
-
-                    bool rffg = TryApplyDirection(HitDirection, ref x, ref y);
-                    //Moving in one direction is not working properly
-                    var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
-                    Console.WriteLine(madeMove);
-                    MadeHit = madeHit;
-                    MadeMove = madeMove;
-                    if (!madeHit)
-                    {
-                        lastMoveWasHit = false;
-                    }
-
-
-                }
-
-            }
-
-
+            case AIState.Targeting:
+                FollowDirection(shipBases);
+                break;
         }
 
-        if (currentTargetShip != null && currentTargetShip.Destroyed)
+        CheckShipDestroyed();
+    }
+    private void Searching(List<ShipBase> shipBases)
+    {
+        do
         {
-            //reset AI state
-            foundDirection = false;
-            foundShip = false;
-            lastMoveWasHit = false;
-            currentTargetShip = null;
-            //reset directions for new ship
-            availableDirections = new()
-                        {
-                            Direction.Up,
-                            Direction.Down,
-                            Direction.Left,
-                            Direction.Right
-                        };
+            x = Random.Shared.Next(0, 10);
+            y = Random.Shared.Next(0, 10);
+        }
+        while ((x + y) % 2 != 0);
 
+        firstHitx = x;
+        firstHity = y;
 
+        var (hit, move) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+
+        MadeHit = hit;
+        MadeMove = move;
+        if (hit && currentTargetShip == null)
+        {
+            var result = GameValidations.IsThereShip(shipBases, x, y);
+            if (result.found)
+            {
+                currentTargetShip = shipBases[result.location];
+            }
+        }
+        if (hit)
+        {
+            state = AIState.FoundHit;
         }
     }
-    private bool TryApplyDirection(Direction direction, ref int x, ref int y)
+    private void PickDirection(List<ShipBase> shipBases)
     {
-        int newX = x;
-        int newY = y;
+        x = firstHitx;
+        y = firstHity;
 
+        if (availableDirections.Count == 0)
+        {
+            state = AIState.Searching;
+            return;
+        }
+
+        int index = Random.Shared.Next(availableDirections.Count);
+        currentDirection = availableDirections[index];
+        availableDirections.RemoveAt(index);
+
+        MoveInDirection(currentDirection, ref x, ref y);
+
+        var (hit, move) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+
+        MadeHit = hit;
+        MadeMove = move;
+
+        if (hit)
+        {
+            state = AIState.Targeting;
+
+        }
+
+    }
+    private void FollowDirection(List<ShipBase> shipBases)
+    {
+        MoveInDirection(currentDirection, ref x, ref y);
+
+        var (hit, move) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+
+        MadeHit = hit;
+        MadeMove = move;
+
+        if (!hit)
+        {
+            //change direction
+            currentDirection = ChangeDirections(currentDirection);
+            ResetToFirstHit();
+            state = AIState.Targeting;
+
+        }
+
+    }
+    private void CheckShipDestroyed()
+    {
+        if (currentTargetShip != null && currentTargetShip.Destroyed)
+        {
+            state = AIState.Searching;
+            currentTargetShip = null;
+
+            availableDirections = new()
+        {
+            Direction.Up,
+            Direction.Down,
+            Direction.Left,
+            Direction.Right
+        };
+        }
+    }
+
+
+
+    private Direction ChangeDirections(Direction direction)
+    {
         switch (direction)
         {
+            case Direction.Up:
+                direction = Direction.Down;
+                break;
+
+            case Direction.Down:
+                direction = Direction.Up;
+                break;
+
+            case Direction.Left:
+                direction = Direction.Right;
+                break;
+
+            case Direction.Right:
+                direction = Direction.Left;
+                break;
+        }
+        return direction;
+    }
+    private void ResetToFirstHit()
+    {
+        y = firstHity;
+        x = firstHitx;
+    }
+    private void MoveInDirection(Direction direction, ref int newX, ref int newY)
+    {
+        switch (direction)
+        {
+
+
             case Direction.Up:
                 newY -= 1;
                 break;
@@ -188,48 +207,6 @@ public class AI : Player
                 newX += 1;
                 break;
         }
-
-        // check bounds
-        if (!GameValidations.IsInsideField(newX, newY))
-        {
-            lastMoveWasHit = false;
-            return false;
-
-        }
-
-
-        //change the old coords
-        x = newX;
-        y = newY;
-
-        return true;
-    }
-
-    private void ChangeDirections()
-    {
-        switch (HitDirection)
-        {
-            case Direction.Up:
-                HitDirection = Direction.Down;
-                break;
-
-            case Direction.Down:
-                HitDirection = Direction.Up;
-                break;
-
-            case Direction.Left:
-                HitDirection = Direction.Right;
-                break;
-
-            case Direction.Right:
-                HitDirection = Direction.Left;
-                break;
-        }
-    }
-    private void ResetToFirstHit()
-    {
-        y = firstHity;
-        x = firstHitx;
     }
 
 }

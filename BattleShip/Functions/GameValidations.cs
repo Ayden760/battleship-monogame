@@ -76,6 +76,14 @@ public static class GameValidations
     }
     public static (bool madeHit, bool madeMove) Check_Set_Hit(List<ShipBase> shipBases, int x, int y, ref FieldState[,] enemyField)
     {
+
+        if (!IsInsideField(x, y))
+        {
+            Console.WriteLine("Outside");
+            return (false, false);
+        }
+
+
         if (enemyField[y, x] == FieldState.Hit ||
             enemyField[y, x] == FieldState.Miss)
         {
