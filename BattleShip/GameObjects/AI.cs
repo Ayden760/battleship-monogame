@@ -16,7 +16,7 @@ public class AI : Player
 {
 
 
-    private Direction HitDirection = Direction.None;
+    private Direction HitDirection;
     private bool foundDirection = false;
     private int x;
     private int y;
@@ -89,7 +89,7 @@ public class AI : Player
 
                 if (!foundDirection)
                 {
-                    Console.WriteLine("test");
+
                     y = firstHity;
                     x = firstHitx;
 
@@ -129,10 +129,11 @@ public class AI : Player
                         ChangeDirections();
                         ResetToFirstHit();
                     }
-                    Console.WriteLine("hängt?");
-                    bool rffg = TryApplyDirection(HitDirection, ref x, ref y);
 
+                    bool rffg = TryApplyDirection(HitDirection, ref x, ref y);
+                    //Moving in one direction is not working properly
                     var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+                    Console.WriteLine(madeMove);
                     MadeHit = madeHit;
                     MadeMove = madeMove;
                     if (!madeHit)
@@ -164,7 +165,7 @@ public class AI : Player
                             Direction.Right
                         };
 
-            HitDirection = Direction.None;
+
         }
     }
     private bool TryApplyDirection(Direction direction, ref int x, ref int y)

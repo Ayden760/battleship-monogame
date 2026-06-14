@@ -76,12 +76,7 @@ public static class AiShipSetter
                         CouldNotPlaceAllShips = true;
                         break;
                     }
-                    Console.WriteLine($"Ship length: {shipBase.Length}");
-                    Console.WriteLine($"Cells: {shipBase.Location.Count}");
-                    foreach (var c in shipBase.Location)
-                    {
-                        Console.WriteLine($"{c.X},{c.Y}");
-                    }
+
                 }
                 if (CouldNotPlaceAllShips)
                 {
