@@ -9,6 +9,7 @@ namespace BattleShip.GameData
     }
     public enum Direction
     {
+        None,
         Up,
         Down,
         Left,
@@ -21,7 +22,7 @@ namespace BattleShip.GameData
         Four,
         Five
     }
-     public enum GameState
+    public enum GameState
     {
         Playing,
         Paused,

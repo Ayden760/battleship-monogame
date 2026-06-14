@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using BattleShip.GameData;
 namespace BattleShip.Functions;
+
 using Data = GameData.GameData;
 
 public static class GameValidations
@@ -128,5 +129,17 @@ public static class GameValidations
             }
         }
 
+    }
+    public static bool HasWon(List<ShipBase> shipBases)
+    {
+        foreach (ShipBase shipBase in shipBases)
+        {
+            if (!shipBase.Destroyed)
+            {
+                return false;
+            }
+
+        }
+        return true;
     }
 }

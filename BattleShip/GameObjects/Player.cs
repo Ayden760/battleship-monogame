@@ -2,15 +2,17 @@ using System.Linq;
 using BattleShip.Functions;
 using BattleShip.InputChecker;
 using BattleShip.GameData;
+
 namespace BattleShip.GameObjects;
 
+using BattleShip.UI;
 using System.Collections.Generic;
 
 public class Player
 {
     public string Name { get; set; }
 
-    private FieldState[,] _Field;
+    protected FieldState[,] _Field;
     public List<ShipBase> ShipBases { get; set; } = new List<ShipBase>();
     public bool ShipsSet { get; set; } = false;
     public bool MadeMove { get; set; }
@@ -61,78 +63,11 @@ public class Player
     }
     public void DrawField(List<ShipBase> shipBases)
     {
-        int tileSize = 20 * 3;
-        int pixelX = 0;
-        int pixelY = 0;
-        for (int y = 0; y < _Field.GetLength(0); y++)
-        {
-            for (int x = 0; x < _Field.GetLength(1); x++)
-            {
-
-                if (_Field[y, x] == FieldState.Miss)
-                {
-
-                    pixelX = (x + 1) * tileSize;
-                    pixelY = (y + 1) * tileSize;
-
-                    ShipDraw.DrawMiss(pixelX, pixelY);
-                }
-                else if (_Field[y, x] == FieldState.Hit)
-                {
-                    pixelX = (x + 1) * tileSize;
-                    pixelY = (y + 1) * tileSize;
-
-                    ShipBase ship = ShipFinder.FindShipAt(x, y, shipBases);
-
-                    if (ship != null)
-                    {
-                        int i = ShipFinder.GetSegmentIndex(ship, x, y);
-
-                        if (i == 0)
-                        {
-                            if (ship.Destroyed)
-                                ShipDraw.DrawDestroyedStart(pixelX, pixelY);
-                            else
-                                ShipDraw.DrawHitStart(pixelX, pixelY);
-                        }
-                        else if (i == ship.Location.Count - 1)
-                        {
-                            if (ship.Destroyed)
-                                ShipDraw.DrawDrestroyedEnd(pixelX, pixelY);
-                            else
-                                ShipDraw.DrawHitEnd(pixelX, pixelY);
-                        }
-                        else
-                        {
-                            if (ship.Destroyed)
-                                ShipDraw.DrawDestroyedMiddle(pixelX, pixelY);
-                            else
-                                ShipDraw.DrawMiddle(pixelX, pixelY);
-                        }
-                    }
-                }
-
-
-
-
-
-
-
-
-            }
-        }
+        FieldRenderer.DrawField(shipBases, _Field);
     }
     public bool HasWon(List<ShipBase> shipBases)
     {
-        foreach (ShipBase shipBase in shipBases)
-        {
-            if (!shipBase.Destroyed)
-            {
-                return false;
-            }
-
-        }
-        return true;
+        return GameValidations.HasWon(shipBases);
     }
 }
 

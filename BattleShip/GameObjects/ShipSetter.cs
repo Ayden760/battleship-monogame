@@ -6,6 +6,7 @@ using BattleShip.Functions;
 using BattleShip.InputChecker;
 namespace BattleShip.GameObjects;
 
+using BattleShip.UI;
 using Data = GameData.GameData;
 
 public static class ShipSetter
@@ -139,19 +140,7 @@ public static class ShipSetter
 
     public static void DrawShips()
     {
-        int tileSize = 20 * 3;
-        foreach (ShipBase shipBase in _shipBases)
-        {
-            foreach (Cell cell in shipBase.Location)
-            {
-                //int pixelX = cell.X * tileSize;
-                //int pixelY = cell.Y * tileSize;
-                int pixelX = (cell.X + 1) * tileSize;
-                int pixelY = (cell.Y + 1) * tileSize;
-                Assets.B_CrossSprite.Draw(Core.SpriteBatch, new Vector2(pixelX, pixelY));
-
-            }
-        }
+        FieldRenderer.DrawShips(_shipBases);
     }
     public static void MoveShip()
     {

@@ -94,7 +94,7 @@ public static class AiShipSetter
     public static void SetAiShips()
     {
 
-        Data.Ship.Ai.Set_Own_Ships(PlaceAllShipsRandomly());
+        Data.Ship.Ai.Set_Own_Ships(PlaceAllShipsRandomly(), true);
 
 
     }

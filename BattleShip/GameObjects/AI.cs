@@ -9,42 +9,143 @@ using MonoGameLibrary;
 
 namespace BattleShip.GameObjects;
 
+using BattleShip.UI;
 using System.Collections.Generic;
 
 public class AI : Player
 {
 
+
+    private Direction HitDirection = Direction.None;
+    private bool foundDirection = false;
+    private int x;
+    private int y;
+    private bool foundShip = false;
+    private bool lastMoveWasHit = false;
+
+
+    private List<Direction> availableDirections = new()
+{
+    Direction.Up,
+    Direction.Down,
+    Direction.Left,
+    Direction.Right
+};
+
     public AI(int rows, int columns, string name)
     : base(rows, columns, name)
     {
-        ShipBases = new List<ShipBase>();
-    }
-    public void Set_Own_Ships(List<ShipBase> shipBases)
-    {
 
-        ShipBases = shipBases
-            .Select(ship => new ShipBase(ship))
-            .ToList();
 
-        ShipsSet = true;
     }
 
-    //for testing
-    public void DrawShips()
+    public void AIUpdate(List<ShipBase> shipBases)
     {
-        int tileSize = 20 * 3;
 
-        foreach (ShipBase shipBase in ShipBases)
+        if (!MadeMove)
         {
-            foreach (Cell cell in shipBase.Location)
+
+
+
+            if (!foundShip)
             {
-                //int pixelX = cell.X * tileSize;
-                //int pixelY = cell.Y * tileSize;
-                int pixelX = (cell.X + 1) * tileSize;
-                int pixelY = (cell.Y + 1) * tileSize;
-                Assets.B_CrossSprite.Draw(Core.SpriteBatch, new Vector2(pixelX, pixelY));
+                x = Random.Shared.Next(0, 10);
+                y = Random.Shared.Next(0, 10);
+
+                var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+                MadeHit = madeHit;
+                foundShip = madeHit;
+                MadeMove = madeMove;
 
             }
+            else
+            {
+
+                if (!foundDirection)
+                {
+                    int index = Random.Shared.Next(availableDirections.Count);
+                    HitDirection = availableDirections[index];
+                    availableDirections.RemoveAt(index);
+                    HitDirection = (Direction)Random.Shared.Next(1, 5);
+                    if (HitDirection == Direction.Up)
+                    {
+                        y -= 1;
+                    }
+                    else if (HitDirection == Direction.Down)
+                    {
+                        y += 1;
+                    }
+                    else if (HitDirection == Direction.Left)
+                    {
+                        x -= 1;
+                    }
+                    else if (HitDirection == Direction.Right)
+                    {
+                        x += 1;
+                    }
+                    var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+                    MadeHit = madeHit;
+                    MadeMove = madeMove;
+                    if (madeHit)
+                    {
+                        //reset directions for new ship
+                        availableDirections = new()
+                        {
+                            Direction.Up,
+                            Direction.Down,
+                            Direction.Left,
+                            Direction.Right
+                        };
+                        foundDirection = true;
+                        lastMoveWasHit = true;
+                    }
+
+
+                }
+                else if (lastMoveWasHit)
+                {
+                    if (HitDirection == Direction.Up)
+                    {
+                        y -= 1;
+                    }
+                    else if (HitDirection == Direction.Down)
+                    {
+                        y += 1;
+                    }
+                    else if (HitDirection == Direction.Left)
+                    {
+                        x -= 1;
+                    }
+                    else if (HitDirection == Direction.Right)
+                    {
+                        x += 1;
+                    }
+                    var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+                    MadeHit = madeHit;
+                    MadeMove = madeMove;
+                    if (!madeHit)
+                    {
+                        lastMoveWasHit = false;
+                    }
+                    // Implement logic to continue in the found direction
+                }
+                else
+                {
+
+
+
+
+
+
+                }
+            }
+
+
+        }
+        if ()
+        {
+            //if Ship Destroyed reset all values
         }
     }
+
 }

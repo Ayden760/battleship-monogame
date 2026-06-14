@@ -61,15 +61,11 @@ public class GameController
 
 
             }
-            else if (Data.Ship.CurrentPlayer == Data.Ship.Player2)
+            else
             {
                 Data.Ship.CurrentPlayer = Data.Ship.Player1;
             }
-            else
-            {
-                //Ai's turn
 
-            }
         }
     }
     public void CheckWin()
