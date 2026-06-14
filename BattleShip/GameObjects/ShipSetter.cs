@@ -123,7 +123,7 @@ public static class ShipSetter
         else
         {
             //schon gesetztes Bearbeiten
-            var (found, location) = GameValidations.IsThereShip(_shipBases, y, x);
+            var (found, location) = GameValidations.IsThereShip(_shipBases, x, y);
 
 
             if (found)

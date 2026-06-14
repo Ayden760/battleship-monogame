@@ -59,7 +59,7 @@ public static class GameValidations
 
         return true;
     }
-    public static (bool found, int location) IsThereShip(List<ShipBase> existingShips, int y, int x)
+    public static (bool found, int location) IsThereShip(List<ShipBase> existingShips, int x, int y)
     {
 
         for (int i = 0; i < existingShips.Count; i++)
@@ -141,5 +141,15 @@ public static class GameValidations
 
         }
         return true;
+    }
+    public static bool IsInsideField(int x, int y)
+    {
+        return x >= 0 &&
+               x < Data.Settings.Columns &&
+               y >= 0 &&
+               y < Data.Settings.Rows;
+
+
+
     }
 }

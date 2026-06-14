@@ -76,6 +76,12 @@ public static class AiShipSetter
                         CouldNotPlaceAllShips = true;
                         break;
                     }
+                    Console.WriteLine($"Ship length: {shipBase.Length}");
+                    Console.WriteLine($"Cells: {shipBase.Location.Count}");
+                    foreach (var c in shipBase.Location)
+                    {
+                        Console.WriteLine($"{c.X},{c.Y}");
+                    }
                 }
                 if (CouldNotPlaceAllShips)
                 {
@@ -86,9 +92,6 @@ public static class AiShipSetter
             }
         } while (CouldNotPlaceAllShips);
         return placedShips;
-
-
-        //make it so that normal player can also use this function to set their ships if they want to
     }
 
     public static void SetAiShips()

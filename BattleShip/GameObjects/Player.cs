@@ -7,6 +7,8 @@ namespace BattleShip.GameObjects;
 
 using BattleShip.UI;
 using System.Collections.Generic;
+using System.Data.Common;
+using Data = GameData.GameData;
 
 public class Player
 {
@@ -39,8 +41,10 @@ public class Player
 
         ShipsSet = set;
     }
-    public void Update(List<ShipBase> shipBases)
+    //virtual so it can be overriten by AI Update
+    public virtual void Update(List<ShipBase> shipBases)
     {
+
 
         int y = 0;
         int x = 0;
