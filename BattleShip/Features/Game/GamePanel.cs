@@ -16,7 +16,7 @@ public class GamePanel : Panel
     private readonly GameController _controller;
 
     private TextRuntime _currentPlayerText;
-      private Texture2D _pixel;
+    private Texture2D _pixel;
 
     public GamePanel(GameController controller)
     {
@@ -25,17 +25,17 @@ public class GamePanel : Panel
         CreateGamePanel();
 
 
-         _pixel = new Texture2D(Core.GraphicsDevice, 1, 1);
+        _pixel = new Texture2D(Core.GraphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
 
     }
     public void CreateGamePanel()
     {
 
-   Core.GraphicsDevice.Clear(Color.CornflowerBlue);
-      
-     Dock(Gum.Wireframe.Dock.Fill);
-     
+        Core.GraphicsDevice.Clear(Color.CornflowerBlue);
+
+        Dock(Gum.Wireframe.Dock.Fill);
+
 
         Button Turn = new Button();
         Turn.Anchor(Gum.Wireframe.Anchor.TopRight);
@@ -46,7 +46,7 @@ public class GamePanel : Panel
         Turn.Y = 150;
         Turn.Text = "End Turn";
         UiHelper.SetTextFontScale(Turn, 0.5f);
-        Turn.Click +=(_,_)=> _controller.HandleTurn();
+        Turn.Click += (_, _) => _controller.TriggerTurnDelay();
         AddChild(Turn);
 
         _currentPlayerText = new TextRuntime();
@@ -56,9 +56,9 @@ public class GamePanel : Panel
         _currentPlayerText.FontScale = 0.5f;
         _currentPlayerText.Text = "Player 1's Turn";
 
-       AddChild(_currentPlayerText);
+        AddChild(_currentPlayerText);
 
-     
+
     }
     public void RefreshUi()
     {
@@ -67,19 +67,19 @@ public class GamePanel : Panel
 
     public void Draw(GameTime gameTime)
     {
-           Core.GraphicsDevice.Clear(Color.CornflowerBlue);
+        Core.GraphicsDevice.Clear(Color.CornflowerBlue);
         Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Assets.Tilemap3x.Draw(Core.SpriteBatch);
         Data.Ship.CurrentPlayer.DrawField(Data.Ship.OldPlayer.ShipBases);
-        if(_controller.State == GameState.GameOver)
+        if (_controller.State == GameState.GameOver)
         {
             IsVisible = false;
-           DrawWinScreen();
+            DrawWinScreen();
         }
         Core.SpriteBatch.End();
         GumService.Default.Draw();
     }
- private void DrawWinScreen()
+    private void DrawWinScreen()
     {
         string text = $"{Data.Ship.CurrentPlayer.Name} has won!";
 
@@ -128,8 +128,8 @@ public class GamePanel : Panel
     }
 
 
-   
-    
+
+
 
 
 

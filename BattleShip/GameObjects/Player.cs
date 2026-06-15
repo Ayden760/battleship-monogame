@@ -44,7 +44,7 @@ public class Player
     //virtual so it can be overriten by AI Update
     public virtual void Update(List<ShipBase> shipBases)
     {
-        MadeMove = true;
+
 
         int y = 0;
         int x = 0;

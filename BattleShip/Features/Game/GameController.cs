@@ -63,6 +63,17 @@ public class GameController
 
         CheckWin();
     }
+    public void TriggerTurnDelay()
+    {
+        if (!Data.Ship.CurrentPlayer.MadeMove)
+        {
+            return;
+        }
+
+        _turnDelayActive = true;
+        _turnDelayTimer = TurnDelaySeconds;
+    }
+
     public void HandleTurn()
     {
 
