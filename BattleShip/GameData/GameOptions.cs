@@ -10,7 +10,7 @@ public class GameOptions
     public int Three_tile { get; set; } = 0;
     public int Four_tile { get; set; } = 0;
     public int Five_tile { get; set; } = 0;
-    public int Difficulty { get; set; } = 0;
+    public int Difficulty { get; set; } = 1;
     public bool Ai_Mode { get; set; } = false;
     public bool DistanceMode { get; set; } = true;
     public bool BonusShotOnHit { get; set; } = false;

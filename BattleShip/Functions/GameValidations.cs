@@ -79,7 +79,7 @@ public static class GameValidations
 
         if (!IsInsideField(x, y))
         {
-            Console.WriteLine("Outside");
+
             return (false, false);
         }
 

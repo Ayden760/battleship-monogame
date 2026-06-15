@@ -65,8 +65,10 @@ public class GameController
     }
     public void HandleTurn()
     {
+
         if (Data.Ship.CurrentPlayer.MadeMove)
         {
+
             Data.Ship.CurrentPlayer.MadeMove = false;
             if (Data.Ship.CurrentPlayer.MadeHit && Data.Settings.BonusShotOnHit)
             {

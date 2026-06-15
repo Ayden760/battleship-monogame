@@ -6,6 +6,7 @@ using BattleShip.GameData;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
 
+using Data = BattleShip.GameData.GameData;
 
 namespace BattleShip.GameObjects;
 
@@ -48,6 +49,13 @@ public class AI : Player
         if (MadeMove)
             return;
 
+        int difficulty = Data.Settings?.Difficulty ?? 1;
+
+        if (difficulty == 1 && state != AIState.Searching)
+        {
+            state = AIState.Searching;
+        }
+
         switch (state)
         {
             case AIState.Searching:
@@ -55,10 +63,22 @@ public class AI : Player
                 break;
 
             case AIState.FoundHit:
+                if (difficulty < 2)
+                {
+                    state = AIState.Searching;
+                    break;
+                }
+
                 PickDirection(shipBases);
                 break;
 
             case AIState.Targeting:
+                if (difficulty < 3)
+                {
+                    state = AIState.Searching;
+                    break;
+                }
+
                 FollowDirection(shipBases);
                 break;
         }
@@ -67,12 +87,15 @@ public class AI : Player
     }
     private void Searching(List<ShipBase> shipBases)
     {
-        do
+        var (nextX, nextY) = GetNextSearchCell(shipBases);
+
+        if (nextX < 0 || nextY < 0)
         {
-            x = Random.Shared.Next(0, 10);
-            y = Random.Shared.Next(0, 10);
+            return;
         }
-        while ((x + y) % 2 != 0);
+
+        x = nextX;
+        y = nextY;
 
         firstHitx = x;
         firstHity = y;
@@ -81,19 +104,85 @@ public class AI : Player
 
         MadeHit = hit;
         MadeMove = move;
-        if (hit && currentTargetShip == null)
+        if (hit)
         {
-            var result = GameValidations.IsThereShip(shipBases, x, y);
-            if (result.found)
-            {
-                currentTargetShip = shipBases[result.location];
-            }
+            UpdateCurrentTargetShip(shipBases, x, y);
         }
         if (hit)
         {
-            state = AIState.FoundHit;
+            state = (Data.Settings?.Difficulty ?? 1) == 1
+                ? AIState.Searching
+                : AIState.FoundHit;
         }
     }
+    private (int x, int y) GetNextSearchCell(List<ShipBase> shipBases)
+    {
+        int difficulty = Data.Settings?.Difficulty ?? 1;
+
+        if (difficulty == 4 && Random.Shared.Next(100) < 20)
+        {
+
+            List<(int x, int y)> directHitCandidates = new();
+
+            foreach (var ship in shipBases)
+            {
+                foreach (var cell in ship.Location)
+                {
+                    if (_Field[cell.Y, cell.X] != FieldState.Hit &&
+                        _Field[cell.Y, cell.X] != FieldState.Miss)
+                    {
+                        directHitCandidates.Add((cell.X, cell.Y));
+                    }
+                }
+            }
+
+            if (directHitCandidates.Count > 0)
+            {
+                int index = Random.Shared.Next(directHitCandidates.Count);
+                return directHitCandidates[index];
+            }
+        }
+
+        bool useGrid = difficulty > 1;
+        List<(int x, int y)> preferred = new();
+        List<(int x, int y)> fallback = new();
+
+        for (int yy = 0; yy < Data.Settings.Rows; yy++)
+        {
+            for (int xx = 0; xx < Data.Settings.Columns; xx++)
+            {
+                if (_Field[yy, xx] == FieldState.Hit || _Field[yy, xx] == FieldState.Miss)
+                {
+                    continue;
+                }
+
+                var cell = (xx, yy);
+                if (useGrid && ((xx + yy) % 2 == 0))
+                {
+                    preferred.Add(cell);
+                }
+                else
+                {
+                    fallback.Add(cell);
+                }
+            }
+        }
+
+        if (preferred.Count > 0)
+        {
+            int index = Random.Shared.Next(preferred.Count);
+            return preferred[index];
+        }
+
+        if (fallback.Count > 0)
+        {
+            int index = Random.Shared.Next(fallback.Count);
+            return fallback[index];
+        }
+
+        return (-1, -1);
+    }
+
     private void PickDirection(List<ShipBase> shipBases)
     {
         x = firstHitx;
@@ -102,6 +191,8 @@ public class AI : Player
         if (availableDirections.Count == 0)
         {
             state = AIState.Searching;
+            currentTargetShip = null;
+            ResetAvailableDirections();
             return;
         }
 
@@ -112,16 +203,26 @@ public class AI : Player
         MoveInDirection(currentDirection, ref x, ref y);
 
         var (hit, move) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+        int difficulty = Data.Settings?.Difficulty ?? 1;
 
         MadeHit = hit;
         MadeMove = move;
 
         if (hit)
         {
-            state = AIState.Targeting;
-
+            UpdateCurrentTargetShip(shipBases, x, y);
+            if (difficulty >= 3)
+            {
+                state = AIState.Targeting;
+            }
+            else
+            {
+                firstHitx = x;
+                firstHity = y;
+                ResetAvailableDirections();
+                state = AIState.FoundHit;
+            }
         }
-
     }
     private void FollowDirection(List<ShipBase> shipBases)
     {
@@ -131,6 +232,11 @@ public class AI : Player
 
         MadeHit = hit;
         MadeMove = move;
+
+        if (hit)
+        {
+            UpdateCurrentTargetShip(shipBases, x, y);
+        }
 
         if (!hit)
         {
@@ -142,21 +248,34 @@ public class AI : Player
         }
 
     }
+    private void UpdateCurrentTargetShip(List<ShipBase> shipBases, int x, int y)
+    {
+        var result = GameValidations.IsThereShip(shipBases, x, y);
+        if (result.found)
+        {
+            currentTargetShip = shipBases[result.location];
+        }
+    }
+
     private void CheckShipDestroyed()
     {
         if (currentTargetShip != null && currentTargetShip.Destroyed)
         {
             state = AIState.Searching;
             currentTargetShip = null;
+            ResetAvailableDirections();
+        }
+    }
 
-            availableDirections = new()
+    private void ResetAvailableDirections()
+    {
+        availableDirections = new()
         {
             Direction.Up,
             Direction.Down,
             Direction.Left,
             Direction.Right
         };
-        }
     }
 
 
