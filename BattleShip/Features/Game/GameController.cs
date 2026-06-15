@@ -1,4 +1,6 @@
 using BattleShip.GameData;
+using Microsoft.Xna.Framework;
+
 namespace BattleShip.Features.Game;
 
 using Data = GameData.GameData;
@@ -6,6 +8,9 @@ public class GameController
 {
     public GameState State { get; private set; }
 
+    private const double TurnDelaySeconds = 2.0;
+    private double _turnDelayTimer;
+    private bool _turnDelayActive;
 
     public string GetCurrentPlayerText()
     {
@@ -24,13 +29,38 @@ public class GameController
         }
         State = GameState.Playing;
     }
-    public void Update()
+    public void Update(GameTime gameTime)
     {
         if (State == GameState.GameOver)
         {
             return;
         }
+
         Data.Ship.CurrentPlayer.Update(Data.Ship.OldPlayer.ShipBases);
+
+        if (Data.Ship.CurrentPlayer.MadeMove)
+        {
+            if (!_turnDelayActive)
+            {
+                _turnDelayActive = true;
+                _turnDelayTimer = 0;
+            }
+
+            _turnDelayTimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (_turnDelayTimer >= TurnDelaySeconds)
+            {
+                HandleTurn();
+                _turnDelayActive = false;
+                _turnDelayTimer = 0;
+            }
+        }
+        else
+        {
+            _turnDelayActive = false;
+            _turnDelayTimer = 0;
+        }
+
         CheckWin();
     }
     public void HandleTurn()

@@ -21,9 +21,9 @@ public class GameScene : Scene
     {
 
         GumService.Default.Update(gameTime);
-        _controller.Update();
+        _controller.Update(gameTime);
         _panel.RefreshUi();
-    
+
     }
     public override void Draw(GameTime gameTime)
     {
