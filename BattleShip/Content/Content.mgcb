@@ -13,12 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin fonts/Arial.fnt
-/copy:fonts/Arial.fnt
-
-#begin fonts/Arial.png
-/copy:fonts/Arial.png
-
 #begin fonts/Arial.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
