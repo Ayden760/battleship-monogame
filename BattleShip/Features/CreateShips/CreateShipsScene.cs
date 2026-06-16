@@ -3,7 +3,9 @@ using MonoGameGum;
 using MonoGameLibrary;
 using MonoGameLibrary.Scenes;
 using BattleShip.GameObjects;
+using System;
 using BattleShip.Features.Game;
+
 
 namespace BattleShip.Features.CreateShips;
 
@@ -13,21 +15,25 @@ public class CreateShipsScene : Scene
     private CreateShipsPanel _panel;
     private CreateShipsController _controller;
     private readonly GameSceneManager _sceneManager;
+    private readonly IServiceProvider _serviceProvider;
 
-    public CreateShipsScene(GameSceneManager sceneManager)
+    public CreateShipsScene(GameSceneManager sceneManager, IServiceProvider provider)
     {
+        _serviceProvider = provider;
         _sceneManager = sceneManager;
+
+
     }
     public override void Initialize()
     {
         base.Initialize();
         ShipSetter.InitializeFromSettings(Data.Settings);
         AiShipSetter.InitializeFromSettings(Data.Settings);
-        _controller = new CreateShipsController();
         Data.Session.CurrentPlayer = Data.Session.Player1;
-
-        _panel = new CreateShipsPanel(_controller);
+        _panel = (CreateShipsPanel)_serviceProvider.GetService(typeof(CreateShipsPanel));
+        _controller = (CreateShipsController)_serviceProvider.GetService(typeof(CreateShipsController));
         _panel.AddToRoot();
+
     }
     public override void Update(GameTime gameTime)
     {

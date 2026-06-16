@@ -3,27 +3,34 @@ using BattleShip.Features.GameOption;
 using BattleShip.Features.Game;
 using Microsoft.Extensions.DependencyInjection;
 using BattleShip;
+using BattleShip.GameData;
 
 
 var services = new ServiceCollection();
 
 //Game
+
 services.AddSingleton<GameScene>();
 services.AddSingleton<GameController>();
 services.AddSingleton<GamePanel>();
 services.AddSingleton<GameSceneManager>();
 
 //Create Ships
+
 services.AddSingleton<CreateShipsScene>();
 services.AddSingleton<CreateShipsController>();
-services.AddSingleton<GameOptionPanel>();
+services.AddSingleton<CreateShipsPanel>();
 
 //Options
 
 services.AddSingleton<GameOptionScene>();
 services.AddSingleton<GameOptionController>();
 services.AddSingleton<GameOptionPanel>();
-services.AddSingleton<BattleShip.Game1>();
+
+
+services.AddSingleton<GameOptions>();
+services.AddSingleton<Game1>();
+
 
 var serviceProvider = services.BuildServiceProvider();
 

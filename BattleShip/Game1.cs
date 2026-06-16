@@ -16,11 +16,12 @@ public class Game1 : Core
     private readonly IServiceProvider _serviceProvider;
     private readonly GameSceneManager _sceneManager;
 
-    public Game1(IServiceProvider serviceProvider) : base("BattleShip", 1120, 960, false)
+    public Game1(IServiceProvider serviceProvider, GameSceneManager sceneManager) : base("BattleShip", 1120, 960, false)
     {
         _serviceProvider = serviceProvider;
-        _sceneManager = new GameSceneManager(_serviceProvider);
-        _sceneManager.ChangeScene<GameScene>();
+        _sceneManager = sceneManager;
+        //_sceneManager = new GameSceneManager(_serviceProvider);
+        _sceneManager.ChangeScene<GameOptionScene>();
         Assets.Load(Content);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;

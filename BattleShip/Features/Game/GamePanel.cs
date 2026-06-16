@@ -33,7 +33,7 @@ public class GamePanel : Panel
     public void CreateGamePanel()
     {
 
-        Core.GraphicsDevice.Clear(Color.CornflowerBlue);
+
 
         Dock(Gum.Wireframe.Dock.Fill);
 

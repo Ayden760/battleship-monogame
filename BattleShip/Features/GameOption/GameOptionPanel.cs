@@ -11,6 +11,7 @@ using MonoGameGum;
 
 namespace BattleShip.Features.GameOption;
 
+using System.Diagnostics;
 using BattleShip.UiHelper;
 
 public class GameOptionPanel : Panel
@@ -208,8 +209,6 @@ public class GameOptionPanel : Panel
         distText.Y = distY;
         distText.FontScale = 0.4f;
         AddChild(distText);
-
-        var distYes = new Button();
 
         _distYes = new Button();
         _distYes.Text = "Yes";

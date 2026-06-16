@@ -1,11 +1,18 @@
+using System.Collections.Generic;
 using BattleShip.GameData;
 namespace BattleShip.Features.GameOption;
 
 using Data = GameData.GameData;
 public class GameOptionController
 {
-    public GameOptions Options { get; set; } = new();
+    public GameOptions Options { get; set; }
 
+
+    public GameOptionController(GameOptions gameOptions)
+    {
+
+        Options = gameOptions;
+    }
     public void SetAi(bool enabled)
     {
         Options.Ai_Mode = enabled;
