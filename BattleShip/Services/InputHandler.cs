@@ -6,7 +6,7 @@ namespace BattleShip.Services;
 
 using Data = GameData.GameData;
 
-public static class GameController
+public static class InputHandler
 {
 
     private static KeyboardInfo s_keyboard => Core.Input.Keyboard;

@@ -64,7 +64,7 @@ public class CreateShipsController
     {
         int y = 0;
         int x = 0;
-        if (GameController.CheckFieldClicked(ref y, ref x))
+        if (InputHandler.CheckFieldClicked(ref y, ref x))
         {
             y -= 1;
             x -= 1;

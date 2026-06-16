@@ -8,6 +8,7 @@ using BattleShip.Features.CreateShips;
 using Microsoft.Xna.Framework.Graphics;
 using BattleShip.Services;
 using MonoGameGum;
+
 namespace BattleShip.Features.GameOption;
 
 using BattleShip.UiHelper;
@@ -31,6 +32,7 @@ public class GameOptionPanel : Panel
     private Button _diffMinus;
     private Button _diffPlus;
     private TextRuntime _diffLabel;
+    public event Action StartClicked;
 
     public GameOptionPanel(GameOptionController controller)
     {
@@ -273,7 +275,7 @@ public class GameOptionPanel : Panel
         {
             _controller.ApplyToGameData();
             IsVisible = false;
-            Core.ChangeScene(new CreateShipsScene());
+            StartClicked?.Invoke();
         };
 
         AddChild(startbutton);

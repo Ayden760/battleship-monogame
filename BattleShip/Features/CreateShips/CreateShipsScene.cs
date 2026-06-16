@@ -12,7 +12,12 @@ public class CreateShipsScene : Scene
 {
     private CreateShipsPanel _panel;
     private CreateShipsController _controller;
+    private readonly GameSceneManager _sceneManager;
 
+    public CreateShipsScene(GameSceneManager sceneManager)
+    {
+        _sceneManager = sceneManager;
+    }
     public override void Initialize()
     {
         base.Initialize();
@@ -33,7 +38,10 @@ public class CreateShipsScene : Scene
         if (_controller.ShouldSwitchToGameScene)
         {
             _panel.IsVisible = false;
-            Core.ChangeScene(new GameScene());
+
+
+            //DI
+            _sceneManager.ChangeScene<GameScene>();
         }
     }
     public override void Draw(GameTime gameTime)

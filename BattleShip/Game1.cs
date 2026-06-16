@@ -7,16 +7,20 @@ using BattleShip.GameData;
 using BattleShip.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using BattleShip.Features.Game;
 namespace BattleShip;
 
 public class Game1 : Core
 {
 
-    private IServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly GameSceneManager _sceneManager;
 
     public Game1(IServiceProvider serviceProvider) : base("BattleShip", 1120, 960, false)
     {
         _serviceProvider = serviceProvider;
+        _sceneManager = new GameSceneManager(_serviceProvider);
+        _sceneManager.ChangeScene<GameScene>();
         Assets.Load(Content);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;

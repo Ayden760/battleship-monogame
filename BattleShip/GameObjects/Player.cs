@@ -51,7 +51,7 @@ public class Player
         if (!MadeMove)
         {
 
-            if (GameController.CheckFieldClicked(ref y, ref x))
+            if (InputHandler.CheckFieldClicked(ref y, ref x))
             {
                 y -= 1;
                 x -= 1;

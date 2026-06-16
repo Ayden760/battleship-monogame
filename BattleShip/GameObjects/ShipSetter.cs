@@ -149,24 +149,24 @@ public static class ShipSetter
         List<ShipBase> newShipBase = new List<ShipBase>(_shipBases);
         newShipBase.RemoveAt(Selectionlocation);
 
-        if (GameController.MoveUp())
+        if (InputHandler.MoveUp())
         {
 
             newCells = ShipMover.MoveUp(_shipBases[Selectionlocation].Location);
         }
-        if (GameController.MoveDown())
+        if (InputHandler.MoveDown())
         {
             newCells = ShipMover.MoveDown(_shipBases[Selectionlocation].Location);
         }
-        if (GameController.MoveLeft())
+        if (InputHandler.MoveLeft())
         {
             newCells = ShipMover.MoveLeft(_shipBases[Selectionlocation].Location);
         }
-        if (GameController.MoveRight())
+        if (InputHandler.MoveRight())
         {
             newCells = ShipMover.MoveRight(_shipBases[Selectionlocation].Location);
         }
-        if (GameController.RotateShip())
+        if (InputHandler.RotateShip())
         {
             newCells = ShipMover.Rotate(_shipBases[Selectionlocation].Location);
         }
