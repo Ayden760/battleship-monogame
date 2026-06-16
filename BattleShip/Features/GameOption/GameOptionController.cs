@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using BattleShip.GameData;
+using CsvHelper.Configuration.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 namespace BattleShip.Features.GameOption;
 
 using Data = GameData.GameData;
@@ -98,12 +101,13 @@ public class GameOptionController
     {
         Options.BonusShotOnHit = enabled;
     }
-
-
-
-    public void ApplyToGameData()
+    public void ApplyToGameData(IServiceProvider serviceProvider)
     {
-        Data.Settings = new GameSettings(Options);
-        Data.Session = new GameSession();
+        Data.Settings = serviceProvider.GetRequiredService<GameSettings>();
+        Data.Settings.Initialize(Options);
+
+
+
+        Data.Session = serviceProvider.GetRequiredService<GameSession>();
     }
 }

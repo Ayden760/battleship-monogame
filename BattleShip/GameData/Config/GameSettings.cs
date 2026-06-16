@@ -30,7 +30,12 @@ public class GameSettings
 
 
 
-    public GameSettings(GameOptions gameOptions)
+    public GameSettings()
+    {
+
+
+    }
+    public void Initialize(GameOptions gameOptions)
     {
         Two_tile = gameOptions.Two_tile;
         Three_tile = gameOptions.Three_tile;
@@ -40,7 +45,6 @@ public class GameSettings
         DistanceMode = gameOptions.DistanceMode;
         Difficulty = gameOptions.Difficulty;
         BonusShotOnHit = gameOptions.BonusShotOnHit;
-
     }
 
 

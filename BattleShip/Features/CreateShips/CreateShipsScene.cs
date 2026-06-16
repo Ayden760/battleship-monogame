@@ -5,6 +5,7 @@ using MonoGameLibrary.Scenes;
 using BattleShip.GameObjects;
 using System;
 using BattleShip.Features.Game;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace BattleShip.Features.CreateShips;
@@ -30,8 +31,8 @@ public class CreateShipsScene : Scene
         ShipSetter.InitializeFromSettings(Data.Settings);
         AiShipSetter.InitializeFromSettings(Data.Settings);
         Data.Session.CurrentPlayer = Data.Session.Player1;
-        _panel = (CreateShipsPanel)_serviceProvider.GetService(typeof(CreateShipsPanel));
-        _controller = (CreateShipsController)_serviceProvider.GetService(typeof(CreateShipsController));
+        _panel = _serviceProvider.GetRequiredService<CreateShipsPanel>();
+        _controller = _serviceProvider.GetRequiredService<CreateShipsController>();
         _panel.AddToRoot();
 
     }

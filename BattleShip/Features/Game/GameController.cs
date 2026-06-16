@@ -69,6 +69,10 @@ public class GameController
         {
             return;
         }
+        if (Data.Session.CurrentPlayer == Data.Session.Ai)
+        {
+            return;
+        }
 
         _turnDelayActive = true;
         _turnDelayTimer = TurnDelaySeconds;

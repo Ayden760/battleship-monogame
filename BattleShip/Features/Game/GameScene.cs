@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using MonoGameGum;
 using MonoGameLibrary.Scenes;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BattleShip.Features.Game;
 
@@ -24,8 +25,8 @@ public class GameScene : Scene
     {
 
         base.Initialize();
-        _controller = (GameController)_serviceProvider.GetService(typeof(GameController));
-        _panel = (GamePanel)_serviceProvider.GetService(typeof(GamePanel));
+        _panel = _serviceProvider.GetRequiredService<GamePanel>();
+        _controller = _serviceProvider.GetRequiredService<GameController>();
         _panel.AddToRoot();
         _controller.Initialize();
     }

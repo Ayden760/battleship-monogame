@@ -15,6 +15,10 @@ public class GameSession
 
     public GameSession()
     {
+        if (Data.Settings == null)
+        {
+            throw new System.Exception("fdfdf");
+        }
         int Rows = Data.Settings.Rows;
         int Columns = Data.Settings.Columns;
         //if für entweder player oder ki

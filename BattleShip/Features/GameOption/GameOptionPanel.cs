@@ -272,7 +272,7 @@ public class GameOptionPanel : Panel
         UiHelper.SetTextFontScale(startbutton, 0.5f);
         startbutton.Click += (_, _) =>
         {
-            _controller.ApplyToGameData();
+
             IsVisible = false;
             StartClicked?.Invoke();
         };

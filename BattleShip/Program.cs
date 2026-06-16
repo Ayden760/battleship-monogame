@@ -30,6 +30,10 @@ services.AddSingleton<GameOptionPanel>();
 
 services.AddSingleton<GameOptions>();
 services.AddSingleton<Game1>();
+services.AddSingleton<GameSettings>();
+services.AddSingleton<GameSession>();
+
+//
 
 
 var serviceProvider = services.BuildServiceProvider();

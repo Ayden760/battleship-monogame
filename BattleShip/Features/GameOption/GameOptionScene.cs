@@ -3,6 +3,8 @@ using MonoGameGum;
 using System;
 using MonoGameLibrary.Scenes;
 using BattleShip.Features.CreateShips;
+using BattleShip.GameData;
+using Microsoft.Extensions.DependencyInjection;
 namespace BattleShip.Features.GameOption;
 
 public class GameOptionScene : Scene
@@ -21,8 +23,8 @@ public class GameOptionScene : Scene
     public override void Initialize()
     {
         base.Initialize();
-        _panel = (GameOptionPanel)_serviceProvider.GetService(typeof(GameOptionPanel));
-        _controller = (GameOptionController)_serviceProvider.GetService(typeof(GameOptionController));
+        _panel = _serviceProvider.GetRequiredService<GameOptionPanel>();
+        _controller = _serviceProvider.GetRequiredService<GameOptionController>();
         _panel.StartClicked += OnStartClicked;
         _panel.AddToRoot();
 
@@ -38,6 +40,7 @@ public class GameOptionScene : Scene
     }
     private void OnStartClicked()
     {
+        _controller.ApplyToGameData(_serviceProvider);
         _sceneManager.ChangeScene<CreateShipsScene>();
     }
 }
