@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using MonoGameLibrary;
 using BattleShip.GameData;
 using BattleShip.Functions;
-using BattleShip.InputChecker;
+using BattleShip.Services;
 namespace BattleShip.GameObjects;
 
 using BattleShip.UI;
@@ -64,14 +64,14 @@ public static class ShipSetter
     public static void Reset_And_Set_PlayerField()
     {
 
-        if (Data.Ship.CurrentPlayer == Data.Ship.Player1)
+        if (Data.Session.CurrentPlayer == Data.Session.Player1)
         {
-            Data.Ship.Player1.Set_Own_Ships(_shipBases, AllShipsSet);
+            Data.Session.Player1.Set_Own_Ships(_shipBases, AllShipsSet);
             InitializeFromSettings(Data.Settings);
         }
-        else if (Data.Ship.CurrentPlayer == Data.Ship.Player2)
+        else if (Data.Session.CurrentPlayer == Data.Session.Player2)
         {
-            Data.Ship.Player2.Set_Own_Ships(_shipBases, AllShipsSet);
+            Data.Session.Player2.Set_Own_Ships(_shipBases, AllShipsSet);
         }
     }
     public static void Select_CurrentShip(int y, int x)

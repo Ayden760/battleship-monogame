@@ -2,7 +2,7 @@ using BattleShip.GameObjects;
 namespace BattleShip.GameData;
 
 using Data = GameData;
-public class GameShip
+public class GameSession
 {
     public AI Ai;
     public Player Player1;
@@ -13,7 +13,7 @@ public class GameShip
 
     //Game Options
 
-    public GameShip()
+    public GameSession()
     {
         int Rows = Data.Settings.Rows;
         int Columns = Data.Settings.Columns;

@@ -5,7 +5,7 @@ using BattleShip.GameObjects;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
 using BattleShip.Functions;
-using BattleShip.InputChecker;
+using BattleShip.Services;
 namespace BattleShip.GameObjects;
 
 using BattleShip.Functions;
@@ -92,7 +92,7 @@ public static class AiShipSetter
     public static void SetAiShips()
     {
 
-        Data.Ship.Ai.Set_Own_Ships(PlaceAllShipsRandomly(), true);
+        Data.Session.Ai.Set_Own_Ships(PlaceAllShipsRandomly(), true);
 
 
     }

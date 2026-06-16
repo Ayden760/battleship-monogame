@@ -1,7 +1,7 @@
 using System.Linq;
 using System;
 using BattleShip.Functions;
-using BattleShip.InputChecker;
+using BattleShip.Services;
 using BattleShip.GameData;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;

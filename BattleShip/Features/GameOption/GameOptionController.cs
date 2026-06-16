@@ -97,6 +97,6 @@ public class GameOptionController
     public void ApplyToGameData()
     {
         Data.Settings = new GameSettings(Options);
-        Data.Ship = new GameShip();
+        Data.Session = new GameSession();
     }
 }

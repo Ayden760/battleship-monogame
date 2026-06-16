@@ -1,6 +1,7 @@
 using BattleShip.GameData;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
+using BattleShip.Services;
 
 public static class ShipDraw
 {

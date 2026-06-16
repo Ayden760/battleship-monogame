@@ -1,5 +1,5 @@
 using BattleShip.GameObjects;
-using BattleShip.InputChecker;
+using BattleShip.Services;
 
 namespace BattleShip.Features.CreateShips;
 
@@ -13,16 +13,16 @@ public class CreateShipsController
 
         ShipSetter.CheckAllSet();
 
-        if (!Data.Ship.Player1.ShipsSet)
+        if (!Data.Session.Player1.ShipsSet)
         {
-            Data.Ship.CurrentPlayer = Data.Ship.Player1;
+            Data.Session.CurrentPlayer = Data.Session.Player1;
             Check_User_Input();
         }
-        else if (Data.Ship.Player2 != null)
+        else if (Data.Session.Player2 != null)
         {
-            if (!Data.Ship.Player2.ShipsSet)
+            if (!Data.Session.Player2.ShipsSet)
             {
-                Data.Ship.CurrentPlayer = Data.Ship.Player2;
+                Data.Session.CurrentPlayer = Data.Session.Player2;
                 Check_User_Input();
             }
             else
@@ -32,13 +32,13 @@ public class CreateShipsController
 
 
         }
-        else if (Data.Ship.Ai != null)
+        else if (Data.Session.Ai != null)
         {
             //create Ai fields
-            if (!Data.Ship.Ai.ShipsSet)
+            if (!Data.Session.Ai.ShipsSet)
             {
                 AiShipSetter.SetAiShips();
-                Data.Ship.Ai.ShipsSet = true;
+                Data.Session.Ai.ShipsSet = true;
             }
             else
             {
@@ -78,7 +78,7 @@ public class CreateShipsController
     }
     public string GetCurrentPlayerText()
     {
-        return $"Player {Data.Ship.CurrentPlayer.Name}'s Turn";
+        return $"Player {Data.Session.CurrentPlayer.Name}'s Turn";
     }
     public void GenerateShipsClicked()
     {

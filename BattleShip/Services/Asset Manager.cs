@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameLibrary.Graphics;
 using Microsoft.Xna.Framework.Content;
-namespace BattleShip.GameData;
+namespace BattleShip.Services;
 
 
 public static class Assets

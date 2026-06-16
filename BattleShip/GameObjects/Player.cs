@@ -1,6 +1,6 @@
 using System.Linq;
 using BattleShip.Functions;
-using BattleShip.InputChecker;
+using BattleShip.Services;
 using BattleShip.GameData;
 
 namespace BattleShip.GameObjects;

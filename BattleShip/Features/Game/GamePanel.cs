@@ -4,6 +4,7 @@ using BattleShip.GameData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
+using BattleShip.Services;
 using MonoGameLibrary;
 
 namespace BattleShip.Features.Game;
@@ -70,7 +71,7 @@ public class GamePanel : Panel
         Core.GraphicsDevice.Clear(Color.CornflowerBlue);
         Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Assets.Tilemap3x.Draw(Core.SpriteBatch);
-        Data.Ship.CurrentPlayer.DrawField(Data.Ship.OldPlayer.ShipBases);
+        Data.Session.CurrentPlayer.DrawField(Data.Session.OldPlayer.ShipBases);
         if (_controller.State == GameState.GameOver)
         {
             IsVisible = false;
@@ -81,7 +82,7 @@ public class GamePanel : Panel
     }
     private void DrawWinScreen()
     {
-        string text = $"{Data.Ship.CurrentPlayer.Name} has won!";
+        string text = $"{Data.Session.CurrentPlayer.Name} has won!";
 
         Vector2 textSize = Assets.Arial.MeasureString(text);
 

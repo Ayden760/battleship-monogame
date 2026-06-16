@@ -6,5 +6,5 @@ namespace BattleShip.GameData;
 public static class GameData
 {
     public static GameSettings Settings;
-    public static GameShip Ship;
+    public static GameSession Session;
 }

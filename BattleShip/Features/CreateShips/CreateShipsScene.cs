@@ -19,7 +19,7 @@ public class CreateShipsScene : Scene
         ShipSetter.InitializeFromSettings(Data.Settings);
         AiShipSetter.InitializeFromSettings(Data.Settings);
         _controller = new CreateShipsController();
-        Data.Ship.CurrentPlayer = Data.Ship.Player1;
+        Data.Session.CurrentPlayer = Data.Session.Player1;
 
         _panel = new CreateShipsPanel(_controller);
         _panel.AddToRoot();

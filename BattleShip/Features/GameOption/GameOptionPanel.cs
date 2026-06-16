@@ -6,6 +6,7 @@ using Gum.Forms.Controls;
 using BattleShip.GameData;
 using BattleShip.Features.CreateShips;
 using Microsoft.Xna.Framework.Graphics;
+using BattleShip.Services;
 using MonoGameGum;
 namespace BattleShip.Features.GameOption;
 
@@ -343,7 +344,8 @@ public class GameOptionPanel : Panel
         SetBonusShot(_controller.Options.BonusShotOnHit);
     }
     public void Draw(GameTime gameTime)
-    {  Core.GraphicsDevice.Clear(Color.CornflowerBlue);
+    {
+        Core.GraphicsDevice.Clear(Color.CornflowerBlue);
         Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
         string text = "OPTIONS";
         Vector2 size = Assets.ArialBig.MeasureString(text);
@@ -357,5 +359,5 @@ public class GameOptionPanel : Panel
 
         Core.SpriteBatch.End();
         GumService.Default.Draw();
-        }
+    }
 }

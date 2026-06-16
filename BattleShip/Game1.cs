@@ -4,14 +4,19 @@ using Gum.Forms.Controls;
 using MonoGameGum;
 using BattleShip.Features.GameOption;
 using BattleShip.GameData;
+using BattleShip.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 namespace BattleShip;
 
 public class Game1 : Core
 {
 
+    private IServiceProvider _serviceProvider;
 
-    public Game1() : base("BattleShip", 1120, 960, false)
+    public Game1(IServiceProvider serviceProvider) : base("BattleShip", 1120, 960, false)
     {
+        _serviceProvider = serviceProvider;
         Assets.Load(Content);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -27,7 +32,7 @@ public class Game1 : Core
 
 
 
-        ChangeScene(new GameOptionScene());
+        ChangeScene(_serviceProvider.GetRequiredService<GameOptionScene>());
     }
     private void InitializeGum()
     {
