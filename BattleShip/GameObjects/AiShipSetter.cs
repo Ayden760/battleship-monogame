@@ -9,14 +9,22 @@ using BattleShip.Services;
 namespace BattleShip.GameObjects;
 
 using BattleShip.Functions;
-using Data = GameData.GameData;
 
-public static class AiShipSetter
+
+public class AiShipSetter
 {
 
-    private static List<int> shipsToPlace = new List<int>();
+    private List<int> shipsToPlace = new List<int>();
+    private GameSession _session;
+    private readonly ShipPlacer _shipPlacer;
 
-    public static void InitializeFromSettings(GameSettings settings)
+
+    public AiShipSetter(GameSettings settings, GameSession session, ShipPlacer shipPlacer)
+    {
+        _session = session;
+        _shipPlacer = shipPlacer;
+    }
+    public void InitializeFromSettings(GameSettings settings)
     {
 
 
@@ -41,7 +49,7 @@ public static class AiShipSetter
 
 
     }
-    public static List<ShipBase> PlaceAllShipsRandomly()
+    public List<ShipBase> PlaceAllShipsRandomly()
     {
         int attempts = 0;
         bool CouldNotPlaceAllShips;
@@ -64,7 +72,7 @@ public static class AiShipSetter
                     int y = Random.Shared.Next(0, 10);
 
                     ShipBase shipBase = new ShipBase(shipLength);
-                    if (ShipPlacer.PlaceShip(y, x, ref shipBase, placedShips, shipLength))
+                    if (_shipPlacer.PlaceShip(y, x, ref shipBase, placedShips, shipLength))
                     {
                         shipBase.IsPlaced = true;
                         placedShips.Add(shipBase);
@@ -89,10 +97,10 @@ public static class AiShipSetter
         return placedShips;
     }
 
-    public static void SetAiShips()
+    public void SetAiShips()
     {
 
-        Data.Session.Ai.Set_Own_Ships(PlaceAllShipsRandomly(), true);
+        _session.Ai.Set_Own_Ships(PlaceAllShipsRandomly(), true);
 
 
     }

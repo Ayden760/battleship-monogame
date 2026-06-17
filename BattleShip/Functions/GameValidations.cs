@@ -3,19 +3,25 @@ using System;
 using BattleShip.GameData;
 namespace BattleShip.Functions;
 
-using Data = GameData.GameData;
 
-public static class GameValidations
+
+public class GameValidations
 {
-    public static bool CanPlaceShip(
+    private readonly GameSettings _settings;
+
+    public GameValidations(GameSettings settings)
+    {
+        _settings = settings;
+    }
+    public bool CanPlaceShip(
      List<ShipBase> existingShips,
      List<Cell> newShipCells
 
     )
     {
 
-        int rows = Data.Settings.Rows;
-        int columns = Data.Settings.Columns;
+        int rows = _settings.Rows;
+        int columns = _settings.Columns;
         // check gamefield borders
         foreach (var cell in newShipCells)
         {
@@ -43,7 +49,7 @@ public static class GameValidations
                         return false;
                     }
 
-                    if (Data.Settings.DistanceMode)
+                    if (_settings.DistanceMode)
                     {
                         int dx = Math.Abs(existingCell.X - newCell.X);
                         int dy = Math.Abs(existingCell.Y - newCell.Y);
@@ -59,7 +65,7 @@ public static class GameValidations
 
         return true;
     }
-    public static (bool found, int location) IsThereShip(List<ShipBase> existingShips, int x, int y)
+    public (bool found, int location) IsThereShip(List<ShipBase> existingShips, int x, int y)
     {
 
         for (int i = 0; i < existingShips.Count; i++)
@@ -74,7 +80,7 @@ public static class GameValidations
         }
         return (false, -1);
     }
-    public static (bool madeHit, bool madeMove) Check_Set_Hit(List<ShipBase> shipBases, int x, int y, ref FieldState[,] enemyField)
+    public (bool madeHit, bool madeMove) Check_Set_Hit(List<ShipBase> shipBases, int x, int y, ref FieldState[,] enemyField)
     {
 
         if (!IsInsideField(x, y))
@@ -100,7 +106,7 @@ public static class GameValidations
                 enemyField[y, x] = FieldState.Hit;
                 shipBase.Hits++;
 
-                if (Data.Settings.DistanceMode && shipBase.Destroyed)
+                if (_settings.DistanceMode && shipBase.Destroyed)
                 {
                     SetSurroundingCellsAsWater(shipBase, ref enemyField);
                 }
@@ -115,7 +121,7 @@ public static class GameValidations
         return (hit, true);
 
     }
-    public static void SetSurroundingCellsAsWater(ShipBase shipBase, ref FieldState[,] enemyField)
+    public void SetSurroundingCellsAsWater(ShipBase shipBase, ref FieldState[,] enemyField)
     {
         foreach (Cell cell in shipBase.Location)
         {
@@ -125,7 +131,7 @@ public static class GameValidations
                 {
                     int posY = cell.Y + y;
                     int posX = cell.X + x;
-                    if (posY < 0 || posY >= Data.Settings.Rows || posX < 0 || posX >= Data.Settings.Columns)
+                    if (posY < 0 || posY >= _settings.Rows || posX < 0 || posX >= _settings.Columns)
                     {
                         continue;
                     }
@@ -138,7 +144,7 @@ public static class GameValidations
         }
 
     }
-    public static bool HasWon(List<ShipBase> shipBases)
+    public bool HasWon(List<ShipBase> shipBases)
     {
         foreach (ShipBase shipBase in shipBases)
         {
@@ -150,12 +156,12 @@ public static class GameValidations
         }
         return true;
     }
-    public static bool IsInsideField(int x, int y)
+    public bool IsInsideField(int x, int y)
     {
         return x >= 0 &&
-               x < Data.Settings.Columns &&
+               x < _settings.Columns &&
                y >= 0 &&
-               y < Data.Settings.Rows;
+               y < _settings.Rows;
 
 
 

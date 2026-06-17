@@ -5,10 +5,14 @@ namespace BattleShip.Functions;
 using System;
 using System.Linq;
 
-public static class ShipPlacer
+public class ShipPlacer
 {
-
-    public static bool PlaceShip(
+    private readonly GameValidations _validations;
+    public ShipPlacer(GameValidations validations)
+    {
+        _validations = validations;
+    }
+    public bool PlaceShip(
     int y,
     int x,
     ref ShipBase shipBase,
@@ -65,7 +69,7 @@ public static class ShipPlacer
             }
 
             // check
-            if (GameValidations.CanPlaceShip(shipBases, new_base.Location))
+            if (_validations.CanPlaceShip(shipBases, new_base.Location))
             {
                 shipBase = new_base;
                 return true;

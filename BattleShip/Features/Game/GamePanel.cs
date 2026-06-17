@@ -9,19 +9,22 @@ using MonoGameLibrary;
 
 namespace BattleShip.Features.Game;
 
-using Data = GameData.GameData;
+
 using BattleShip.UiHelper;
 
 public class GamePanel : Panel
 {
     private readonly GameController _controller;
+    private GameSession _session;
+
 
     private TextRuntime _currentPlayerText;
     private Texture2D _pixel;
 
-    public GamePanel(GameController controller)
+    public GamePanel(GameController controller, GameSession session)
     {
         _controller = controller;
+        _session = session;
 
         CreateGamePanel();
 
@@ -71,7 +74,7 @@ public class GamePanel : Panel
         Core.GraphicsDevice.Clear(Color.CornflowerBlue);
         Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
         Assets.Tilemap3x.Draw(Core.SpriteBatch);
-        Data.Session.CurrentPlayer.DrawField(Data.Session.OldPlayer.ShipBases);
+        _session.CurrentPlayer.DrawField(_session.OldPlayer.ShipBases);
         if (_controller.State == GameState.GameOver)
         {
             IsVisible = false;
@@ -82,7 +85,7 @@ public class GamePanel : Panel
     }
     private void DrawWinScreen()
     {
-        string text = $"{Data.Session.CurrentPlayer.Name} has won!";
+        string text = $"{_session.CurrentPlayer.Name} has won!";
 
         Vector2 textSize = Assets.Arial.MeasureString(text);
 

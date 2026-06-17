@@ -6,31 +6,39 @@ using BattleShip.GameObjects;
 using System;
 using BattleShip.Features.Game;
 using Microsoft.Extensions.DependencyInjection;
+using BattleShip.GameData;
 
 
 namespace BattleShip.Features.CreateShips;
 
-using Data = GameData.GameData;
 public class CreateShipsScene : Scene
 {
     private CreateShipsPanel _panel;
     private CreateShipsController _controller;
     private readonly GameSceneManager _sceneManager;
     private readonly IServiceProvider _serviceProvider;
+    private GameSession _gameSession;
+    private readonly GameSettings _settings;
+    private ShipSetter _shipsetter;
+    private AiShipSetter _aiShipSetter;
 
-    public CreateShipsScene(GameSceneManager sceneManager, IServiceProvider provider)
+    public CreateShipsScene(GameSceneManager sceneManager, IServiceProvider provider, GameSession session, GameSettings settings, ShipSetter shipSetter, AiShipSetter aiShipSetter)
     {
         _serviceProvider = provider;
         _sceneManager = sceneManager;
+        _gameSession = session;
+        _settings = settings;
+        _shipsetter = shipSetter;
+        _aiShipSetter = aiShipSetter;
 
 
     }
     public override void Initialize()
     {
         base.Initialize();
-        ShipSetter.InitializeFromSettings(Data.Settings);
-        AiShipSetter.InitializeFromSettings(Data.Settings);
-        Data.Session.CurrentPlayer = Data.Session.Player1;
+        _shipsetter.InitializeFromSettings(_settings);
+        _aiShipSetter.InitializeFromSettings(_settings);
+        _gameSession.CurrentPlayer = _gameSession.Player1;
         _panel = _serviceProvider.GetRequiredService<CreateShipsPanel>();
         _controller = _serviceProvider.GetRequiredService<CreateShipsController>();
         _panel.AddToRoot();

@@ -3,29 +3,35 @@ using Microsoft.Xna.Framework;
 
 namespace BattleShip.Features.Game;
 
-using Data = GameData.GameData;
+
 public class GameController
 {
     public GameState State { get; private set; }
+    private readonly GameSettings _settings;
+    private GameSession _session;
 
     private const double TurnDelaySeconds = 2.0;
     private double _turnDelayTimer;
     private bool _turnDelayActive;
-
+    public GameController(GameSession session, GameSettings settings)
+    {
+        _session = session;
+        _settings = settings;
+    }
     public string GetCurrentPlayerText()
     {
-        return $"Player {Data.Session.CurrentPlayer.Name}'s Turn";
+        return $"Player {_session.CurrentPlayer.Name}'s Turn";
     }
     public void Initialize()
     {
-        Data.Session.CurrentPlayer = Data.Session.Player1;
-        if (Data.Settings.Ai_Mode)
+        _session.CurrentPlayer = _session.Player1;
+        if (_settings.Ai_Mode)
         {
-            Data.Session.OldPlayer = Data.Session.Ai;
+            _session.OldPlayer = _session.Ai;
         }
         else
         {
-            Data.Session.OldPlayer = Data.Session.Player2;
+            _session.OldPlayer = _session.Player2;
         }
         State = GameState.Playing;
     }
@@ -36,9 +42,9 @@ public class GameController
             return;
         }
 
-        Data.Session.CurrentPlayer.Update(Data.Session.OldPlayer.ShipBases);
+        _session.CurrentPlayer.Update(_session.OldPlayer.ShipBases);
 
-        if (Data.Session.CurrentPlayer.MadeMove)
+        if (_session.CurrentPlayer.MadeMove)
         {
             if (!_turnDelayActive)
             {
@@ -65,11 +71,11 @@ public class GameController
     }
     public void TriggerTurnDelay()
     {
-        if (!Data.Session.CurrentPlayer.MadeMove)
+        if (!_session.CurrentPlayer.MadeMove)
         {
             return;
         }
-        if (Data.Session.CurrentPlayer == Data.Session.Ai)
+        if (_session.CurrentPlayer == _session.Ai)
         {
             return;
         }
@@ -81,28 +87,28 @@ public class GameController
     public void HandleTurn()
     {
 
-        if (Data.Session.CurrentPlayer.MadeMove)
+        if (_session.CurrentPlayer.MadeMove)
         {
 
-            Data.Session.CurrentPlayer.MadeMove = false;
-            if (Data.Session.CurrentPlayer.MadeHit && Data.Settings.BonusShotOnHit)
+            _session.CurrentPlayer.MadeMove = false;
+            if (_session.CurrentPlayer.MadeHit && _settings.BonusShotOnHit)
             {
                 return;
             }
-            Data.Session.OldPlayer = Data.Session.CurrentPlayer;
+            _session.OldPlayer = _session.CurrentPlayer;
 
-            if (Data.Session.CurrentPlayer == Data.Session.Player1)
+            if (_session.CurrentPlayer == _session.Player1)
             {
 
 
 
-                if (!Data.Settings.Ai_Mode)
+                if (!_settings.Ai_Mode)
                 {
-                    Data.Session.CurrentPlayer = Data.Session.Player2;
+                    _session.CurrentPlayer = _session.Player2;
                 }
                 else
                 {
-                    Data.Session.CurrentPlayer = Data.Session.Ai;
+                    _session.CurrentPlayer = _session.Ai;
                     //set to AI
                 }
 
@@ -110,14 +116,14 @@ public class GameController
             }
             else
             {
-                Data.Session.CurrentPlayer = Data.Session.Player1;
+                _session.CurrentPlayer = _session.Player1;
             }
 
         }
     }
     public void CheckWin()
     {
-        if (Data.Session.CurrentPlayer.HasWon(Data.Session.OldPlayer.ShipBases))
+        if (_session.CurrentPlayer.HasWon(_session.OldPlayer.ShipBases))
         {
             State = GameState.GameOver;
         }

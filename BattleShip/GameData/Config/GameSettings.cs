@@ -9,10 +9,10 @@ public class GameSettings
 
 
     //stores the number of ships of each ship size
-    public int Two_tile { get; private set; }
-    public int Three_tile { get; private set; }
-    public int Four_tile { get; private set; }
-    public int Five_tile { get; private set; }
+    public int Two_tile { get; private set; } = 0;
+    public int Three_tile { get; private set; } = 0;
+    public int Four_tile { get; private set; } = 0;
+    public int Five_tile { get; private set; } = 0;
 
 
     public int TotalShips => Two_tile + Three_tile + Four_tile + Five_tile;
@@ -30,11 +30,7 @@ public class GameSettings
 
 
 
-    public GameSettings()
-    {
 
-
-    }
     public void Initialize(GameOptions gameOptions)
     {
         Two_tile = gameOptions.Two_tile;

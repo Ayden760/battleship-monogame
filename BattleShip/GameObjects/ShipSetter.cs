@@ -7,32 +7,48 @@ using BattleShip.Services;
 namespace BattleShip.GameObjects;
 
 using BattleShip.UI;
-using Data = GameData.GameData;
 
-public static class ShipSetter
+
+public class ShipSetter
 {
 
-    private static List<ShipBase> _shipBases = new List<ShipBase>();
+    private List<ShipBase> _shipBases = new List<ShipBase>();
 
-    private static bool AllShipsSet = false;
+    private bool AllShipsSet = false;
 
-    private static int Selectionlocation;
-    public static bool Ship_Selected { get; set; }
-
-
-
-    public static int CurrentShip_Length { get; set; }
-    public static bool Set_Mode { get; set; }
-
-    public static int Two_tile { get; private set; }
-    public static int Three_tile { get; private set; }
-    public static int Four_tile { get; private set; }
-    public static int Five_tile { get; private set; }
+    private int Selectionlocation;
+    public bool Ship_Selected { get; set; }
 
 
 
+    public int CurrentShip_Length { get; set; }
+    public bool Set_Mode { get; set; }
 
-    public static void CheckAllSet()
+    public int Two_tile { get; private set; }
+    public int Three_tile { get; private set; }
+    public int Four_tile { get; private set; }
+    public int Five_tile { get; private set; }
+
+    private readonly GameSettings _settings;
+    private readonly InputHandler _inputHandler;
+    private GameSession _session;
+    private AiShipSetter _aiShipSetter;
+    private GameValidations _validations;
+    private readonly ShipPlacer _shipPlacer;
+
+    public ShipSetter(GameSettings settings, InputHandler handler, GameSession session, AiShipSetter aiShipSetter, GameValidations validations, ShipPlacer shipPlacer)
+    {
+        _settings = settings;
+        _inputHandler = handler;
+        _session = session;
+        _aiShipSetter = aiShipSetter;
+        _validations = validations;
+        _shipPlacer = shipPlacer;
+    }
+
+
+
+    public void CheckAllSet()
     {
         bool allset = true;
 
@@ -46,7 +62,7 @@ public static class ShipSetter
 
 
     }
-    public static void InitializeFromSettings(GameSettings settings)
+    public void InitializeFromSettings(GameSettings settings)
     {
         _shipBases.Clear();
 
@@ -61,20 +77,20 @@ public static class ShipSetter
         Five_tile = settings.Five_tile;
 
     }
-    public static void Reset_And_Set_PlayerField()
+    public void Reset_And_Set_PlayerField()
     {
 
-        if (Data.Session.CurrentPlayer == Data.Session.Player1)
+        if (_session.CurrentPlayer == _session.Player1)
         {
-            Data.Session.Player1.Set_Own_Ships(_shipBases, AllShipsSet);
-            InitializeFromSettings(Data.Settings);
+            _session.Player1.Set_Own_Ships(_shipBases, AllShipsSet);
+            InitializeFromSettings(_settings);
         }
-        else if (Data.Session.CurrentPlayer == Data.Session.Player2)
+        else if (_session.CurrentPlayer == _session.Player2)
         {
-            Data.Session.Player2.Set_Own_Ships(_shipBases, AllShipsSet);
+            _session.Player2.Set_Own_Ships(_shipBases, AllShipsSet);
         }
     }
-    public static void Select_CurrentShip(int y, int x)
+    public void Select_CurrentShip(int y, int x)
     {
         if (Set_Mode)
         {
@@ -82,7 +98,7 @@ public static class ShipSetter
             //set ships new
             Set_Mode = false;
             ShipBase shipBase = new ShipBase(CurrentShip_Length);
-            bool Can_Set = ShipPlacer.PlaceShip(y, x, ref shipBase, _shipBases, CurrentShip_Length);
+            bool Can_Set = _shipPlacer.PlaceShip(y, x, ref shipBase, _shipBases, CurrentShip_Length);
             if (Can_Set)
             {
                 bool NotAlreadySet = true;
@@ -123,7 +139,7 @@ public static class ShipSetter
         else
         {
             //schon gesetztes Bearbeiten
-            var (found, location) = GameValidations.IsThereShip(_shipBases, x, y);
+            var (found, location) = _validations.IsThereShip(_shipBases, x, y);
 
 
             if (found)
@@ -138,41 +154,41 @@ public static class ShipSetter
         }
     }
 
-    public static void DrawShips()
+    public void DrawShips()
     {
         FieldRenderer.DrawShips(_shipBases);
     }
-    public static void MoveShip()
+    public void MoveShip()
     {
 
         List<Cell> newCells = new List<Cell>();
         List<ShipBase> newShipBase = new List<ShipBase>(_shipBases);
         newShipBase.RemoveAt(Selectionlocation);
 
-        if (InputHandler.MoveUp())
+        if (_inputHandler.MoveUp())
         {
 
             newCells = ShipMover.MoveUp(_shipBases[Selectionlocation].Location);
         }
-        if (InputHandler.MoveDown())
+        if (_inputHandler.MoveDown())
         {
             newCells = ShipMover.MoveDown(_shipBases[Selectionlocation].Location);
         }
-        if (InputHandler.MoveLeft())
+        if (_inputHandler.MoveLeft())
         {
             newCells = ShipMover.MoveLeft(_shipBases[Selectionlocation].Location);
         }
-        if (InputHandler.MoveRight())
+        if (_inputHandler.MoveRight())
         {
             newCells = ShipMover.MoveRight(_shipBases[Selectionlocation].Location);
         }
-        if (InputHandler.RotateShip())
+        if (_inputHandler.RotateShip())
         {
             newCells = ShipMover.Rotate(_shipBases[Selectionlocation].Location);
         }
         if (newCells.Count > 0)
         {
-            if (GameValidations.CanPlaceShip(newShipBase, newCells))
+            if (_validations.CanPlaceShip(newShipBase, newCells))
             {
                 _shipBases[Selectionlocation].Location = newCells;
 
@@ -180,7 +196,7 @@ public static class ShipSetter
         }
 
     }
-    public static void Check_Confirm()
+    public void Check_Confirm()
     {
         if (AllShipsSet)
         {
@@ -189,10 +205,10 @@ public static class ShipSetter
         }
     }
 
-    public static void GenerateShipsForCurrentPlayer()
+    public void GenerateShipsForCurrentPlayer()
     {
         _shipBases.Clear();
-        _shipBases = AiShipSetter.PlaceAllShipsRandomly();
+        _shipBases = _aiShipSetter.PlaceAllShipsRandomly();
         Two_tile = 0;
         Three_tile = 0;
         Four_tile = 0;

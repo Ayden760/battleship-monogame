@@ -6,7 +6,7 @@ using BattleShip.GameData;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
 
-using Data = BattleShip.GameData.GameData;
+
 
 namespace BattleShip.GameObjects;
 
@@ -36,10 +36,18 @@ public class AI : Player
     Direction.Right
 };
 
-    public AI(int rows, int columns, string name)
-    : base(rows, columns, name)
+    private readonly GameSettings _settings;
+
+    private GameValidations _validations;
+
+    public AI(int rows, int columns, string name, InputHandler handler, GameSettings settings, GameValidations validations)
+    : base(rows, columns, name, handler, validations)
     {
+        _settings = settings;
+        _validations = validations;
     }
+
+
     public override void Update(List<ShipBase> shipBases)
     {
         AIUpdate(shipBases);
@@ -49,7 +57,7 @@ public class AI : Player
         if (MadeMove)
             return;
 
-        int difficulty = Data.Settings?.Difficulty ?? 1;
+        int difficulty = _settings?.Difficulty ?? 1;
 
         if (difficulty == 1 && state != AIState.Searching)
         {
@@ -100,7 +108,7 @@ public class AI : Player
         firstHitx = x;
         firstHity = y;
 
-        var (hit, move) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+        var (hit, move) = _validations.Check_Set_Hit(shipBases, x, y, ref _Field);
 
         MadeHit = hit;
         MadeMove = move;
@@ -110,14 +118,14 @@ public class AI : Player
         }
         if (hit)
         {
-            state = (Data.Settings?.Difficulty ?? 1) == 1
+            state = (_settings?.Difficulty ?? 1) == 1
                 ? AIState.Searching
                 : AIState.FoundHit;
         }
     }
     private (int x, int y) GetNextSearchCell(List<ShipBase> shipBases)
     {
-        int difficulty = Data.Settings?.Difficulty ?? 1;
+        int difficulty = _settings?.Difficulty ?? 1;
 
         if (difficulty == 4 && Random.Shared.Next(100) < 20)
         {
@@ -147,9 +155,9 @@ public class AI : Player
         List<(int x, int y)> preferred = new();
         List<(int x, int y)> fallback = new();
 
-        for (int yy = 0; yy < Data.Settings.Rows; yy++)
+        for (int yy = 0; yy < _settings.Rows; yy++)
         {
-            for (int xx = 0; xx < Data.Settings.Columns; xx++)
+            for (int xx = 0; xx < _settings.Columns; xx++)
             {
                 if (_Field[yy, xx] == FieldState.Hit || _Field[yy, xx] == FieldState.Miss)
                 {
@@ -202,8 +210,8 @@ public class AI : Player
 
         MoveInDirection(currentDirection, ref x, ref y);
 
-        var (hit, move) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
-        int difficulty = Data.Settings?.Difficulty ?? 1;
+        var (hit, move) = _validations.Check_Set_Hit(shipBases, x, y, ref _Field);
+        int difficulty = _settings?.Difficulty ?? 1;
 
         MadeHit = hit;
         MadeMove = move;
@@ -228,7 +236,7 @@ public class AI : Player
     {
         MoveInDirection(currentDirection, ref x, ref y);
 
-        var (hit, move) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+        var (hit, move) = _validations.Check_Set_Hit(shipBases, x, y, ref _Field);
 
         MadeHit = hit;
         MadeMove = move;
@@ -250,7 +258,7 @@ public class AI : Player
     }
     private void UpdateCurrentTargetShip(List<ShipBase> shipBases, int x, int y)
     {
-        var result = GameValidations.IsThereShip(shipBases, x, y);
+        var result = _validations.IsThereShip(shipBases, x, y);
         if (result.found)
         {
             currentTargetShip = shipBases[result.location];

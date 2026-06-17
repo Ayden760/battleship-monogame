@@ -7,8 +7,7 @@ namespace BattleShip.GameObjects;
 
 using BattleShip.UI;
 using System.Collections.Generic;
-using System.Data.Common;
-using Data = GameData.GameData;
+
 
 public class Player
 {
@@ -20,16 +19,22 @@ public class Player
     public bool MadeMove { get; set; }
     public bool MadeHit { get; set; } = false;
 
+    private readonly InputHandler _inputHandler;
+    private GameValidations _validations;
 
-    public Player(int rows, int columns, string name)
+
+    public Player(int rows, int columns, string name, InputHandler handler, GameValidations validations)
     {
 
         Name = name;
 
         _Field = new FieldState[rows, columns];
 
+        _inputHandler = handler;
+        _validations = validations;
 
     }
+
 
 
     public void Set_Own_Ships(List<ShipBase> shipBases, bool set)
@@ -51,12 +56,12 @@ public class Player
         if (!MadeMove)
         {
 
-            if (InputHandler.CheckFieldClicked(ref y, ref x))
+            if (_inputHandler.CheckFieldClicked(ref y, ref x))
             {
                 y -= 1;
                 x -= 1;
 
-                var (madeHit, madeMove) = GameValidations.Check_Set_Hit(shipBases, x, y, ref _Field);
+                var (madeHit, madeMove) = _validations.Check_Set_Hit(shipBases, x, y, ref _Field);
                 MadeHit = madeHit;
                 MadeMove = madeMove;
             }
@@ -71,7 +76,7 @@ public class Player
     }
     public bool HasWon(List<ShipBase> shipBases)
     {
-        return GameValidations.HasWon(shipBases);
+        return _validations.HasWon(shipBases);
     }
 }
 

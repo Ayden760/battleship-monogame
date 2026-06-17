@@ -1,28 +1,42 @@
+using BattleShip.GameData;
 using BattleShip.GameObjects;
 using BattleShip.Services;
 
 namespace BattleShip.Features.CreateShips;
 
-using Data = GameData.GameData;
+
 public class CreateShipsController
 {
 
+    private GameSession _session;
+    private readonly InputHandler _inputHandler;
+    private readonly ShipSetter _shipSetter;
+    private readonly AiShipSetter _aiShipSetter;
+
     public bool ShouldSwitchToGameScene { get; private set; }
+    public CreateShipsController(GameSession session, ShipSetter shipSetter, InputHandler handler, AiShipSetter aiShipSetter)
+    {
+        _session = session;
+        _shipSetter = shipSetter;
+        _inputHandler = handler;
+        _aiShipSetter = aiShipSetter;
+
+    }
     public void Update()
     {
 
-        ShipSetter.CheckAllSet();
+        _shipSetter.CheckAllSet();
 
-        if (!Data.Session.Player1.ShipsSet)
+        if (!_session.Player1.ShipsSet)
         {
-            Data.Session.CurrentPlayer = Data.Session.Player1;
+            _session.CurrentPlayer = _session.Player1;
             Check_User_Input();
         }
-        else if (Data.Session.Player2 != null)
+        else if (_session.Player2 != null)
         {
-            if (!Data.Session.Player2.ShipsSet)
+            if (!_session.Player2.ShipsSet)
             {
-                Data.Session.CurrentPlayer = Data.Session.Player2;
+                _session.CurrentPlayer = _session.Player2;
                 Check_User_Input();
             }
             else
@@ -32,13 +46,13 @@ public class CreateShipsController
 
 
         }
-        else if (Data.Session.Ai != null)
+        else if (_session.Ai != null)
         {
             //create Ai fields
-            if (!Data.Session.Ai.ShipsSet)
+            if (!_session.Ai.ShipsSet)
             {
-                AiShipSetter.SetAiShips();
-                Data.Session.Ai.ShipsSet = true;
+                _aiShipSetter.SetAiShips();
+                _session.Ai.ShipsSet = true;
             }
             else
             {
@@ -52,37 +66,37 @@ public class CreateShipsController
     }
     public void HandleShipClicked(int type)
     {
-        ShipSetter.CurrentShip_Length = type;
-        ShipSetter.Set_Mode = true;
-        ShipSetter.Ship_Selected = false;
+        _shipSetter.CurrentShip_Length = type;
+        _shipSetter.Set_Mode = true;
+        _shipSetter.Ship_Selected = false;
     }
     public void ConfirmClicked()
     {
-        ShipSetter.Check_Confirm();
+        _shipSetter.Check_Confirm();
     }
     private void Check_User_Input()
     {
         int y = 0;
         int x = 0;
-        if (InputHandler.CheckFieldClicked(ref y, ref x))
+        if (_inputHandler.CheckFieldClicked(ref y, ref x))
         {
             y -= 1;
             x -= 1;
-            ShipSetter.Select_CurrentShip(y, x);
+            _shipSetter.Select_CurrentShip(y, x);
         }
-        else if (ShipSetter.Ship_Selected)
+        else if (_shipSetter.Ship_Selected)
         {
-            ShipSetter.MoveShip();
+            _shipSetter.MoveShip();
         }
 
     }
     public string GetCurrentPlayerText()
     {
-        return $"Player {Data.Session.CurrentPlayer.Name}'s Turn";
+        return $"Player {_session.CurrentPlayer.Name}'s Turn";
     }
     public void GenerateShipsClicked()
     {
-        ShipSetter.GenerateShipsForCurrentPlayer();
+        _shipSetter.GenerateShipsForCurrentPlayer();
 
     }
 

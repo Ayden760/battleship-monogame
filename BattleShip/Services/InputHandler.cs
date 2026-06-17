@@ -2,19 +2,24 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
 using MonoGameLibrary.Input;
+using BattleShip.GameData;
 namespace BattleShip.Services;
 
-using Data = GameData.GameData;
 
-public static class InputHandler
+public class InputHandler
 {
 
-    private static KeyboardInfo s_keyboard => Core.Input.Keyboard;
-    private static MouseInfo s_mouse => Core.Input.Mouse;
+    private KeyboardInfo s_keyboard => Core.Input.Keyboard;
+    private MouseInfo s_mouse => Core.Input.Mouse;
+    private readonly GameSettings _settings;
 
 
 
-    public static bool MoveUp()
+    public InputHandler(GameSettings settings)
+    {
+        _settings = settings;
+    }
+    public bool MoveUp()
     {
 
 
@@ -22,29 +27,29 @@ public static class InputHandler
                s_keyboard.WasKeyJustPressed(Keys.Up);
     }
 
-    public static bool MoveDown()
+    public bool MoveDown()
     {
         return s_keyboard.WasKeyJustPressed(Keys.S) ||
                s_keyboard.WasKeyJustPressed(Keys.Down);
     }
 
-    public static bool MoveLeft()
+    public bool MoveLeft()
     {
         return s_keyboard.WasKeyJustPressed(Keys.A) ||
                s_keyboard.WasKeyJustPressed(Keys.Left);
     }
 
-    public static bool MoveRight()
+    public bool MoveRight()
     {
         return s_keyboard.WasKeyJustPressed(Keys.D) ||
                s_keyboard.WasKeyJustPressed(Keys.Right);
     }
 
-    public static bool RotateShip()
+    public bool RotateShip()
     {
         return s_keyboard.WasKeyJustPressed(Keys.R);
     }
-    public static bool CheckFieldClicked(ref int y, ref int x)
+    public bool CheckFieldClicked(ref int y, ref int x)
     {
 
         if (s_mouse.WasButtonJustPressed(MouseButton.Left))
@@ -57,8 +62,8 @@ public static class InputHandler
             y = click.Y / tileSize;
 
 
-            bool insideMap = x > 0 && x <= Data.Settings.Rows &&
-           y > 0 && y <= Data.Settings.Columns;
+            bool insideMap = x > 0 && x <= _settings.Rows &&
+           y > 0 && y <= _settings.Columns;
 
             if (insideMap)
             {

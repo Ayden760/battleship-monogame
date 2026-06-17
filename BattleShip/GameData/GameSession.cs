@@ -1,9 +1,14 @@
+using BattleShip.Functions;
 using BattleShip.GameObjects;
+using BattleShip.Services;
+using Gum.Wireframe;
 namespace BattleShip.GameData;
 
 using Data = GameData;
 public class GameSession
 {
+    private readonly GameSettings _settings;
+
     public AI Ai;
     public Player Player1;
     public Player Player2;
@@ -13,26 +18,19 @@ public class GameSession
 
     //Game Options
 
-    public GameSession()
+    public GameSession(GameSettings settings, InputHandler handler, GameValidations gameValidations)
     {
-        if (Data.Settings == null)
-        {
-            throw new System.Exception("fdfdf");
-        }
-        int Rows = Data.Settings.Rows;
-        int Columns = Data.Settings.Columns;
-        //if für entweder player oder ki
+        _settings = settings;
+        Player1 = new Player(_settings.Rows, _settings.Columns, "Player1", handler, gameValidations);
 
-        Player1 = new Player(Rows, Columns, "Player1");
-
-        if (!Data.Settings.Ai_Mode)
+        if (!_settings.Ai_Mode)
         {
-            Player2 = new Player(Rows, Columns, "Player2");
+            Player2 = new Player(_settings.Rows, _settings.Columns, "Player2", handler, gameValidations);
             Ai = null;
         }
         else
         {
-            Ai = new AI(Rows, Columns, "AI_1");
+            Ai = new AI(_settings.Rows, _settings.Columns, "AI_1", handler, settings, gameValidations);
             Player2 = null;
         }
 

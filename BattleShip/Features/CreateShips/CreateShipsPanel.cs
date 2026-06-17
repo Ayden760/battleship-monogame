@@ -10,12 +10,12 @@ using BattleShip.Services;
 using MonoGameGum;
 namespace BattleShip.Features.CreateShips;
 
-using Data = GameData.GameData;
 using BattleShip.UiHelper;
 
 public class CreateShipsPanel : Panel
 {
     private readonly CreateShipsController _controller;
+    private readonly ShipSetter _shipSetter;
 
     private TextRuntime _ship2Text;
     private TextRuntime _ship3Text;
@@ -25,9 +25,10 @@ public class CreateShipsPanel : Panel
     TextRuntime _currentPlayerText;
 
 
-    public CreateShipsPanel(CreateShipsController controller)
+    public CreateShipsPanel(CreateShipsController controller, ShipSetter shipSetter)
     {
         _controller = controller;
+        _shipSetter = shipSetter;
 
         CreateShipPanel();
 
@@ -168,10 +169,10 @@ public class CreateShipsPanel : Panel
     public void RefreshUi()
     {
 
-        _ship2Text.Text = ShipSetter.Two_tile.ToString();
-        _ship3Text.Text = ShipSetter.Three_tile.ToString();
-        _ship4Text.Text = ShipSetter.Four_tile.ToString();
-        _ship5Text.Text = ShipSetter.Five_tile.ToString();
+        _ship2Text.Text = _shipSetter.Two_tile.ToString();
+        _ship3Text.Text = _shipSetter.Three_tile.ToString();
+        _ship4Text.Text = _shipSetter.Four_tile.ToString();
+        _ship5Text.Text = _shipSetter.Five_tile.ToString();
         _currentPlayerText.Text = _controller.GetCurrentPlayerText();
     }
     public void Draw(GameTime gameTime)
@@ -180,7 +181,7 @@ public class CreateShipsPanel : Panel
         Core.SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
         Assets.Tilemap3x.Draw(Core.SpriteBatch);
-        ShipSetter.DrawShips();
+        _shipSetter.DrawShips();
 
 
         Core.SpriteBatch.End();

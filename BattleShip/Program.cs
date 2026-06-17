@@ -4,6 +4,9 @@ using BattleShip.Features.Game;
 using Microsoft.Extensions.DependencyInjection;
 using BattleShip;
 using BattleShip.GameData;
+using BattleShip.Services;
+using BattleShip.GameObjects;
+using BattleShip.Functions;
 
 
 var services = new ServiceCollection();
@@ -35,7 +38,20 @@ services.AddSingleton<Game1>();
 services.AddSingleton<GameSettings>();
 services.AddSingleton<GameSession>();
 
+//Services
+services.AddSingleton<InputHandler>();
 
+//Player AI
+services.AddSingleton<Player>();
+services.AddSingleton<AI>();
+
+//GameValidations
+services.AddSingleton<GameValidations>();
+
+
+services.AddSingleton<ShipSetter>();
+services.AddSingleton<AiShipSetter>();
+services.AddSingleton<ShipPlacer>();
 
 
 

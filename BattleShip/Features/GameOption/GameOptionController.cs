@@ -5,16 +5,20 @@ using CsvHelper.Configuration.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 namespace BattleShip.Features.GameOption;
 
-using Data = GameData.GameData;
+
 public class GameOptionController
 {
-    public GameOptions Options { get; set; }
+    public GameOptions Options { get; private set; }
+    private GameSettings _settings;
+    private GameSession _session;
 
 
-    public GameOptionController(GameOptions gameOptions)
+    public GameOptionController(GameOptions gameOptions, GameSettings settings, GameSession session)
     {
 
         Options = gameOptions;
+        _settings = settings;
+        _session = session;
     }
     public void SetAi(bool enabled)
     {
@@ -103,11 +107,8 @@ public class GameOptionController
     }
     public void ApplyToGameData(IServiceProvider serviceProvider)
     {
-        Data.Settings = serviceProvider.GetRequiredService<GameSettings>();
-        Data.Settings.Initialize(Options);
-
-
-
-        Data.Session = serviceProvider.GetRequiredService<GameSession>();
+        _settings = serviceProvider.GetRequiredService<GameSettings>();
+        _settings.Initialize(Options);
+        _session = serviceProvider.GetRequiredService<GameSession>();
     }
 }
