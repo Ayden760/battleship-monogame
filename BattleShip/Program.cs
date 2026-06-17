@@ -41,9 +41,7 @@ services.AddSingleton<GameSession>();
 //Services
 services.AddSingleton<InputHandler>();
 
-//Player AI
-services.AddSingleton<Player>();
-services.AddSingleton<AI>();
+
 
 //GameValidations
 services.AddSingleton<GameValidations>();

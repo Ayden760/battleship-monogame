@@ -40,7 +40,7 @@ public class GameOptionScene : Scene
     }
     private void OnStartClicked()
     {
-        _controller.ApplyToGameData(_serviceProvider);
+        _controller.ApplyToGameData();
         _sceneManager.ChangeScene<CreateShipsScene>();
     }
 }

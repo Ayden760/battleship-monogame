@@ -105,10 +105,10 @@ public class GameOptionController
     {
         Options.BonusShotOnHit = enabled;
     }
-    public void ApplyToGameData(IServiceProvider serviceProvider)
+    public void ApplyToGameData()
     {
-        _settings = serviceProvider.GetRequiredService<GameSettings>();
+
         _settings.Initialize(Options);
-        _session = serviceProvider.GetRequiredService<GameSession>();
+        _session.InitializeSession();
     }
 }
