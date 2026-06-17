@@ -50,11 +50,9 @@ public class CreateShipsScene : Scene
         GumService.Default.Update(gameTime);
         _controller.Update();
         _panel.RefreshUi();
-        if (_controller.ShouldSwitchToGameScene)
+        if (_controller.StateMatch == MatchState.SetupComplete)
         {
             _panel.IsVisible = false;
-
-
             //DI
             _sceneManager.ChangeScene<GameScene>();
         }

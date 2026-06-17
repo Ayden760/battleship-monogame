@@ -1,12 +1,6 @@
 namespace BattleShip.GameData
 {
-    public enum FieldState
-    {
 
-        Ship,
-        Hit,
-        Miss
-    }
     public enum Direction
     {
         Up,
@@ -21,17 +15,5 @@ namespace BattleShip.GameData
         Four,
         Five
     }
-    public enum GameState
-    {
-        Playing,
-        Paused,
-        GameOver
-    }
-    enum AIState
-    {
-        Searching,
-        FoundHit,
-        Targeting,
-        DoneShip
-    }
+
 }

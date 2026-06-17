@@ -13,7 +13,9 @@ public class CreateShipsController
     private readonly ShipSetter _shipSetter;
     private readonly AiShipSetter _aiShipSetter;
 
-    public bool ShouldSwitchToGameScene { get; private set; }
+
+    public MatchState StateMatch { get; private set; }
+
     public CreateShipsController(GameSession session, ShipSetter shipSetter, InputHandler handler, AiShipSetter aiShipSetter)
     {
         _session = session;
@@ -24,45 +26,45 @@ public class CreateShipsController
     }
     public void Update()
     {
-
         _shipSetter.CheckAllSet();
-
-        if (!_session.Player1.ShipsSet)
+        UpdateState();
+        switch (StateMatch)
         {
-            _session.CurrentPlayer = _session.Player1;
-            Check_User_Input();
-        }
-        else if (_session.Player2 != null)
-        {
-            if (!_session.Player2.ShipsSet)
-            {
+            case MatchState.SetupPlayer1:
+                _session.CurrentPlayer = _session.Player1;
+                Check_User_Input();
+                break;
+            case MatchState.SetupPlayer2:
                 _session.CurrentPlayer = _session.Player2;
                 Check_User_Input();
-            }
-            else
-            {
-                ShouldSwitchToGameScene = true;
-            }
-
-
-        }
-        else if (_session.Ai != null)
-        {
-            //create Ai fields
-            if (!_session.Ai.ShipsSet)
-            {
+                break;
+            case MatchState.SetupAI:
                 _aiShipSetter.SetAiShips();
                 _session.Ai.ShipsSet = true;
-            }
-            else
-            {
-                ShouldSwitchToGameScene = true;
-            }
+                break;
+            case MatchState.SetupComplete:
+                break;
 
-            // set ships for the AI via a function that randomly places all the ships and uses the already made ShipPlacer class
         }
-
-
+    }
+    public void UpdateState()
+    {
+        if (!_session.Player1.ShipsSet)
+        {
+            StateMatch = MatchState.SetupPlayer1;
+            return;
+        }
+        if (_session.Player2 != null && !_session.Player2.ShipsSet)
+        {
+            StateMatch = MatchState.SetupPlayer2;
+            return;
+        }
+        if (_session.Ai != null && !_session.Ai.ShipsSet)
+        {
+            StateMatch = MatchState.SetupAI;
+            return;
+        }
+        StateMatch = MatchState.SetupComplete;
     }
     public void HandleShipClicked(int type)
     {
