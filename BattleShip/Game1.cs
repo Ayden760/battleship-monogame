@@ -20,7 +20,6 @@ public class Game1 : Core
     {
         _serviceProvider = serviceProvider;
         _sceneManager = sceneManager;
-        //_sceneManager = new GameSceneManager(_serviceProvider);
         _sceneManager.ChangeScene<GameOptionScene>();
         Assets.Load(Content);
         Content.RootDirectory = "Content";

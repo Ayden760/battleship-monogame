@@ -30,13 +30,16 @@ services.AddSingleton<GameOptionPanel>();
 
 services.AddSingleton<GameOptions>();
 services.AddSingleton<Game1>();
+
+//Settings/ Session
 services.AddSingleton<GameSettings>();
 services.AddSingleton<GameSession>();
 
-//
+
+
 
 
 var serviceProvider = services.BuildServiceProvider();
 
-using var game = serviceProvider.GetService<BattleShip.Game1>();
+using var game = serviceProvider.GetService<Game1>();
 game.Run();
