@@ -1,0 +1,21 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - run: dotnet restore BattleShip.Tests/BattleShip.Tests.csproj
+      - run: dotnet test BattleShip.Tests/BattleShip.Tests.csproj --configuration Release --verbosity minimal
