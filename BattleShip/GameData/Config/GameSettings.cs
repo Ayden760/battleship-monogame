@@ -38,6 +38,8 @@ public class GameSettings
         Four_tile = gameOptions.Four_tile;
         Five_tile = gameOptions.Five_tile;
         Ai_Mode = gameOptions.Ai_Mode;
+        Rows = gameOptions.Rows;
+        Columns = gameOptions.Columns;
         DistanceMode = gameOptions.DistanceMode;
         Difficulty = gameOptions.Difficulty;
         BonusShotOnHit = gameOptions.BonusShotOnHit;

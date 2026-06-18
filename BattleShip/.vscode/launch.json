@@ -8,7 +8,8 @@
         "name": "C#: BattleShip Debug",
         "type": "dotnet",
         "request": "launch",
-        "projectPath": "${workspaceFolder}/BattleShip.csproj"
+        "projectPath": "${workspaceFolder}/BattleShip.csproj",
+        "preLaunchTask": "Run Unit Tests"
       }
     ],
   }

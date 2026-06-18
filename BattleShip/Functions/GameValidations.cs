@@ -20,13 +20,13 @@ public class GameValidations
     )
     {
 
-        int rows = _settings.Rows;
-        int columns = _settings.Columns;
+        int rows = _settings.Rows - 1;
+        int columns = _settings.Columns - 1;
         // check gamefield borders
         foreach (var cell in newShipCells)
         {
-            if (cell.X < 0 || cell.X >= columns ||
-            cell.Y < 0 || cell.Y >= rows)
+            if (cell.X < 0 || cell.X > columns ||
+            cell.Y < 0 || cell.Y > rows)
             {
                 return false;
             }
