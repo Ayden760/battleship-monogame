@@ -7,6 +7,7 @@ namespace BattleShip.Features.Game;
 public class GameController
 {
     public GameState State { get; private set; }
+    public MatchState MatchState { get; private set; }
     private readonly GameSettings _settings;
     private GameSession _session;
 
@@ -34,43 +35,32 @@ public class GameController
             _session.OldPlayer = _session.Player2;
         }
         State = GameState.Playing;
+        MatchState = MatchState.PlayerTurn;
     }
     public void Update(GameTime gameTime)
     {
-        if (State == GameState.GameOver)
+        switch (MatchState)
         {
-            return;
+            case MatchState.GameOver:
+                return;
+            case MatchState.PlayerTurn:
+                HandlePlayerTurn(gameTime);
+                break;
+            case MatchState.TurnTransition:
+                HandleTurnTransition(gameTime);
+                break;
         }
 
-        _session.CurrentPlayer.Update(_session.OldPlayer.ShipBases);
-
-        if (_session.CurrentPlayer.MadeMove)
+        if (CheckWin())
         {
-            if (!_turnDelayActive)
-            {
-                _turnDelayActive = true;
-                _turnDelayTimer = 0;
-            }
-
-            _turnDelayTimer += gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (_turnDelayTimer >= TurnDelaySeconds)
-            {
-                HandleTurn();
-                _turnDelayActive = false;
-                _turnDelayTimer = 0;
-            }
+            MatchState = MatchState.GameOver;
+            State = GameState.GameOver;
         }
-        else
-        {
-            _turnDelayActive = false;
-            _turnDelayTimer = 0;
-        }
-
-        CheckWin();
     }
     public void TriggerTurnDelay()
     {
+
+        //checks if player did his Move before pressing Continue
         if (!_session.CurrentPlayer.MadeMove)
         {
             return;
@@ -82,6 +72,56 @@ public class GameController
 
         _turnDelayActive = true;
         _turnDelayTimer = TurnDelaySeconds;
+        MatchState = MatchState.TurnTransition;
+    }
+
+    private void HandlePlayerTurn(GameTime gameTime)
+    {
+        _session.CurrentPlayer.Update(_session.OldPlayer.ShipBases);
+
+        if (_session.CurrentPlayer.MadeMove)
+        {
+            MatchState = MatchState.TurnTransition;
+            HandleTurnTransition(gameTime);
+            return;
+        }
+
+        _turnDelayActive = false;
+        _turnDelayTimer = 0;
+    }
+
+    private void HandleTurnTransition(GameTime gameTime)
+    {
+        if (!_session.CurrentPlayer.MadeMove)
+        {
+            _turnDelayActive = false;
+            _turnDelayTimer = 0;
+            MatchState = MatchState.PlayerTurn;
+            return;
+        }
+
+        //starts the delay timer
+        if (!_turnDelayActive)
+        {
+            _turnDelayActive = true;
+            _turnDelayTimer = 0;
+        }
+
+        _turnDelayTimer += gameTime.ElapsedGameTime.TotalSeconds;
+
+
+        //switches to second player if true
+        if (_turnDelayTimer >= TurnDelaySeconds)
+        {
+            HandleTurn();
+            _turnDelayActive = false;
+            _turnDelayTimer = 0;
+
+            if (MatchState != MatchState.GameOver)
+            {
+                MatchState = MatchState.PlayerTurn;
+            }
+        }
     }
 
     public void HandleTurn()
@@ -121,12 +161,14 @@ public class GameController
 
         }
     }
-    public void CheckWin()
+    public bool CheckWin()
     {
         if (_session.CurrentPlayer.HasWon(_session.OldPlayer.ShipBases))
         {
-            State = GameState.GameOver;
+            return true;
         }
+
+        return false;
     }
 
 }

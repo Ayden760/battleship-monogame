@@ -27,6 +27,7 @@ namespace BattleShip.GameData
         SetupAI,
         SetupComplete,
         PlayerTurn,
+        AiThinking,
         TurnTransition,
         GameOver
     }

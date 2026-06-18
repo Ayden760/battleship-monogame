@@ -31,7 +31,7 @@ public class GameSession
     public void InitializeSession()
     {
         Player1 = new Player(_settings.Rows, _settings.Columns, "Player1", _inputHandler, _gamValidations);
-        Console.WriteLine(_settings.Ai_Mode);
+
         if (!_settings.Ai_Mode)
         {
             Player2 = new Player(_settings.Rows, _settings.Columns, "Player2", _inputHandler, _gamValidations);
