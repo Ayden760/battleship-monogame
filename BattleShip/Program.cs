@@ -6,7 +6,19 @@ using BattleShip;
 using BattleShip.GameData;
 using BattleShip.Services;
 using BattleShip.GameObjects;
+using System;
 using BattleShip.Functions;
+using System.Diagnostics;
+using System.IO;
+
+
+#if DEBUG
+if (!RunUnitTests())
+{
+    Console.WriteLine("Unit tests failed. Aborting game start.");
+    return;
+}
+#endif
 
 
 var services = new ServiceCollection();
@@ -57,3 +69,49 @@ var serviceProvider = services.BuildServiceProvider();
 
 using var game = serviceProvider.GetService<Game1>();
 game.Run();
+
+static bool RunUnitTests()
+{
+    var projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
+    var testProjectPath = Path.Combine(projectRoot, "BattleShip.Tests", "BattleShip.Tests.csproj");
+
+    if (!File.Exists(testProjectPath))
+    {
+        Console.Error.WriteLine($"Test project not found: {testProjectPath}");
+        return false;
+    }
+
+    var startInfo = new ProcessStartInfo
+    {
+        FileName = "dotnet",
+        Arguments = $"test \"{testProjectPath}\" --nologo --no-build",
+        WorkingDirectory = projectRoot,
+        RedirectStandardOutput = true,
+        RedirectStandardError = true,
+        UseShellExecute = false,
+        CreateNoWindow = true,
+    };
+
+    using var process = new Process { StartInfo = startInfo };
+    process.OutputDataReceived += (_, e) =>
+    {
+        if (!string.IsNullOrWhiteSpace(e.Data))
+        {
+            Console.WriteLine(e.Data);
+        }
+    };
+    process.ErrorDataReceived += (_, e) =>
+    {
+        if (!string.IsNullOrWhiteSpace(e.Data))
+        {
+            Console.Error.WriteLine(e.Data);
+        }
+    };
+
+    process.Start();
+    process.BeginOutputReadLine();
+    process.BeginErrorReadLine();
+    process.WaitForExit();
+
+    return process.ExitCode == 0;
+}
