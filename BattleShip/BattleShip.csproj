@@ -29,6 +29,10 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="BattleShip.Tests/**/*.cs" />
+    <None Remove="BattleShip.Tests/**/*" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MonoGameLibrary\MonoGameLibrary.csproj" />
   </ItemGroup>
 </Project>

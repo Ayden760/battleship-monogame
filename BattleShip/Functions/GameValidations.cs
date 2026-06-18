@@ -100,7 +100,7 @@ public class GameValidations
         foreach (ShipBase shipBase in shipBases)
         {
 
-            if (ShipFinder.Contains(shipBase, x, y))
+            if (ShipFinder.Contains(shipBase, x, y) && shipBase.IsPlaced)
             {
                 hit = true;
                 enemyField[y, x] = FieldState.Hit;

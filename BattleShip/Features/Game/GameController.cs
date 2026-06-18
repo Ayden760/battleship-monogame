@@ -17,7 +17,6 @@ public class GameController
     private double _turnDelayTimer;
     private bool _turnDelayActive;
 
-
     //AI
     private const double AiMinThinkDelaySeconds = 0.5;
     private const double AiMaxThinkDelaySeconds = 1.0;
@@ -204,7 +203,6 @@ public class GameController
 
         if (_session.CurrentPlayer.MadeMove)
         {
-
             _session.CurrentPlayer.MadeMove = false;
             if (_session.CurrentPlayer.MadeHit && _settings.BonusShotOnHit)
             {
@@ -214,9 +212,6 @@ public class GameController
 
             if (_session.CurrentPlayer == _session.Player1)
             {
-
-
-
                 if (!_settings.Ai_Mode)
                 {
                     _session.CurrentPlayer = _session.Player2;
@@ -224,16 +219,12 @@ public class GameController
                 else
                 {
                     _session.CurrentPlayer = _session.Ai;
-                    //set to AI
                 }
-
-
             }
             else
             {
                 _session.CurrentPlayer = _session.Player1;
             }
-
         }
     }
     public bool CheckWin()
@@ -242,8 +233,6 @@ public class GameController
         {
             return true;
         }
-
         return false;
     }
-
 }

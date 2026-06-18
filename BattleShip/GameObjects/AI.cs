@@ -155,9 +155,12 @@ public class AI : Player
         List<(int x, int y)> preferred = new();
         List<(int x, int y)> fallback = new();
 
-        for (int yy = 0; yy < _settings.Rows; yy++)
+        int rows = _Field.GetLength(0);
+        int columns = _Field.GetLength(1);
+
+        for (int yy = 0; yy < rows; yy++)
         {
-            for (int xx = 0; xx < _settings.Columns; xx++)
+            for (int xx = 0; xx < columns; xx++)
             {
                 if (_Field[yy, xx] == FieldState.Hit || _Field[yy, xx] == FieldState.Miss)
                 {
