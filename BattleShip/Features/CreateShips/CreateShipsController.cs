@@ -12,7 +12,8 @@ public class CreateShipsController
     private readonly InputHandler _inputHandler;
     private readonly ShipSetter _shipSetter;
     private readonly AiShipSetter _aiShipSetter;
-    //test df
+
+
 
     public MatchState StateMatch { get; private set; }
 
