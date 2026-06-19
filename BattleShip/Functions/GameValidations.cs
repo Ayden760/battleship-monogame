@@ -25,7 +25,7 @@ public class GameValidations
         // check gamefield borders
         foreach (var cell in newShipCells)
         {
-            if (cell.X < 2 || cell.X > columns ||
+            if (cell.X < 0 || cell.X > columns ||
             cell.Y < 0 || cell.Y > rows)
             {
                 return false;
