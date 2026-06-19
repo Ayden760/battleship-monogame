@@ -17,5 +17,15 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Diagnose paths
+        run: |
+          pwd
+          ls -la
+          ls -la BattleShip.Tests
+
       - run: dotnet restore BattleShip.Tests/BattleShip.Tests.csproj
       - run: dotnet test BattleShip.Tests/BattleShip.Tests.csproj --configuration Release --verbosity minimal
