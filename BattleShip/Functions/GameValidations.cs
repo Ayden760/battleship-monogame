@@ -31,6 +31,8 @@ public class GameValidations
                 return false;
             }
         }
+        //test
+        //test
 
 
         foreach (var ship in existingShips)
