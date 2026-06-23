@@ -7,11 +7,14 @@ namespace BattleShip.GameObjects;
 
 using BattleShip.UI;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
 
 public class Player
 {
     public string Name { get; set; }
+
+    public int SessionPlayerId { get; set; }
 
     protected FieldState[,] _Field;
     public List<ShipBase> ShipBases { get; set; } = new List<ShipBase>();

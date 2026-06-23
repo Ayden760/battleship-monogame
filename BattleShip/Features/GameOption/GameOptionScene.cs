@@ -41,6 +41,19 @@ public class GameOptionScene : Scene
     private void OnStartClicked()
     {
         _controller.ApplyToGameData();
+        using var db = new GameDbContext();
+
+        db.Database.EnsureCreated();
+
+        db.Scores.Add(new Score
+        {
+            PlayerName = "TestSpieler",
+            PlayerScore = 3
+        });
+
+        db.SaveChanges();
+
+
         _sceneManager.ChangeScene<CreateShipsScene>();
     }
 }
