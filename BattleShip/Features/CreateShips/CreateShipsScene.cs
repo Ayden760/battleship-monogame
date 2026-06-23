@@ -47,16 +47,7 @@ public class CreateShipsScene : Scene
     }
     public override void Update(GameTime gameTime)
     {
-        using var db = new GameDbContext();
 
-        var scores = db.Scores
-            .OrderByDescending(s => s.PlayerScore)
-            .ToList();
-
-        foreach (var s in scores)
-        {
-            Console.WriteLine($"{s.PlayerName} - {s.PlayerScore} Wins");
-        }
         GumService.Default.Update(gameTime);
         _controller.Update();
         _panel.RefreshUi();

@@ -7,10 +7,17 @@ using BattleShip.GameData;
 using BattleShip.Services;
 using BattleShip.GameObjects;
 using BattleShip.Functions;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
+using System;
+
+
 
 
 var services = new ServiceCollection();
 
+services.AddDbContext<GameDbContext>(options =>
+    options.UseSqlite("Data Source=battleship.db"));
 //Game
 
 services.AddSingleton<GameScene>();
@@ -55,5 +62,14 @@ services.AddSingleton<ShipPlacer>();
 
 var serviceProvider = services.BuildServiceProvider();
 
-using var game = serviceProvider.GetService<Game1>();
+
+
+using (var scope = serviceProvider.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<GameDbContext>();
+    db.Database.Migrate();
+}
+
+
+using var game = serviceProvider.GetRequiredService<Game1>();
 game.Run();

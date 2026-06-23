@@ -15,5 +15,10 @@ namespace BattleShip.GameData
         Four,
         Five
     }
+    public enum GameMode
+    {
+        AI,
+        PvP
+    }
 
 }

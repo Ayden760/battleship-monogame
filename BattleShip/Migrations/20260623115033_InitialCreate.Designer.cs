@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BattleShip.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    [Migration("20260623063346_InitialCreate")]
+    [Migration("20260623115033_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,17 +24,17 @@ namespace BattleShip.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Mode")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Mode")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("Number_Ships")
+                    b.Property<int>("Number_ShipCells")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerAttempts")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PlayerName")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("PlayerScore")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

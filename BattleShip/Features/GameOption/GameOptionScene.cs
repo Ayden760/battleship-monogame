@@ -22,6 +22,7 @@ public class GameOptionScene : Scene
     }
     public override void Initialize()
     {
+
         base.Initialize();
         _panel = _serviceProvider.GetRequiredService<GameOptionPanel>();
         _controller = _serviceProvider.GetRequiredService<GameOptionController>();
@@ -41,19 +42,6 @@ public class GameOptionScene : Scene
     private void OnStartClicked()
     {
         _controller.ApplyToGameData();
-        using var db = new GameDbContext();
-
-        db.Database.EnsureCreated();
-
-        db.Scores.Add(new Score
-        {
-            PlayerName = "TestSpieler",
-            PlayerScore = 3
-        });
-
-        db.SaveChanges();
-
-
         _sceneManager.ChangeScene<CreateShipsScene>();
     }
 }

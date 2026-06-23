@@ -1,6 +1,8 @@
 using BattleShip.GameData;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BattleShip.Features.Game;
 
@@ -11,6 +13,8 @@ public class GameController
     public MatchState MatchState { get; private set; }
     private readonly GameSettings _settings;
     private GameSession _session;
+    private bool _scoreSaved;
+    private List<Score> _top5Scores;
 
     private const double TurnDelaySeconds = 2.0;
 
@@ -25,10 +29,14 @@ public class GameController
     private bool _aiReadyToAct;
     private double _aiThinkDelayTimer;
     private double _aiThinkDelayTarget;
-    public GameController(GameSession session, GameSettings settings)
+    private GameDbContext _dbContext;
+    public GameController(GameSession session, GameSettings settings, GameDbContext dbContext)
     {
+
         _session = session;
         _settings = settings;
+        _dbContext = dbContext;
+        Console.WriteLine(_session.CurrentPlayer.Score.Number_ShipCells);
     }
     public string GetCurrentPlayerText()
     {
@@ -52,6 +60,8 @@ public class GameController
         }
         State = GameState.Playing;
         MatchState = MatchState.PlayerTurn;
+
+        _top5Scores = LoadTop5Scores();
     }
     public void Update(GameTime gameTime)
     {
@@ -72,9 +82,21 @@ public class GameController
 
         if (CheckWin())
         {
+            if (!_scoreSaved)
+            {
+                SaveWinnerScore();
+                _scoreSaved = true;
+            }
+
             MatchState = MatchState.GameOver;
             State = GameState.GameOver;
         }
+
+        foreach (Score score in _top5Scores)
+        {
+            Console.WriteLine($"ID: {score.Id} Name: {score.PlayerName} Attemps: {score.PlayerAttempts} Number Ships {score.Number_ShipCells} GameMode: {score.Mode}");
+        }
+        Console.WriteLine($"Current Score: ID: {_session.CurrentPlayer.Score.Id} Name: {_session.CurrentPlayer.Score.PlayerName} Attemps: {_session.CurrentPlayer.Score.PlayerAttempts} Number ShipCells {_session.CurrentPlayer.Score.Number_ShipCells} GameMode: {_session.CurrentPlayer.Score.Mode}");
     }
     public void TriggerTurnDelay()
     {
@@ -234,5 +256,55 @@ public class GameController
             return true;
         }
         return false;
+    }
+
+    private void SaveWinnerScore()
+    {
+        var winner = _session.CurrentPlayer;
+        if (winner == null || winner.Score == null)
+        {
+            return;
+        }
+
+
+
+        Score scoreEntry = null;
+        if (winner.Score.Id != 0)
+        {
+            //search for the existing ID
+            scoreEntry = _dbContext.Scores.FirstOrDefault(s => s.Id == winner.Score.Id);
+        }
+
+        if (scoreEntry == null)
+        {
+            scoreEntry = _dbContext.Scores.FirstOrDefault(s => s.PlayerName == winner.Score.PlayerName && s.Mode == winner.Score.Mode);
+        }
+
+        if (scoreEntry == null)
+        {
+            scoreEntry = winner.Score;
+            _dbContext.Scores.Add(scoreEntry);
+        }
+
+        //scoreEntry.PlayerScore += 1;
+        //scoreEntry.Number_Ships = winner.Score.Number_Ships;
+        _dbContext.SaveChanges();
+
+        winner.Score = scoreEntry;
+    }
+    private List<Score> LoadTop5Scores()
+    {
+
+
+        GameMode mode = _settings.Ai_Mode ? GameMode.AI : GameMode.PvP;
+        int number_ShipCells = _settings.Number_ShipCells;
+
+        var top5 = _dbContext.Scores
+            .Where(s => s.Mode == mode && s.Number_ShipCells == number_ShipCells)
+            .OrderBy(s => s.PlayerAttempts)
+            .Take(5)
+            .ToList();
+
+        return top5;
     }
 }

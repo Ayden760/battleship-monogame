@@ -21,17 +21,17 @@ namespace BattleShip.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Mode")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Mode")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("Number_Ships")
+                    b.Property<int>("Number_ShipCells")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerAttempts")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PlayerName")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("PlayerScore")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

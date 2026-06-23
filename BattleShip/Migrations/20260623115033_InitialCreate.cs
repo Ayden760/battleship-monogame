@@ -17,9 +17,9 @@ namespace BattleShip.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PlayerName = table.Column<string>(type: "TEXT", nullable: true),
-                    Mode = table.Column<string>(type: "TEXT", nullable: true),
-                    PlayerScore = table.Column<int>(type: "INTEGER", nullable: false),
-                    Number_Ships = table.Column<int>(type: "INTEGER", nullable: false)
+                    Mode = table.Column<int>(type: "INTEGER", nullable: false),
+                    PlayerAttempts = table.Column<int>(type: "INTEGER", nullable: false),
+                    Number_ShipCells = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
