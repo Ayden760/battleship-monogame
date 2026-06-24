@@ -31,6 +31,7 @@ public class GameSession
         _inputHandler = handler;
         _gamValidations = gameValidations;
         _dbContext = dbContext;
+
     }
     public void InitializeSession()
     {
@@ -53,14 +54,12 @@ public class GameSession
         var mode = _settings.Ai_Mode ? GameMode.AI : GameMode.PvP;
         Player1.InitializeScore(mode, _settings.Number_ShipCells);
 
-
-        EnsureScoreExists(Player1);
+        EnsureScoreExists(Player1, mode, _settings.Number_ShipCells);
 
         if (!_settings.Ai_Mode)
         {
-
             Player2.InitializeScore(mode, _settings.Number_ShipCells);
-            EnsureScoreExists(Player2);
+            EnsureScoreExists(Player2, mode, _settings.Number_ShipCells);
         }
         /* else
          {
@@ -71,23 +70,26 @@ public class GameSession
 
     }
 
-    private void EnsureScoreExists(Player player)
+    private void EnsureScoreExists(Player player, GameMode mode, int numberShipCells)
     {
-        if (player == null || player.Score == null)
+        if (player == null || player.Data_Player == null)
         {
             return;
         }
 
-        var existing = _dbContext.Scores
-            .FirstOrDefault(s => s.PlayerName == player.Score.PlayerName && s.Mode == player.Score.Mode);
+        var existing = _dbContext.Players_Data
+            .FirstOrDefault(s => s.PlayerName == player.Data_Player.PlayerName);
 
         if (existing == null)
         {
-            _dbContext.Scores.Add(player.Score);
+            player.Data_Player.ResetEntry(mode, numberShipCells);
+            _dbContext.Players_Data.Add(player.Data_Player);
             _dbContext.SaveChanges();
             return;
         }
 
-        player.Score = existing;
+        existing.ResetEntry(mode, numberShipCells);
+        _dbContext.SaveChanges();
+        player.Data_Player = existing;
     }
 }

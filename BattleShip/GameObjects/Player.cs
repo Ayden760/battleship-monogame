@@ -17,7 +17,10 @@ public class Player
 
     public int SessionPlayerId { get; set; }
 
-    public Score Score { get; set; }
+    public Player_Data Data_Player { get; set; }
+
+    private GameMode _scoreMode;
+    private int _scoreNumberShipCells;
 
     protected FieldState[,] _Field;
     public List<ShipBase> ShipBases { get; set; } = new List<ShipBase>();
@@ -39,27 +42,30 @@ public class Player
         _inputHandler = handler;
         _validations = validations;
 
-        Score = new Score
+        Data_Player = new Player_Data
         {
-            PlayerName = Name,
-            PlayerAttempts = 0,
-            Number_ShipCells = 0
+            PlayerName = Name
         };
     }
 
     public void InitializeScore(GameMode mode, int numberShipCells = 0)
     {
-
-        if (Score == null)
+        if (Data_Player == null)
         {
-            Score = new Score();
+            Data_Player = new Player_Data();
         }
 
-        Score.PlayerName = Name;
-        Score.Mode = mode;
-        Score.Number_ShipCells = numberShipCells;
-        Score.PlayerAttempts = 0;
+        Data_Player.PlayerName = Name;
+        _scoreMode = mode;
+        _scoreNumberShipCells = numberShipCells;
+        Data_Player.ResetEntry(mode, numberShipCells);
     }
+
+    public GameMode CurrentScoreMode => _scoreMode;
+
+    public int CurrentScoreShipCells => _scoreNumberShipCells;
+
+    public int CurrentScoreAttempts => Data_Player?.GetAttempts(_scoreMode, _scoreNumberShipCells) ?? 0;
 
 
 
@@ -91,7 +97,7 @@ public class Player
                 MadeHit = madeHit;
                 if (madeMove)
                 {
-                    Score.PlayerAttempts++;
+                    Data_Player.IncrementAttempts(_scoreMode, _scoreNumberShipCells);
                 }
                 MadeMove = madeMove;
             }

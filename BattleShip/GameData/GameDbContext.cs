@@ -1,23 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System;
-
+using System.IO;
 
 public class GameDbContext : DbContext
 {
-
-    public DbSet<Score> Scores { get; set; }
-    public string DbPath { get; }
+    public DbSet<Player_Data> Players_Data { get; set; }
 
     public GameDbContext(DbContextOptions<GameDbContext> options)
         : base(options)
     {
     }
+
+    public static string GetDatabasePath()
+    {
+        return Path.GetFullPath(
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "battleship.db")
+        );
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         if (!options.IsConfigured)
         {
-            options.UseSqlite("Data Source=battleship.db");
+            var dbPath = GetDatabasePath();
+            options.UseSqlite($"Data Source={dbPath}");
         }
     }
 }
@@ -27,7 +34,8 @@ public class GameDbContextFactory : IDesignTimeDbContextFactory<GameDbContext>
     public GameDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<GameDbContext>();
-        optionsBuilder.UseSqlite("Data Source=battleship.db");
+        var dbPath = GameDbContext.GetDatabasePath();
+        optionsBuilder.UseSqlite($"Data Source={dbPath}");
         return new GameDbContext(optionsBuilder.Options);
     }
 }

@@ -10,14 +10,15 @@ using BattleShip.Functions;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using System;
+using System.IO;
 
 
 
 
 var services = new ServiceCollection();
-
+var dbPath = GameDbContext.GetDatabasePath();
 services.AddDbContext<GameDbContext>(options =>
-    options.UseSqlite("Data Source=battleship.db"));
+    options.UseSqlite($"Data Source={dbPath}"));
 //Game
 
 services.AddSingleton<GameScene>();
