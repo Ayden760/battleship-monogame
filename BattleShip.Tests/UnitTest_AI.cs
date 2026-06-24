@@ -4,6 +4,7 @@ using BattleShip.Functions;
 using BattleShip.GameData;
 using BattleShip.GameObjects;
 using BattleShip.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace BattleShip.Tests;
 
@@ -118,7 +119,8 @@ public class AiTests
         var settings = CreateSettings(rows: 8, columns: 8, five: 1, four: 1, three: 2, two: 2);
         var validations = new GameValidations(settings);
         var inputHandler = new InputHandler(settings);
-        var session = new GameSession(settings, inputHandler, validations);
+        using var dbContext = CreateTestDbContext();
+        var session = new GameSession(settings, inputHandler, validations, dbContext);
         var shipPlacer = new ShipPlacer(validations);
         var aiShipSetter = new AiShipSetter(settings, session, shipPlacer);
 
@@ -148,7 +150,8 @@ public class AiTests
         var settings = CreateSettings(rows: 5, columns: 5, five: 3, three: 2, two: 1);
         var validations = new GameValidations(settings);
         var inputHandler = new InputHandler(settings);
-        var session = new GameSession(settings, inputHandler, validations);
+        using var dbContext = CreateTestDbContext();
+        var session = new GameSession(settings, inputHandler, validations, dbContext);
         var shipPlacer = new ShipPlacer(validations);
         var aiShipSetter = new AiShipSetter(settings, session, shipPlacer);
 
@@ -172,7 +175,8 @@ public class AiTests
         var settings = CreateSettings(rows: 8, columns: 8, five: 1, four: 1, three: 2, two: 2);
         var validations = new GameValidations(settings);
         var inputHandler = new InputHandler(settings);
-        var session = new GameSession(settings, inputHandler, validations);
+        using var dbContext = CreateTestDbContext();
+        var session = new GameSession(settings, inputHandler, validations, dbContext);
         var shipPlacer = new ShipPlacer(validations);
         var aiShipSetter = new AiShipSetter(settings, session, shipPlacer);
 
@@ -215,6 +219,13 @@ public class AiTests
 
         return settings;
     }
+    private static GameDbContext CreateTestDbContext()
+    {
+        var options = new DbContextOptionsBuilder<GameDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString()) // tests have own DB
+            .Options;
 
+        return new GameDbContext(options);
+    }
 
 }
