@@ -16,8 +16,6 @@ public class GameController
     private readonly GameSettings _settings;
     private GameSession _session;
     private bool _scoreSaved;
-    private List<Player_Data> _top5Scores;
-
     private const double TurnDelaySeconds = 2.0;
 
     private double _turnDelayTimer;
@@ -51,6 +49,7 @@ public class GameController
     }
     public void Initialize()
     {
+        _session.CurrentMatch.GameStartTime = DateTime.UtcNow;
         _session.CurrentPlayer = _session.Player1;
         if (_settings.Ai_Mode)
         {
@@ -63,7 +62,7 @@ public class GameController
         State = GameState.Playing;
         MatchState = MatchState.PlayerTurn;
 
-        _top5Scores = LoadTop5Scores();
+
     }
     public void Update(GameTime gameTime)
     {
@@ -86,7 +85,8 @@ public class GameController
         {
             if (!_scoreSaved)
             {
-                SaveWinnerScore();
+                SaveMatchScore();
+
                 _scoreSaved = true;
             }
 
@@ -257,79 +257,55 @@ public class GameController
         return false;
     }
 
-    private void SaveWinnerScore()
+    private void SaveMatchScore()
     {
-        var winner = _session.CurrentPlayer;
-        if (winner == null || winner.Data_Player == null)
+        if (_session.CurrentMatch == null)
         {
             return;
         }
 
+        _session.CurrentMatch.GameEndTime = DateTime.UtcNow;
+        _session.CurrentMatch.Aborted = false;
 
+        var winnerName = _session.CurrentPlayer.Name;
 
-        Player_Data scoreEntry = null;
-        if (winner.Data_Player.Id != 0)
+        if (_session.Player1Data != null)
         {
-            scoreEntry = _dbContext.Players_Data.FirstOrDefault(s => s.Id == winner.Data_Player.Id);
+            _session.Player1Data.HasWon = _session.Player1.Name == winnerName;
+            _dbContext.Scores.Add(new Score
+            {
+                PlayerID = _session.Player1Data.Id,
+                IMatchID = _session.CurrentMatch.Id,
+                PlayerAttemps = _session.Player1.Attemps,
+                NumberShipCells = _session.Player1.ShipBases.Sum(s => s.Length)
+            });
         }
 
-        if (scoreEntry == null)
+        if (_session.Player2Data != null && _session.Player2 != null)
         {
-            scoreEntry = _dbContext.Players_Data.FirstOrDefault(s => s.PlayerName == winner.Data_Player.PlayerName);
+            _session.Player2Data.HasWon = _session.Player2.Name == winnerName;
+            _dbContext.Scores.Add(new Score
+            {
+                PlayerID = _session.Player2Data.Id,
+                IMatchID = _session.CurrentMatch.Id,
+                PlayerAttemps = _session.Player2.Attemps,
+                NumberShipCells = _session.Player2.ShipBases.Sum(s => s.Length)
+            });
         }
 
-        if (scoreEntry == null)
+        if (_session.AiData != null && _session.Ai != null)
         {
-            scoreEntry = winner.Data_Player;
-            _dbContext.Players_Data.Add(scoreEntry);
+            _session.AiData.HasWon = _session.Ai.Name == winnerName;
+            _dbContext.Scores.Add(new Score
+            {
+                PlayerID = _session.AiData.Id,
+                IMatchID = _session.CurrentMatch.Id,
+                PlayerAttemps = _session.Ai.Attemps,
+                NumberShipCells = _session.Ai.ShipBases.Sum(s => s.Length)
+            });
         }
 
-        scoreEntry.GetOrCreateEntry(winner.CurrentScoreMode, winner.CurrentScoreShipCells);
         _dbContext.SaveChanges();
-
-
-        winner.Data_Player = scoreEntry;
-
-        // Debug output: dump all score rows currently stored in the database.
-
-        var allScores = _dbContext.Players_Data
-     .Include(p => p.Highscores_PvP)
-     .Include(p => p.HighScores_PvE)
-     .ToList();
-
-        Console.WriteLine("--- Database Dump: Scores ---");
-        foreach (var dbScore in allScores)
-        {
-            Console.WriteLine($"ID: {dbScore.Id} Name: {dbScore.PlayerName}");
-
-            Console.WriteLine("PvP: ");
-            foreach (ShipSizeScore shipSizeScore in dbScore.Highscores_PvP)
-            {
-                Console.WriteLine($" shipCells: {shipSizeScore.Number_ShipCells} Attempts: {shipSizeScore.PlayerAttempts}");
-            }
-            Console.WriteLine("PvE: ");
-            foreach (ShipSizeScore shipSizeScore in dbScore.HighScores_PvE)
-            {
-                Console.WriteLine($"ShipCells: {shipSizeScore.Number_ShipCells} Attempts: {shipSizeScore.PlayerAttempts}");
-            }
-            Console.WriteLine("New Player: ");
-
-        }
-        Console.WriteLine("--- End Database Dump ---");
     }
-    private List<Player_Data> LoadTop5Scores()
-    {
 
-
-        GameMode mode = _settings.Ai_Mode ? GameMode.AI : GameMode.PvP;
-        int number_ShipCells = _settings.Number_ShipCells;
-
-        var top5 = _dbContext.Players_Data
-            .AsEnumerable()
-            .OrderBy(s => s.GetAttempts(mode, number_ShipCells))
-            .Take(5)
-            .ToList();
-
-        return top5;
-    }
 }

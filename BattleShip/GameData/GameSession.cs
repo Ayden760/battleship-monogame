@@ -21,7 +21,11 @@ public class GameSession
     public Player CurrentPlayer { get; set; }
     public Player OldPlayer { get; set; }
 
-    private GameDbContext _dbContext;
+    private readonly GameDbContext _dbContext;
+    public Match CurrentMatch { get; private set; }
+    public Player_Data Player1Data { get; private set; }
+    public Player_Data Player2Data { get; private set; }
+    public Player_Data AiData { get; private set; }
 
     //Game Options
 
@@ -35,61 +39,69 @@ public class GameSession
     }
     public void InitializeSession()
     {
+        CurrentMatch = new Match
+        {
+            MatchSetTime = DateTime.UtcNow,
+            GameStartTime = DateTime.UtcNow,
+            GameEndTime = DateTime.UtcNow,
+            Aborted = true,
+            Mode = _settings.Ai_Mode ? GameMode.AI : GameMode.PvP,
+            DistanceMode = _settings.DistanceMode,
+            BonusShotOnHit = _settings.BonusShotOnHit
+
+        };
+
+        _dbContext.Matches.Add(CurrentMatch);
+        _dbContext.SaveChanges();
+
         Player1 = new Player(_settings.Rows, _settings.Columns, "Test1", _inputHandler, _gamValidations);
+        Player1Data = GetOrCreatePlayerData(Player1.Name, isAi: false, aiDifficulty: 0);
 
         if (!_settings.Ai_Mode)
         {
             Player2 = new Player(_settings.Rows, _settings.Columns, "Test2", _inputHandler, _gamValidations);
+            Player2Data = GetOrCreatePlayerData(Player2.Name, isAi: false, aiDifficulty: 0);
+            AiData = null;
             Ai = null;
         }
         else
         {
             Ai = new AI(_settings.Rows, _settings.Columns, "AI_1", _inputHandler, _settings, _gamValidations);
+            AiData = GetOrCreatePlayerData(Ai.Name, isAi: true, aiDifficulty: _settings.Difficulty);
+            Player2Data = null;
             Player2 = null;
         }
 
-
-        //for the Player scores
-
-        var mode = _settings.Ai_Mode ? GameMode.AI : GameMode.PvP;
-        Player1.InitializeScore(mode, _settings.Number_ShipCells);
-
-        EnsureScoreExists(Player1, mode, _settings.Number_ShipCells);
-
-        if (!_settings.Ai_Mode)
-        {
-            Player2.InitializeScore(mode, _settings.Number_ShipCells);
-            EnsureScoreExists(Player2, mode, _settings.Number_ShipCells);
-        }
-        /* else
-         {
-             Ai.InitializeScore(mode, _settings.TotalShips);
-             EnsureScoreExists(Ai, db);
-         }
- */
-
-    }
-
-    private void EnsureScoreExists(Player player, GameMode mode, int numberShipCells)
-    {
-        if (player == null || player.Data_Player == null)
-        {
-            return;
-        }
-
-        var existing = _dbContext.Players_Data
-            .FirstOrDefault(s => s.PlayerName == player.Data_Player.PlayerName);
-
-        if (existing == null)
-        {
-            player.Data_Player.ResetEntry(mode, numberShipCells);
-            _dbContext.Players_Data.Add(player.Data_Player);
-            _dbContext.SaveChanges();
-            return;
-        }
-
-        existing.ResetEntry(mode, numberShipCells);
         _dbContext.SaveChanges();
-        player.Data_Player = existing;
+
     }
+
+    private Player_Data GetOrCreatePlayerData(string playerName, bool isAi, int aiDifficulty)
+    {
+        //makes every letter lowercase so for example this : Test1, teSt1 is the same Player
+        var normalizedName = playerName.Trim().ToLowerInvariant();
+        var playerData = _dbContext.Players_Data
+            .FirstOrDefault(p => p.PlayerName != null && p.PlayerName.Trim().ToLower() == normalizedName);
+
+        if (playerData == null)
+        {
+            playerData = new Player_Data
+            {
+                PlayerName = playerName.Trim(),
+                IsAI = isAi,
+                AiDifficulty = aiDifficulty,
+                HasWon = false
+            };
+
+            _dbContext.Players_Data.Add(playerData);
+            return playerData;
+        }
+
+        playerData.IsAI = isAi;
+        playerData.AiDifficulty = aiDifficulty;
+
+        return playerData;
+    }
+
+
 }

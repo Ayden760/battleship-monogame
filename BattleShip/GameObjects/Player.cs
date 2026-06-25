@@ -14,14 +14,7 @@ using System.Data.Common;
 public class Player
 {
     public string Name { get; set; }
-
-    public int SessionPlayerId { get; set; }
-
-    public Player_Data Data_Player { get; set; }
-
-    private GameMode _scoreMode;
-    private int _scoreNumberShipCells;
-
+    public int Attemps { get; private set; } = 0;
     protected FieldState[,] _Field;
     public List<ShipBase> ShipBases { get; set; } = new List<ShipBase>();
     public bool ShipsSet { get; set; } = false;
@@ -30,8 +23,6 @@ public class Player
 
     private readonly InputHandler _inputHandler;
     private GameValidations _validations;
-
-
     public Player(int rows, int columns, string name, InputHandler handler, GameValidations validations)
     {
 
@@ -41,34 +32,7 @@ public class Player
 
         _inputHandler = handler;
         _validations = validations;
-
-        Data_Player = new Player_Data
-        {
-            PlayerName = Name
-        };
     }
-
-    public void InitializeScore(GameMode mode, int numberShipCells = 0)
-    {
-        if (Data_Player == null)
-        {
-            Data_Player = new Player_Data();
-        }
-
-        Data_Player.PlayerName = Name;
-        _scoreMode = mode;
-        _scoreNumberShipCells = numberShipCells;
-        Data_Player.ResetEntry(mode, numberShipCells);
-    }
-
-    public GameMode CurrentScoreMode => _scoreMode;
-
-    public int CurrentScoreShipCells => _scoreNumberShipCells;
-
-    public int CurrentScoreAttempts => Data_Player?.GetAttempts(_scoreMode, _scoreNumberShipCells) ?? 0;
-
-
-
     public void Set_Own_Ships(List<ShipBase> shipBases, bool set)
     {
         // Copies ships to prevent both players from sharing the same instances
@@ -97,7 +61,7 @@ public class Player
                 MadeHit = madeHit;
                 if (madeMove)
                 {
-                    Data_Player.IncrementAttempts(_scoreMode, _scoreNumberShipCells);
+                    Attemps++;
                 }
                 MadeMove = madeMove;
             }
