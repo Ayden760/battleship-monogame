@@ -21,9 +21,10 @@ namespace BattleShip.Migrations
                     GameStartTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     GameEndTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Aborted = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Mode = table.Column<int>(type: "INTEGER", nullable: false),
+                    ModePlayer = table.Column<int>(type: "INTEGER", nullable: false),
                     DistanceMode = table.Column<bool>(type: "INTEGER", nullable: false),
-                    BonusShotOnHit = table.Column<bool>(type: "INTEGER", nullable: false)
+                    BonusShotOnHit = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AiDifficulty = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,9 +38,7 @@ namespace BattleShip.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PlayerName = table.Column<string>(type: "TEXT", nullable: true),
-                    HasWon = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsAI = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AiDifficulty = table.Column<int>(type: "INTEGER", nullable: false)
+                    IsAI = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +46,7 @@ namespace BattleShip.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Scores",
+                name: "MatchPlayers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -56,32 +55,33 @@ namespace BattleShip.Migrations
                     DataPlayerId = table.Column<int>(type: "INTEGER", nullable: true),
                     IMatchID = table.Column<int>(type: "INTEGER", nullable: false),
                     MatchDataId = table.Column<int>(type: "INTEGER", nullable: true),
-                    PlayerAttemps = table.Column<int>(type: "INTEGER", nullable: false),
-                    NumberShipCells = table.Column<int>(type: "INTEGER", nullable: false)
+                    PlayerAttempts = table.Column<int>(type: "INTEGER", nullable: false),
+                    NumberShipCells = table.Column<int>(type: "INTEGER", nullable: false),
+                    HasWon = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Scores", x => x.Id);
+                    table.PrimaryKey("PK_MatchPlayers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Scores_Matches_MatchDataId",
+                        name: "FK_MatchPlayers_Matches_MatchDataId",
                         column: x => x.MatchDataId,
                         principalTable: "Matches",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Scores_Players_Data_DataPlayerId",
+                        name: "FK_MatchPlayers_Players_Data_DataPlayerId",
                         column: x => x.DataPlayerId,
                         principalTable: "Players_Data",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Scores_DataPlayerId",
-                table: "Scores",
+                name: "IX_MatchPlayers_DataPlayerId",
+                table: "MatchPlayers",
                 column: "DataPlayerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Scores_MatchDataId",
-                table: "Scores",
+                name: "IX_MatchPlayers_MatchDataId",
+                table: "MatchPlayers",
                 column: "MatchDataId");
         }
 
@@ -89,7 +89,7 @@ namespace BattleShip.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Scores");
+                name: "MatchPlayers");
 
             migrationBuilder.DropTable(
                 name: "Matches");

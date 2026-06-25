@@ -15,7 +15,7 @@ public class GameController
     public MatchState MatchState { get; private set; }
     private readonly GameSettings _settings;
     private GameSession _session;
-    private bool _scoreSaved;
+    private bool _MatchPlayerSaved;
     private const double TurnDelaySeconds = 2.0;
 
     private double _turnDelayTimer;
@@ -83,11 +83,11 @@ public class GameController
 
         if (CheckWin())
         {
-            if (!_scoreSaved)
+            if (!_MatchPlayerSaved)
             {
-                SaveMatchScore();
+                SaveMatchPlayer();
 
-                _scoreSaved = true;
+                _MatchPlayerSaved = true;
             }
 
             MatchState = MatchState.GameOver;
@@ -257,7 +257,7 @@ public class GameController
         return false;
     }
 
-    private void SaveMatchScore()
+    private void SaveMatchPlayer()
     {
         if (_session.CurrentMatch == null)
         {
@@ -271,37 +271,37 @@ public class GameController
 
         if (_session.Player1Data != null)
         {
-            _session.Player1Data.HasWon = _session.Player1.Name == winnerName;
-            _dbContext.Scores.Add(new Score
+            _dbContext.MatchPlayers.Add(new MatchPlayer
             {
                 PlayerID = _session.Player1Data.Id,
                 IMatchID = _session.CurrentMatch.Id,
-                PlayerAttemps = _session.Player1.Attemps,
-                NumberShipCells = _session.Player1.ShipBases.Sum(s => s.Length)
+                PlayerAttempts = _session.Player1.Attempts,
+                NumberShipCells = _session.Player1.ShipBases.Sum(s => s.Length),
+                HasWon = _session.Player1.Name == winnerName
             });
         }
 
         if (_session.Player2Data != null && _session.Player2 != null)
         {
-            _session.Player2Data.HasWon = _session.Player2.Name == winnerName;
-            _dbContext.Scores.Add(new Score
+            _dbContext.MatchPlayers.Add(new MatchPlayer
             {
                 PlayerID = _session.Player2Data.Id,
                 IMatchID = _session.CurrentMatch.Id,
-                PlayerAttemps = _session.Player2.Attemps,
-                NumberShipCells = _session.Player2.ShipBases.Sum(s => s.Length)
+                PlayerAttempts = _session.Player2.Attempts,
+                NumberShipCells = _session.Player2.ShipBases.Sum(s => s.Length),
+                HasWon = _session.Player2.Name == winnerName
             });
         }
 
         if (_session.AiData != null && _session.Ai != null)
         {
-            _session.AiData.HasWon = _session.Ai.Name == winnerName;
-            _dbContext.Scores.Add(new Score
+            _dbContext.MatchPlayers.Add(new MatchPlayer
             {
                 PlayerID = _session.AiData.Id,
                 IMatchID = _session.CurrentMatch.Id,
-                PlayerAttemps = _session.Ai.Attemps,
-                NumberShipCells = _session.Ai.ShipBases.Sum(s => s.Length)
+                PlayerAttempts = _session.Ai.Attempts,
+                NumberShipCells = _session.Ai.ShipBases.Sum(s => s.Length),
+                HasWon = _session.Ai.Name == winnerName
             });
         }
 

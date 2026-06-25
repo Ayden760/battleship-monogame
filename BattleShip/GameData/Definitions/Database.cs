@@ -9,22 +9,23 @@ public class Player_Data
 {
     public int Id { get; set; }
     public string PlayerName { get; set; } = "";
-    public ICollection<Score> Scores { get; set; } = new List<Score>();
-    public bool HasWon { get; set; }
+    public ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
+
     public bool IsAI { get; set; }
-    public int AiDifficulty { get; set; } = 0;
+
 
 
 }
-public class Score
+public class MatchPlayer
 {
     public int Id { get; set; }
     public int PlayerID { get; set; }
     public Player_Data DataPlayer { get; set; }
     public int IMatchID { get; set; }
     public Match MatchData { get; set; }
-    public int PlayerAttemps { get; set; }
+    public int PlayerAttempts { get; set; }
     public int NumberShipCells { get; set; }
+    public bool HasWon { get; set; }
 
 }
 public class Match
@@ -34,10 +35,11 @@ public class Match
     public DateTime GameStartTime { get; set; }
     public DateTime GameEndTime { get; set; }
     public bool Aborted { get; set; }
-    public GameMode Mode { get; set; }
+    public GameMode ModePlayer { get; set; }
     public bool DistanceMode { get; set; }
     public bool BonusShotOnHit { get; set; }
-    public ICollection<Score> Scores { get; set; } = new List<Score>();
+    public int AiDifficulty { get; set; } = 0;
+    public ICollection<MatchPlayer> MatchPlayers { get; set; } = new List<MatchPlayer>();
 }
 
 

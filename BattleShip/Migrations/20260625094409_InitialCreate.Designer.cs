@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BattleShip.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    [Migration("20260625084550_InitialCreate")]
+    [Migration("20260625094409_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -28,6 +28,9 @@ namespace BattleShip.Migrations
                     b.Property<bool>("Aborted")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AiDifficulty")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("BonusShotOnHit")
                         .HasColumnType("INTEGER");
 
@@ -43,7 +46,7 @@ namespace BattleShip.Migrations
                     b.Property<DateTime>("MatchSetTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Mode")
+                    b.Property<int>("ModePlayer")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -51,16 +54,46 @@ namespace BattleShip.Migrations
                     b.ToTable("Matches");
                 });
 
-            modelBuilder.Entity("Player_Data", b =>
+            modelBuilder.Entity("MatchPlayer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AiDifficulty")
+                    b.Property<int?>("DataPlayerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("HasWon")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IMatchID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MatchDataId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NumberShipCells")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerAttempts")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("PlayerID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DataPlayerId");
+
+                    b.HasIndex("MatchDataId");
+
+                    b.ToTable("MatchPlayers");
+                });
+
+            modelBuilder.Entity("Player_Data", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsAI")
@@ -74,47 +107,14 @@ namespace BattleShip.Migrations
                     b.ToTable("Players_Data");
                 });
 
-            modelBuilder.Entity("Score", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("DataPlayerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("IMatchID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("MatchDataId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NumberShipCells")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PlayerAttemps")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PlayerID")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DataPlayerId");
-
-                    b.HasIndex("MatchDataId");
-
-                    b.ToTable("Scores");
-                });
-
-            modelBuilder.Entity("Score", b =>
+            modelBuilder.Entity("MatchPlayer", b =>
                 {
                     b.HasOne("Player_Data", "DataPlayer")
-                        .WithMany("Scores")
+                        .WithMany("MatchPlayers")
                         .HasForeignKey("DataPlayerId");
 
                     b.HasOne("Match", "MatchData")
-                        .WithMany("Scores")
+                        .WithMany("MatchPlayers")
                         .HasForeignKey("MatchDataId");
 
                     b.Navigation("DataPlayer");
@@ -124,12 +124,12 @@ namespace BattleShip.Migrations
 
             modelBuilder.Entity("Match", b =>
                 {
-                    b.Navigation("Scores");
+                    b.Navigation("MatchPlayers");
                 });
 
             modelBuilder.Entity("Player_Data", b =>
                 {
-                    b.Navigation("Scores");
+                    b.Navigation("MatchPlayers");
                 });
 #pragma warning restore 612, 618
         }

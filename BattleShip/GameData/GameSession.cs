@@ -45,9 +45,10 @@ public class GameSession
             GameStartTime = DateTime.UtcNow,
             GameEndTime = DateTime.UtcNow,
             Aborted = true,
-            Mode = _settings.Ai_Mode ? GameMode.AI : GameMode.PvP,
+            ModePlayer = _settings.Ai_Mode ? GameMode.AI : GameMode.PvP,
             DistanceMode = _settings.DistanceMode,
-            BonusShotOnHit = _settings.BonusShotOnHit
+            BonusShotOnHit = _settings.BonusShotOnHit,
+            AiDifficulty = _settings.Difficulty
 
         };
 
@@ -55,19 +56,19 @@ public class GameSession
         _dbContext.SaveChanges();
 
         Player1 = new Player(_settings.Rows, _settings.Columns, "Test1", _inputHandler, _gamValidations);
-        Player1Data = GetOrCreatePlayerData(Player1.Name, isAi: false, aiDifficulty: 0);
+        Player1Data = GetOrCreatePlayerData(Player1.Name, isAi: false);
 
         if (!_settings.Ai_Mode)
         {
             Player2 = new Player(_settings.Rows, _settings.Columns, "Test2", _inputHandler, _gamValidations);
-            Player2Data = GetOrCreatePlayerData(Player2.Name, isAi: false, aiDifficulty: 0);
+            Player2Data = GetOrCreatePlayerData(Player2.Name, isAi: false);
             AiData = null;
             Ai = null;
         }
         else
         {
             Ai = new AI(_settings.Rows, _settings.Columns, "AI_1", _inputHandler, _settings, _gamValidations);
-            AiData = GetOrCreatePlayerData(Ai.Name, isAi: true, aiDifficulty: _settings.Difficulty);
+            AiData = GetOrCreatePlayerData(Ai.Name, isAi: true);
             Player2Data = null;
             Player2 = null;
         }
@@ -76,7 +77,7 @@ public class GameSession
 
     }
 
-    private Player_Data GetOrCreatePlayerData(string playerName, bool isAi, int aiDifficulty)
+    private Player_Data GetOrCreatePlayerData(string playerName, bool isAi)
     {
         //makes every letter lowercase so for example this : Test1, teSt1 is the same Player
         var normalizedName = playerName.Trim().ToLowerInvariant();
@@ -89,8 +90,6 @@ public class GameSession
             {
                 PlayerName = playerName.Trim(),
                 IsAI = isAi,
-                AiDifficulty = aiDifficulty,
-                HasWon = false
             };
 
             _dbContext.Players_Data.Add(playerData);
@@ -98,8 +97,6 @@ public class GameSession
         }
 
         playerData.IsAI = isAi;
-        playerData.AiDifficulty = aiDifficulty;
-
         return playerData;
     }
 

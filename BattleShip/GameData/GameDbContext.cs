@@ -6,7 +6,7 @@ using System.IO;
 public class GameDbContext : DbContext
 {
     public DbSet<Player_Data> Players_Data { get; set; }
-    public DbSet<Score> Scores { get; set; }
+    public DbSet<MatchPlayer> MatchPlayers { get; set; }
     public DbSet<Match> Matches { get; set; }
 
     public GameDbContext(DbContextOptions<GameDbContext> options)
