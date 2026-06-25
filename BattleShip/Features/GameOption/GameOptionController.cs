@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using BattleShip.GameData;
+using BattleShip.GameObjects;
+using BattleShip.Services;
 using CsvHelper.Configuration.Attributes;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.DependencyInjection;
 namespace BattleShip.Features.GameOption;
 
@@ -11,14 +14,20 @@ public class GameOptionController
     public GameOptions Options { get; private set; }
     private GameSettings _settings;
     private GameSession _session;
+    private InputHandler _InputHandler;
 
 
-    public GameOptionController(GameOptions gameOptions, GameSettings settings, GameSession session)
+    public bool IsEditingPlayer1Name { get; private set; }
+    public bool IsEditingPlayer2Name { get; private set; }
+
+
+    public GameOptionController(GameOptions gameOptions, GameSettings settings, GameSession session, InputHandler handler)
     {
 
         Options = gameOptions;
         _settings = settings;
         _session = session;
+        _InputHandler = handler;
     }
     public void SetAi(bool enabled)
     {
@@ -105,10 +114,46 @@ public class GameOptionController
     {
         Options.BonusShotOnHit = enabled;
     }
+    public void SetEditingName(bool enabled, PlayerId Id)
+    {
+        switch (Id)
+        {
+            case PlayerId.Player1:
+                IsEditingPlayer1Name = enabled;
+                break;
+            case PlayerId.Player2:
+                IsEditingPlayer2Name = enabled;
+                break;
+        }
+
+    }
+
+
+    public void CancelNameEditingOnClick()
+    {
+        if (_InputHandler.CheckLeftMouseButtonClicked())
+        {
+            bool wasEditing = IsEditingPlayer1Name || IsEditingPlayer2Name;
+            if (!wasEditing)
+            {
+                return;
+            }
+
+            IsEditingPlayer1Name = false;
+            IsEditingPlayer2Name = false;
+
+        }
+
+    }
+
+
     public void ApplyToGameData()
     {
 
         _settings.Initialize(Options);
         _session.InitializeSession();
     }
+
+
+
 }

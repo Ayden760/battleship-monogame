@@ -20,5 +20,10 @@ namespace BattleShip.GameData
         AI,
         PvP
     }
+    public enum PlayerId
+    {
+        Player1,
+        Player2
+    }
 
 }
