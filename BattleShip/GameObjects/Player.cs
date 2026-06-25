@@ -14,7 +14,7 @@ using System.Data.Common;
 public class Player
 {
     public string Name { get; set; }
-    public int Attemps { get; private set; } = 0;
+    public int Attemps { get; protected set; } = 0;
     protected FieldState[,] _Field;
     public List<ShipBase> ShipBases { get; set; } = new List<ShipBase>();
     public bool ShipsSet { get; set; } = false;
