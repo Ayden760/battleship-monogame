@@ -51,10 +51,8 @@ namespace BattleShip.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    PlayerID = table.Column<int>(type: "INTEGER", nullable: false),
-                    DataPlayerId = table.Column<int>(type: "INTEGER", nullable: true),
-                    IMatchID = table.Column<int>(type: "INTEGER", nullable: false),
-                    MatchDataId = table.Column<int>(type: "INTEGER", nullable: true),
+                    DataPlayerId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MatchDataId = table.Column<int>(type: "INTEGER", nullable: false),
                     PlayerAttempts = table.Column<int>(type: "INTEGER", nullable: false),
                     NumberShipCells = table.Column<int>(type: "INTEGER", nullable: false),
                     HasWon = table.Column<bool>(type: "INTEGER", nullable: false)
@@ -66,12 +64,14 @@ namespace BattleShip.Migrations
                         name: "FK_MatchPlayers_Matches_MatchDataId",
                         column: x => x.MatchDataId,
                         principalTable: "Matches",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MatchPlayers_Players_Data_DataPlayerId",
                         column: x => x.DataPlayerId,
                         principalTable: "Players_Data",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

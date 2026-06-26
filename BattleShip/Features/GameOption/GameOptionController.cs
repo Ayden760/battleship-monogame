@@ -8,10 +8,13 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework.Input;
 namespace BattleShip.Features.GameOption;
-
+#nullable enable
 
 public class GameOptionController
 {
+    private const string DefaultPlayer1Name = "Name";
+    private const string DefaultPlayer2Name = "Name";
+
     public GameOptions Options { get; private set; }
     private GameSettings _settings;
     private GameSession _session;
@@ -121,6 +124,10 @@ public class GameOptionController
         {
             case PlayerId.Player1:
                 IsEditingPlayer1Name = enabled;
+                if (enabled && IsDefaultName(Options.Player1Name, DefaultPlayer1Name))
+                {
+                    Options.Player1Name = string.Empty;
+                }
                 break;
             case PlayerId.Player2:
                 if (Options.Ai_Mode)
@@ -128,9 +135,23 @@ public class GameOptionController
                     break;
                 }
                 IsEditingPlayer2Name = enabled;
+                if (enabled && IsDefaultName(Options.Player2Name, DefaultPlayer2Name))
+                {
+                    Options.Player2Name = string.Empty;
+                }
                 break;
         }
 
+    }
+
+    private static bool IsDefaultName(string currentName, string fallbackName)
+    {
+        if (string.IsNullOrWhiteSpace(currentName))
+        {
+            return false;
+        }
+
+        return string.Equals(currentName.Trim(), fallbackName, StringComparison.OrdinalIgnoreCase);
     }
 
 

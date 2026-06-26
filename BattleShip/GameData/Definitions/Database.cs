@@ -19,10 +19,13 @@ public class Player_Data
 public class MatchPlayer
 {
     public int Id { get; set; }
-    public int PlayerID { get; set; }
+
+    public int DataPlayerId { get; set; }
     public Player_Data DataPlayer { get; set; }
-    public int IMatchID { get; set; }
+
+    public int MatchDataId { get; set; }
     public Match MatchData { get; set; }
+
     public int PlayerAttempts { get; set; }
     public int NumberShipCells { get; set; }
     public bool HasWon { get; set; }

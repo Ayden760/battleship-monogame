@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BattleShip.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    [Migration("20260625094409_InitialCreate")]
+    [Migration("20260626112536_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -60,25 +60,19 @@ namespace BattleShip.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("DataPlayerId")
+                    b.Property<int>("DataPlayerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("HasWon")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("IMatchID")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("MatchDataId")
+                    b.Property<int>("MatchDataId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("NumberShipCells")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("PlayerAttempts")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PlayerID")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -111,11 +105,15 @@ namespace BattleShip.Migrations
                 {
                     b.HasOne("Player_Data", "DataPlayer")
                         .WithMany("MatchPlayers")
-                        .HasForeignKey("DataPlayerId");
+                        .HasForeignKey("DataPlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Match", "MatchData")
                         .WithMany("MatchPlayers")
-                        .HasForeignKey("MatchDataId");
+                        .HasForeignKey("MatchDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DataPlayer");
 

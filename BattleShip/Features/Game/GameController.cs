@@ -30,12 +30,17 @@ public class GameController
     private double _aiThinkDelayTimer;
     private double _aiThinkDelayTarget;
     private GameDbContext _dbContext;
+
+    public string ConfigText = "Test";
+    public string CurrentPlayerStatsText;
+    public List<string> Highscores;
     public GameController(GameSession session, GameSettings settings, GameDbContext dbContext)
     {
 
         _session = session;
         _settings = settings;
         _dbContext = dbContext;
+        ConfigText = $"Mode: {(_settings.Ai_Mode ? $"AI\nDiff: {_settings.Difficulty}" : "Player")}\nDIST Mode: {(_settings.DistanceMode ? "Yes" : "No")}\nBonusshot: {(_settings.BonusShotOnHit ? "Yes" : "No")}\nNumCells : {_settings.Number_ShipCells}";
 
     }
     public string GetCurrentPlayerText()
@@ -49,6 +54,8 @@ public class GameController
     }
     public void Initialize()
     {
+
+        LoadHighscores();
         _session.CurrentMatch.GameStartTime = DateTime.UtcNow;
         _session.CurrentPlayer = _session.Player1;
         if (_settings.Ai_Mode)
@@ -93,6 +100,7 @@ public class GameController
             MatchState = MatchState.GameOver;
             State = GameState.GameOver;
         }
+        UpdateCurrentPlayerText();
 
 
 
@@ -273,8 +281,8 @@ public class GameController
         {
             _dbContext.MatchPlayers.Add(new MatchPlayer
             {
-                PlayerID = _session.Player1Data.Id,
-                IMatchID = _session.CurrentMatch.Id,
+                DataPlayerId = _session.Player1Data.Id,
+                MatchDataId = _session.CurrentMatch.Id,
                 PlayerAttempts = _session.Player1.Attempts,
                 NumberShipCells = _session.Player1.ShipBases.Sum(s => s.Length),
                 HasWon = _session.Player1.Name == winnerName
@@ -285,8 +293,8 @@ public class GameController
         {
             _dbContext.MatchPlayers.Add(new MatchPlayer
             {
-                PlayerID = _session.Player2Data.Id,
-                IMatchID = _session.CurrentMatch.Id,
+                DataPlayerId = _session.Player2Data.Id,
+                MatchDataId = _session.CurrentMatch.Id,
                 PlayerAttempts = _session.Player2.Attempts,
                 NumberShipCells = _session.Player2.ShipBases.Sum(s => s.Length),
                 HasWon = _session.Player2.Name == winnerName
@@ -297,8 +305,8 @@ public class GameController
         {
             _dbContext.MatchPlayers.Add(new MatchPlayer
             {
-                PlayerID = _session.AiData.Id,
-                IMatchID = _session.CurrentMatch.Id,
+                DataPlayerId = _session.AiData.Id,
+                MatchDataId = _session.CurrentMatch.Id,
                 PlayerAttempts = _session.Ai.Attempts,
                 NumberShipCells = _session.Ai.ShipBases.Sum(s => s.Length),
                 HasWon = _session.Ai.Name == winnerName
@@ -306,6 +314,41 @@ public class GameController
         }
 
         _dbContext.SaveChanges();
+    }
+    public void UpdateCurrentPlayerText()
+    {
+        CurrentPlayerStatsText = $"CurrentPlayer Stats\nAttempts: {_session.CurrentPlayer.Attempts}";
+    }
+    public void LoadHighscores()
+    {
+        var currentMode = _settings.Ai_Mode ? GameMode.AI : GameMode.PvP;
+
+        var query = _dbContext.MatchPlayers
+            .AsNoTracking()
+            .Where(mp => mp.HasWon)
+            .Where(mp => mp.MatchData != null)
+            .Where(mp => mp.MatchData.ModePlayer == currentMode)
+            .Where(mp => mp.MatchData.DistanceMode == _settings.DistanceMode)
+            .Where(mp => mp.MatchData.BonusShotOnHit == _settings.BonusShotOnHit)
+            .Where(mp => mp.NumberShipCells == _settings.Number_ShipCells);
+
+
+        if (_settings.Ai_Mode)
+        {
+            query = query.Where(mp => mp.MatchData.AiDifficulty == _settings.Difficulty);
+        }
+
+        Highscores = query
+            .OrderBy(mp => mp.PlayerAttempts)
+            .ThenBy(mp => mp.Id)
+            .Select(mp => $"{mp.DataPlayer.PlayerName}: {mp.PlayerAttempts} attempts")
+            .Take(5)
+            .ToList();
+
+        if (Highscores.Count == 0)
+        {
+            Highscores.Add("No highscores for current settings.");
+        }
     }
 
 }
