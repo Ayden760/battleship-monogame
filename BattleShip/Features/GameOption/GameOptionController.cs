@@ -6,6 +6,7 @@ using BattleShip.Services;
 using CsvHelper.Configuration.Attributes;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Xna.Framework.Input;
 namespace BattleShip.Features.GameOption;
 
 
@@ -122,6 +123,10 @@ public class GameOptionController
                 IsEditingPlayer1Name = enabled;
                 break;
             case PlayerId.Player2:
+                if (Options.Ai_Mode)
+                {
+                    break;
+                }
                 IsEditingPlayer2Name = enabled;
                 break;
         }
@@ -133,12 +138,6 @@ public class GameOptionController
     {
         if (_InputHandler.CheckLeftMouseButtonClicked())
         {
-            bool wasEditing = IsEditingPlayer1Name || IsEditingPlayer2Name;
-            if (!wasEditing)
-            {
-                return;
-            }
-
             IsEditingPlayer1Name = false;
             IsEditingPlayer2Name = false;
 
@@ -149,11 +148,47 @@ public class GameOptionController
 
     public void ApplyToGameData()
     {
-
         _settings.Initialize(Options);
-        _session.InitializeSession();
+        _session.InitializeSession(Options.Player1Name, Options.Player2Name);
     }
 
+    private void HandleBackspace()
+    {
 
+        if (_InputHandler.WasKeyJustPressed(Keys.Back))
+        {
+
+            if (IsEditingPlayer1Name && Options.Player1Name.Length > 0)
+            {
+                Options.Player1Name = Options.Player1Name[..^1];
+
+            }
+
+            if (IsEditingPlayer2Name && Options.Player2Name.Length > 0)
+            {
+                Options.Player2Name = Options.Player2Name[..^1];
+            }
+        }
+    }
+
+    public void HandleTextInput(char c)
+    {
+
+        if (c == '\b')
+            return;
+        if (!IsEditingPlayer1Name && !IsEditingPlayer2Name)
+            return;
+
+        if (IsEditingPlayer1Name && Options.Player1Name.Length <= 18)
+            Options.Player1Name += c;
+
+        if (IsEditingPlayer2Name && Options.Player2Name.Length <= 18)
+            Options.Player2Name += c;
+    }
+    public void Update()
+    {
+        CancelNameEditingOnClick();
+        HandleBackspace();
+    }
 
 }

@@ -42,6 +42,8 @@ public class GameOptionPanel : Panel
     private TextRuntime _player2Text;
 
 
+
+
     public GameOptionPanel(GameOptionController controller)
     {
         _controller = controller;
@@ -358,6 +360,8 @@ public class GameOptionPanel : Panel
         _threeText.Text = _controller.Options.Three_tile.ToString();
         _fourText.Text = _controller.Options.Four_tile.ToString();
         _fiveText.Text = _controller.Options.Five_tile.ToString();
+        _player1NameButton.Text = string.IsNullOrEmpty(_controller.Options.Player1Name) ? " " : _controller.Options.Player1Name;
+        _player2NameButton.Text = string.IsNullOrEmpty(_controller.Options.Player2Name) ? " " : _controller.Options.Player2Name;
 
         _difficultyText.Text = _controller.Options.Difficulty.ToString();
 
@@ -430,7 +434,6 @@ public class GameOptionPanel : Panel
     }
     public void Update()
     {
-        _controller.CancelNameEditingOnClick();
         SetAi(_controller.Options.Ai_Mode);
         SetDist(_controller.Options.DistanceMode);
         SetBonusShot(_controller.Options.BonusShotOnHit);

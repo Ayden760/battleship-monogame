@@ -8,6 +8,8 @@ using BattleShip.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using BattleShip.Features.Game;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 namespace BattleShip;
 
 public class Game1 : Core
@@ -15,9 +17,11 @@ public class Game1 : Core
 
     private readonly IServiceProvider _serviceProvider;
     private readonly GameSceneManager _sceneManager;
+    private GameOptionController _gameOptionController;
 
-    public Game1(IServiceProvider serviceProvider, GameSceneManager sceneManager) : base("BattleShip", 1120, 960, false)
+    public Game1(IServiceProvider serviceProvider, GameSceneManager sceneManager, GameOptionController optionController) : base("BattleShip", 1120, 960, false)
     {
+        _gameOptionController = optionController;
         _serviceProvider = serviceProvider;
         _sceneManager = sceneManager;
         Assets.Load(Content);
@@ -28,7 +32,7 @@ public class Game1 : Core
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-
+        Window.TextInput += OnTextInput;
         base.Initialize();
 
         InitializeGum();
@@ -71,5 +75,8 @@ public class Game1 : Core
         GumService.Default.CanvasHeight = GraphicsDevice.PresentationParameters.BackBufferHeight / 4.0f;
         GumService.Default.Renderer.Camera.Zoom = 4.0f;
     }
-
+    private void OnTextInput(object sender, TextInputEventArgs e)
+    {
+        _gameOptionController.HandleTextInput(e.Character);
+    }
 }

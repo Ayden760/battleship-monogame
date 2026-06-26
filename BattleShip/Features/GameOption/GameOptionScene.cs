@@ -33,6 +33,7 @@ public class GameOptionScene : Scene
     public override void Update(GameTime gameTime)
     {
         GumService.Default.Update(gameTime);
+        _controller.Update();
         _panel.Update();
     }
     public override void Draw(GameTime gameTime)

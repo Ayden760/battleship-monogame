@@ -77,4 +77,8 @@ public class InputHandler
     {
         return s_mouse.WasButtonJustPressed(MouseButton.Left);
     }
+    public bool WasKeyJustPressed(Keys key)
+    {
+        return s_keyboard.WasKeyJustPressed(key);
+    }
 }

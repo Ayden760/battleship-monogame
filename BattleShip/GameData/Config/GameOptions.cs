@@ -11,8 +11,8 @@ public class GameOptions
     public int Four_tile { get; set; } = 0;
     public int Five_tile { get; set; } = 0;
     public int Difficulty { get; set; } = 1;
-    public string Player1Name = "Player1Name";
-    public string Player2Name = "Player2Name";
+    public string Player1Name = "Name";
+    public string Player2Name = "Name";
     public bool Ai_Mode { get; set; } = false;
     public int Rows { get; set; } = 10;
     public int Columns { get; set; } = 10;

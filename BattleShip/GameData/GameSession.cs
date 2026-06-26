@@ -37,8 +37,13 @@ public class GameSession
         _dbContext = dbContext;
 
     }
-    public void InitializeSession()
+
+
+    public void InitializeSession(string player1Name, string player2Name)
     {
+        player1Name = NormalizeName(player1Name, "NamelessPlayer1");
+        player2Name = NormalizeName(player2Name, "NamelessPlayer2");
+
         CurrentMatch = new Match
         {
             MatchSetTime = DateTime.UtcNow,
@@ -55,12 +60,12 @@ public class GameSession
         _dbContext.Matches.Add(CurrentMatch);
         _dbContext.SaveChanges();
 
-        Player1 = new Player(_settings.Rows, _settings.Columns, "Test1", _inputHandler, _gamValidations);
+        Player1 = new Player(_settings.Rows, _settings.Columns, player1Name, _inputHandler, _gamValidations);
         Player1Data = GetOrCreatePlayerData(Player1.Name, isAi: false);
 
         if (!_settings.Ai_Mode)
         {
-            Player2 = new Player(_settings.Rows, _settings.Columns, "Test2", _inputHandler, _gamValidations);
+            Player2 = new Player(_settings.Rows, _settings.Columns, player2Name, _inputHandler, _gamValidations);
             Player2Data = GetOrCreatePlayerData(Player2.Name, isAi: false);
             AiData = null;
             Ai = null;
@@ -98,6 +103,13 @@ public class GameSession
 
         playerData.IsAI = isAi;
         return playerData;
+    }
+    private string NormalizeName(string name, string fallback)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return fallback;
+
+        return name.Trim();
     }
 
 
