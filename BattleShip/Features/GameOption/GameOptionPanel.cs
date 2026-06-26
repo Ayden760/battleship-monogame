@@ -6,6 +6,7 @@ using Gum.Forms.Controls;
 using BattleShip.GameData;
 using BattleShip.Features.CreateShips;
 using Microsoft.Xna.Framework.Graphics;
+
 using BattleShip.Services;
 using MonoGameGum;
 
@@ -34,6 +35,14 @@ public class GameOptionPanel : Panel
     private Button _diffPlus;
     private TextRuntime _diffLabel;
     public event Action StartClicked;
+
+    private Button _player1NameButton;
+
+    private Button _player2NameButton;
+    private TextRuntime _player2Text;
+
+
+
 
     public GameOptionPanel(GameOptionController controller)
     {
@@ -278,6 +287,72 @@ public class GameOptionPanel : Panel
         };
 
         AddChild(startbutton);
+
+
+
+
+
+        //Player Names
+
+
+        TextRuntime Player1Text = new TextRuntime();
+        Player1Text.Anchor(Gum.Wireframe.Anchor.TopRight);
+        Player1Text.Text = "Player1:";
+        Player1Text.X = -60;
+        Player1Text.Y = 40;
+        Player1Text.FontScale = 0.4f;
+        AddChild(Player1Text);
+
+        _player1NameButton = new Button();
+        _player1NameButton.Anchor(Gum.Wireframe.Anchor.TopRight);
+        _player1NameButton.Text = _controller.Options.Player1Name;
+        _player1NameButton.X = -10;
+        _player1NameButton.Y = 50;
+        _player1NameButton.Width = 80;
+        _player1NameButton.Height = 10;
+        UiHelper.SetTextFontScale(_player1NameButton, 0.4f);
+        _player1NameButton.Visual.SetProperty("Background.Color", Color.DarkCyan);
+
+        _player1NameButton.Click += (_, _) =>
+        {
+            _controller.SetEditingName(true, PlayerId.Player1);
+        };
+
+        AddChild(_player1NameButton);
+
+
+        _player2Text = new TextRuntime();
+        _player2Text.Anchor(Gum.Wireframe.Anchor.TopRight);
+        _player2Text.Text = "Player2:";
+        _player2Text.X = -60;
+        _player2Text.Y = 80;
+        _player2Text.FontScale = 0.4f;
+        AddChild(_player2Text);
+
+        _player2NameButton = new Button();
+        _player2NameButton.Anchor(Gum.Wireframe.Anchor.TopRight);
+        _player2NameButton.Text = _controller.Options.Player2Name;
+        _player2NameButton.X = -10;
+        _player2NameButton.Y = 90;
+        _player2NameButton.Width = 80;
+        _player2NameButton.Height = 10;
+        UiHelper.SetTextFontScale(_player2NameButton, 0.4f);
+        _player2NameButton.Visual.SetProperty("Background.Color", Color.DarkCyan);
+
+        _player2NameButton.Click += (_, _) =>
+        {
+            _controller.SetEditingName(true, PlayerId.Player2);
+        };
+
+        AddChild(_player2NameButton);
+
+        TextRuntime InfoText = new TextRuntime();
+        InfoText.Anchor(Gum.Wireframe.Anchor.TopRight);
+        InfoText.Text = "CLICK BOX TO EDIT NAME";
+        InfoText.X = -5;
+        InfoText.Y = 120;
+        InfoText.FontScale = 0.4f;
+        AddChild(InfoText);
     }
     private void RefreshUi()
     {
@@ -285,8 +360,14 @@ public class GameOptionPanel : Panel
         _threeText.Text = _controller.Options.Three_tile.ToString();
         _fourText.Text = _controller.Options.Four_tile.ToString();
         _fiveText.Text = _controller.Options.Five_tile.ToString();
+        _player1NameButton.Text = string.IsNullOrEmpty(_controller.Options.Player1Name) ? " " : _controller.Options.Player1Name;
+        _player2NameButton.Text = string.IsNullOrEmpty(_controller.Options.Player2Name) ? " " : _controller.Options.Player2Name;
 
         _difficultyText.Text = _controller.Options.Difficulty.ToString();
+
+        _player1NameButton.Visual.SetProperty("Background.Color", Color.DarkCyan);
+        UpdatePlayer1NameState(_controller.IsEditingPlayer1Name);
+        UpdatePlayer2NameState(_controller.Options.Ai_Mode, _controller.IsEditingPlayer2Name);
     }
     private void SetDist(bool enabled)
     {
@@ -313,6 +394,7 @@ public class GameOptionPanel : Panel
         RefreshUi();
         UpdateDifficultyState(enabled);
 
+
     }
     private void SetBonusShot(bool enabled)
     {
@@ -338,12 +420,26 @@ public class GameOptionPanel : Panel
         _diffLabel.Color = enabled ? Color.White : Color.Gray;
         _difficultyText.Color = enabled ? Color.White : Color.Gray;
     }
+    private void UpdatePlayer1NameState(bool IsEditing)
+    {
+        _player1NameButton.Visual.SetProperty("Background.Color", IsEditing ? new Color(0, 180, 180) : Color.DarkCyan);
+
+    }
+    private void UpdatePlayer2NameState(bool enabled, bool IsEditing)
+    {
+        _player2NameButton.Visual.SetProperty("Background.Color", IsEditing ? new Color(0, 180, 180) :
+        enabled ? Color.Gray : Color.DarkCyan);
+        _player2Text.Color = enabled ? Color.Gray : Color.White;
+
+    }
     public void Update()
     {
         SetAi(_controller.Options.Ai_Mode);
         SetDist(_controller.Options.DistanceMode);
         SetBonusShot(_controller.Options.BonusShotOnHit);
     }
+
+
     public void Draw(GameTime gameTime)
     {
         Core.GraphicsDevice.Clear(Color.CornflowerBlue);

@@ -6,13 +6,15 @@ using BattleShip.GameData;
 namespace BattleShip.GameObjects;
 
 using BattleShip.UI;
+using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
 
 public class Player
 {
     public string Name { get; set; }
-
+    public int Attempts { get; protected set; } = 0;
     protected FieldState[,] _Field;
     public List<ShipBase> ShipBases { get; set; } = new List<ShipBase>();
     public bool ShipsSet { get; set; } = false;
@@ -21,8 +23,6 @@ public class Player
 
     private readonly InputHandler _inputHandler;
     private GameValidations _validations;
-
-
     public Player(int rows, int columns, string name, InputHandler handler, GameValidations validations)
     {
 
@@ -32,11 +32,7 @@ public class Player
 
         _inputHandler = handler;
         _validations = validations;
-
     }
-
-
-
     public void Set_Own_Ships(List<ShipBase> shipBases, bool set)
     {
         // Copies ships to prevent both players from sharing the same instances
@@ -63,6 +59,10 @@ public class Player
 
                 var (madeHit, madeMove) = _validations.Check_Set_Hit(shipBases, x, y, ref _Field);
                 MadeHit = madeHit;
+                if (madeMove)
+                {
+                    Attempts++;
+                }
                 MadeMove = madeMove;
             }
         }

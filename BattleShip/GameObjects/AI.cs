@@ -54,6 +54,7 @@ public class AI : Player
     }
     public void AIUpdate(List<ShipBase> shipBases)
     {
+        Attempts++;
         if (MadeMove)
             return;
 

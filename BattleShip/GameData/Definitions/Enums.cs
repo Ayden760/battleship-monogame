@@ -15,5 +15,15 @@ namespace BattleShip.GameData
         Four,
         Five
     }
+    public enum GameMode
+    {
+        AI,
+        PvP
+    }
+    public enum PlayerId
+    {
+        Player1,
+        Player2
+    }
 
 }

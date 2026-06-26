@@ -14,7 +14,6 @@ public class InputHandler
     private readonly GameSettings _settings;
 
 
-
     public InputHandler(GameSettings settings)
     {
         _settings = settings;
@@ -73,5 +72,13 @@ public class InputHandler
             }
         }
         return false;
+    }
+    public bool CheckLeftMouseButtonClicked()
+    {
+        return s_mouse.WasButtonJustPressed(MouseButton.Left);
+    }
+    public bool WasKeyJustPressed(Keys key)
+    {
+        return s_keyboard.WasKeyJustPressed(key);
     }
 }

@@ -16,6 +16,7 @@ public class GameSettings
 
 
     public int TotalShips => Two_tile + Three_tile + Four_tile + Five_tile;
+    public int Number_ShipCells => 2 * Two_tile + 3 * Three_tile + 4 * Four_tile + 5 * Five_tile;
 
     public int Difficulty { get; private set; } = 2;
 

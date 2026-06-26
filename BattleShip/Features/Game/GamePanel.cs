@@ -1,6 +1,7 @@
 using MonoGameGum.GueDeriving;
 using Gum.Forms.Controls;
 using BattleShip.GameData;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
@@ -11,6 +12,7 @@ namespace BattleShip.Features.Game;
 
 
 using BattleShip.UiHelper;
+using Gum.Forms.DefaultVisuals;
 
 public class GamePanel : Panel
 {
@@ -20,6 +22,10 @@ public class GamePanel : Panel
 
     private TextRuntime _currentPlayerText;
     private Texture2D _pixel;
+    private TextRuntime _ConfigText;
+    private TextRuntime _CurrentPlayerStatsText;
+    private readonly List<TextRuntime> _highscoreTexts = new();
+
 
     public GamePanel(GameController controller, GameSession session)
     {
@@ -47,7 +53,7 @@ public class GamePanel : Panel
         Turn.Width = 50;
 
         Turn.X = -40;
-        Turn.Y = 150;
+        Turn.Y = 40;
         Turn.Text = "End Turn";
         UiHelper.SetTextFontScale(Turn, 0.5f);
         Turn.Click += (_, _) => _controller.TriggerTurnDelay();
@@ -62,11 +68,78 @@ public class GamePanel : Panel
 
         AddChild(_currentPlayerText);
 
+        _ConfigText = new TextRuntime();
+        _ConfigText.Anchor(Gum.Wireframe.Anchor.TopLeft);
+        _ConfigText.Y = 80;
+        _ConfigText.X = 190;
+        _ConfigText.FontScale = 0.4f;
+        _ConfigText.Text = _controller.ConfigText;
+        AddChild(_ConfigText);
+
+        _CurrentPlayerStatsText = new TextRuntime();
+        _CurrentPlayerStatsText.Anchor(Gum.Wireframe.Anchor.TopLeft);
+        _CurrentPlayerStatsText.Y = 130;
+        _CurrentPlayerStatsText.X = 190;
+        _CurrentPlayerStatsText.FontScale = 0.4f;
+        _CurrentPlayerStatsText.Text = _controller.CurrentPlayerStatsText;
+        AddChild(_CurrentPlayerStatsText);
+
+
+        for (int i = 0; i < 5; i++)
+        {
+            var highscoreText = new TextRuntime();
+            highscoreText.Anchor(Gum.Wireframe.Anchor.BottomLeft);
+
+            if (i >= 3)
+            {
+                highscoreText.X = 180;
+                highscoreText.Y = -50 + ((i - 3) * 20);
+            }
+
+            else
+            {
+                highscoreText.X = 60;
+                highscoreText.Y = -50 + (i * 20);
+            }
+
+            highscoreText.FontScale = 0.35f;
+            highscoreText.Text = $"{i + 1}. -";
+            _highscoreTexts.Add(highscoreText);
+            AddChild(highscoreText);
+        }
+
+        UpdateHighscoreTexts();
+
+        TextRuntime HighScores = new TextRuntime();
+        HighScores.Anchor(Gum.Wireframe.Anchor.BottomLeft);
+        HighScores.X = 5;
+        HighScores.Y = -50;
+        HighScores.FontScale = 0.4f;
+        HighScores.Text = "HighScores";
+        AddChild(HighScores);
+
+
+
 
     }
     public void RefreshUi()
     {
         _currentPlayerText.Text = _controller.GetCurrentPlayerText();
+        _CurrentPlayerStatsText.Text = _controller.CurrentPlayerStatsText;
+        UpdateHighscoreTexts();
+    }
+
+    private void UpdateHighscoreTexts()
+    {
+        var highscores = _controller.Highscores;
+
+        for (int i = 0; i < _highscoreTexts.Count; i++)
+        {
+            var entry = (highscores != null && i < highscores.Count && highscores[i] != null)
+                ? highscores[i]
+                : "-";
+            _highscoreTexts[i].Text = $"{i + 1}. {entry}";
+        }
     }
 
     public void Draw(GameTime gameTime)
