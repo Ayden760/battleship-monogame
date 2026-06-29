@@ -81,4 +81,8 @@ public class InputHandler
     {
         return s_keyboard.WasKeyJustPressed(key);
     }
+    public bool Pause()
+    {
+        return s_keyboard.WasKeyJustPressed(Keys.Escape);
+    }
 }

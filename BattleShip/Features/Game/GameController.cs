@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace BattleShip.Features.Game;
@@ -373,6 +372,7 @@ public class GameController
         }
 
         Highscores = query
+        //inside db
             .OrderBy(mp => mp.PlayerAttempts)
             .ThenBy(mp => mp.Id)
 
