@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BattleShip.Migrations
 {
     [DbContext(typeof(GameDbContext))]
-    [Migration("20260626112536_InitialCreate")]
+    [Migration("20260629062236_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -74,6 +74,9 @@ namespace BattleShip.Migrations
 
                     b.Property<int>("PlayerAttempts")
                         .HasColumnType("INTEGER");
+
+                    b.Property<TimeSpan>("PlayersTime")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

@@ -44,6 +44,7 @@ public class GameSession
         player1Name = NormalizeName(player1Name, "NamelessPlayer1");
         player2Name = NormalizeName(player2Name, "NamelessPlayer2");
 
+        FallBackOnSame(ref player1Name, ref player2Name);
         CurrentMatch = new Match
         {
             MatchSetTime = DateTime.UtcNow,
@@ -109,7 +110,16 @@ public class GameSession
         if (string.IsNullOrWhiteSpace(name))
             return fallback;
 
+
         return name.Trim();
+    }
+    private void FallBackOnSame(ref string name1, ref string name2)
+    {
+        if (name1 == name2)
+        {
+            name1 = "emptyP1";
+            name2 = "emptyP2";
+        }
     }
 
 

@@ -2,6 +2,7 @@ using BattleShip.GameData;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ public class GameController
 
     public string ConfigText = "Test";
     public string CurrentPlayerStatsText;
+
     public List<string> Highscores;
     public GameController(GameSession session, GameSettings settings, GameDbContext dbContext)
     {
@@ -73,6 +75,8 @@ public class GameController
     }
     public void Update(GameTime gameTime)
     {
+        UpdateActivePlayerTime(gameTime);
+
         switch (MatchState)
         {
             case MatchState.GameOver:
@@ -104,6 +108,33 @@ public class GameController
 
 
 
+    }
+
+    private void UpdateActivePlayerTime(GameTime gameTime)
+    {
+        if (MatchState == MatchState.GameOver || MatchState == MatchState.TurnTransition)
+        {
+            return;
+        }
+
+        var delta = gameTime.ElapsedGameTime;
+
+        if (_session.CurrentPlayer == _session.Player1)
+        {
+            _session.Player1.Time += delta;
+            return;
+        }
+
+        if (!_settings.Ai_Mode && _session.CurrentPlayer == _session.Player2)
+        {
+            _session.Player2.Time += delta;
+            return;
+        }
+
+        if (_settings.Ai_Mode && _session.CurrentPlayer == _session.Ai)
+        {
+            _session.Ai.Time += delta;
+        }
     }
     public void TriggerTurnDelay()
     {
@@ -285,6 +316,7 @@ public class GameController
                 MatchDataId = _session.CurrentMatch.Id,
                 PlayerAttempts = _session.Player1.Attempts,
                 NumberShipCells = _session.Player1.ShipBases.Sum(s => s.Length),
+                PlayersTime = _session.Player1.Time,
                 HasWon = _session.Player1.Name == winnerName
             });
         }
@@ -297,6 +329,7 @@ public class GameController
                 MatchDataId = _session.CurrentMatch.Id,
                 PlayerAttempts = _session.Player2.Attempts,
                 NumberShipCells = _session.Player2.ShipBases.Sum(s => s.Length),
+                PlayersTime = _session.Player2.Time,
                 HasWon = _session.Player2.Name == winnerName
             });
         }
@@ -309,6 +342,7 @@ public class GameController
                 MatchDataId = _session.CurrentMatch.Id,
                 PlayerAttempts = _session.Ai.Attempts,
                 NumberShipCells = _session.Ai.ShipBases.Sum(s => s.Length),
+                PlayersTime = _session.Ai.Time,
                 HasWon = _session.Ai.Name == winnerName
             });
         }
@@ -317,7 +351,7 @@ public class GameController
     }
     public void UpdateCurrentPlayerText()
     {
-        CurrentPlayerStatsText = $"CurrentPlayer Stats\nAttempts: {_session.CurrentPlayer.Attempts}";
+        CurrentPlayerStatsText = $"CurrentPlayer Stats\nAttempts: {_session.CurrentPlayer.Attempts}\nTime: {_session.CurrentPlayer.Time.TotalSeconds.ToString("F2", CultureInfo.InvariantCulture)}s";
     }
     public void LoadHighscores()
     {
@@ -341,7 +375,25 @@ public class GameController
         Highscores = query
             .OrderBy(mp => mp.PlayerAttempts)
             .ThenBy(mp => mp.Id)
-            .Select(mp => $"{mp.DataPlayer.PlayerName}: {mp.PlayerAttempts} attempts")
+
+
+            //gets only relevant Data
+            .Select(mp => new
+            {
+                Name = mp.DataPlayer != null && !string.IsNullOrWhiteSpace(mp.DataPlayer.PlayerName)
+                    ? mp.DataPlayer.PlayerName
+                    : "Unknown",
+                Attempts = mp.PlayerAttempts,
+                PlayerTimeSeconds = mp.PlayersTime.TotalSeconds,
+                mp.Id
+            })
+            //changes to c#
+            .AsEnumerable()
+            .OrderBy(x => x.Attempts)
+            .ThenBy(x => x.PlayerTimeSeconds)
+            .ThenBy(x => x.Id)
+            .Select(x =>
+                $"{x.Name}: {x.Attempts} attempts    Time: {Math.Round(x.PlayerTimeSeconds, 2).ToString("F2", CultureInfo.InvariantCulture)}s")
             .Take(5)
             .ToList();
 
