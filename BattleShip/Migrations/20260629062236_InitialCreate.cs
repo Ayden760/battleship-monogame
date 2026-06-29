@@ -55,6 +55,7 @@ namespace BattleShip.Migrations
                     MatchDataId = table.Column<int>(type: "INTEGER", nullable: false),
                     PlayerAttempts = table.Column<int>(type: "INTEGER", nullable: false),
                     NumberShipCells = table.Column<int>(type: "INTEGER", nullable: false),
+                    PlayersTime = table.Column<TimeSpan>(type: "TEXT", nullable: false),
                     HasWon = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

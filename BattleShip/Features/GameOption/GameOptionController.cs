@@ -1,19 +1,14 @@
 using System;
-using System.Collections.Generic;
 using BattleShip.GameData;
-using BattleShip.GameObjects;
 using BattleShip.Services;
-using CsvHelper.Configuration.Attributes;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework.Input;
 namespace BattleShip.Features.GameOption;
 #nullable enable
 
 public class GameOptionController
 {
-    private const string DefaultPlayer1Name = "Name";
-    private const string DefaultPlayer2Name = "Name";
+    private const string DefaultPlayer1Name = "Name1";
+    private const string DefaultPlayer2Name = "Name2";
 
     public GameOptions Options { get; private set; }
     private GameSettings _settings;

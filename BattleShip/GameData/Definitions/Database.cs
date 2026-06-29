@@ -28,6 +28,7 @@ public class MatchPlayer
 
     public int PlayerAttempts { get; set; }
     public int NumberShipCells { get; set; }
+    public TimeSpan PlayersTime { get; set; } = TimeSpan.Zero;
     public bool HasWon { get; set; }
 
 }

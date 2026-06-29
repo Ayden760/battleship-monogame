@@ -72,6 +72,9 @@ namespace BattleShip.Migrations
                     b.Property<int>("PlayerAttempts")
                         .HasColumnType("INTEGER");
 
+                    b.Property<TimeSpan>("PlayersTime")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DataPlayerId");

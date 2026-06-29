@@ -15,6 +15,7 @@ public class Player
 {
     public string Name { get; set; }
     public int Attempts { get; protected set; } = 0;
+    public TimeSpan Time { get; set; } = TimeSpan.Zero;
     protected FieldState[,] _Field;
     public List<ShipBase> ShipBases { get; set; } = new List<ShipBase>();
     public bool ShipsSet { get; set; } = false;
