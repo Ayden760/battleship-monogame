@@ -18,7 +18,8 @@ public class GameOptionScene : Scene
     private InputHandler _handler;
 
     private readonly IServiceProvider _serviceProvider;
-    public GameOptionScene(GameSceneManager sceneManager, IServiceProvider provider, InputHandler handler)
+
+    public GameOptionScene(GameSceneManager sceneManager, IServiceProvider provider, InputHandler handler, GameOptions options)
     {
         _serviceProvider = provider;
         _sceneManager = sceneManager;
@@ -32,6 +33,7 @@ public class GameOptionScene : Scene
         Core.ExitOnEscape = false;
         _panel = _serviceProvider.GetRequiredService<GameOptionPanel>();
         _controller = _serviceProvider.GetRequiredService<GameOptionController>();
+        _controller.Options.Reset();
         _escPanel = _serviceProvider.GetRequiredService<EscPanel>();
         _panel.StartClicked += OnStartClicked;
         _escPanel.ResumeClicked += OnResumeClicked;
