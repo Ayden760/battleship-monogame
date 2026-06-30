@@ -3,10 +3,8 @@ using System.Linq;
 using BattleShip.Functions;
 using BattleShip.GameObjects;
 using BattleShip.Services;
-using Gum.Wireframe;
 namespace BattleShip.GameData;
 
-using Data = GameData;
 public class GameSession
 {
     private readonly GameSettings _settings;

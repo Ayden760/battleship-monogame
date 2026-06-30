@@ -2,15 +2,11 @@ using System.Linq;
 using BattleShip.Functions;
 using BattleShip.Services;
 using BattleShip.GameData;
-
 namespace BattleShip.GameObjects;
 
 using BattleShip.UI;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Common;
-
 public class Player
 {
     public string Name { get; set; }

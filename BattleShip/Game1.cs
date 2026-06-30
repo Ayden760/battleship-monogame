@@ -39,7 +39,7 @@ public class Game1 : Core
 
 
 
-        ChangeScene(_serviceProvider.GetRequiredService<GameOptionScene>());
+        ChangeScene(_serviceProvider.GetRequiredService<TitleScene>());
     }
     private void InitializeGum()
     {

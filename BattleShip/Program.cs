@@ -18,28 +18,32 @@ using System.IO;
 var services = new ServiceCollection();
 var dbPath = GameDbContext.GetDatabasePath();
 services.AddDbContext<GameDbContext>(options =>
-    options.UseSqlite($"Data Source={dbPath}"));
+    options.UseSqlite($"Data Source={dbPath}"), ServiceLifetime.Singleton);
 //Game
 
-services.AddSingleton<GameScene>();
+services.AddTransient<GameScene>();
 services.AddSingleton<GameController>();
-services.AddSingleton<GamePanel>();
+services.AddTransient<GamePanel>();
 services.AddSingleton<GameSceneManager>();
 
 //Create Ships
 
-services.AddSingleton<CreateShipsScene>();
-services.AddSingleton<CreateShipsController>();
-services.AddSingleton<CreateShipsPanel>();
+services.AddTransient<CreateShipsScene>();
+services.AddTransient<CreateShipsController>();
+services.AddTransient<CreateShipsPanel>();
+
+
 
 //Options
 
-services.AddSingleton<GameOptionScene>();
+services.AddTransient<GameOptionScene>();
 services.AddSingleton<GameOptionController>();
-services.AddSingleton<GameOptionPanel>();
+services.AddTransient<GameOptionPanel>();
 
-
-services.AddSingleton<GameOptions>();
+//title
+services.AddTransient<TitlePanel>();
+services.AddTransient<TitleScene>();
+services.AddTransient<GameOptions>();
 services.AddSingleton<Game1>();
 
 //Settings/ Session
@@ -49,7 +53,7 @@ services.AddSingleton<GameSession>();
 //Services
 services.AddSingleton<InputHandler>();
 
-
+services.AddTransient<EscPanel>();
 
 //GameValidations
 services.AddSingleton<GameValidations>();
