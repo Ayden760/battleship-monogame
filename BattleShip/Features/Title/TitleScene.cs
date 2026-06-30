@@ -2,8 +2,6 @@ using Microsoft.Xna.Framework;
 using MonoGameGum;
 using System;
 using MonoGameLibrary.Scenes;
-using BattleShip.Features.CreateShips;
-using BattleShip.GameData;
 using Microsoft.Extensions.DependencyInjection;
 using MonoGameLibrary;
 namespace BattleShip.Features.GameOption;

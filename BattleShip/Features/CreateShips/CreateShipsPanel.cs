@@ -1,10 +1,8 @@
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
-using System;
 using MonoGameGum.GueDeriving;
 using Gum.Forms.Controls;
 using BattleShip.GameObjects;
-using BattleShip.GameData;
 using Microsoft.Xna.Framework.Graphics;
 using BattleShip.Services;
 using MonoGameGum;

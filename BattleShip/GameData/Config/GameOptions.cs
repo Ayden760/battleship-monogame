@@ -2,9 +2,6 @@ namespace BattleShip.GameData;
 
 public class GameOptions
 {
-
-
-
     //stores the number of ships of each ship size
     public int Two_tile { get; set; }
     public int Three_tile { get; set; }

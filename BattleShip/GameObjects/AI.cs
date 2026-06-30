@@ -1,16 +1,9 @@
-using System.Linq;
 using System;
 using BattleShip.Functions;
 using BattleShip.Services;
 using BattleShip.GameData;
-using Microsoft.Xna.Framework;
-using MonoGameLibrary;
-
-
-
 namespace BattleShip.GameObjects;
 
-using BattleShip.UI;
 using System.Collections.Generic;
 
 public class AI : Player

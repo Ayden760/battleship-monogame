@@ -15,7 +15,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\BattleShip\BattleShip.csproj" />
   </ItemGroup>

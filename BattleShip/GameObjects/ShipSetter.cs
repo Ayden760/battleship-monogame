@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using MonoGameLibrary;
 using BattleShip.GameData;
 using BattleShip.Functions;
 using BattleShip.Services;
@@ -138,7 +136,7 @@ public class ShipSetter
 
         else
         {
-            //schon gesetztes Bearbeiten
+
             var (found, location) = _validations.IsThereShip(_shipBases, x, y);
 
 

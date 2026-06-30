@@ -1,15 +1,9 @@
 using System;
 using System.Collections.Generic;
 using BattleShip.GameData;
-using BattleShip.GameObjects;
-using Microsoft.Xna.Framework;
-using MonoGameLibrary;
-using BattleShip.Functions;
-using BattleShip.Services;
 namespace BattleShip.GameObjects;
 
 using BattleShip.Functions;
-
 
 public class AiShipSetter
 {

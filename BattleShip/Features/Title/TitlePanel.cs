@@ -1,18 +1,12 @@
 using System;
 using Microsoft.Xna.Framework;
 using MonoGameLibrary;
-using MonoGameGum.GueDeriving;
 using Gum.Forms.Controls;
-using BattleShip.GameData;
-using BattleShip.Features.CreateShips;
 using Microsoft.Xna.Framework.Graphics;
-
 using BattleShip.Services;
 using MonoGameGum;
-
 namespace BattleShip.Features.GameOption;
 
-using System.Diagnostics;
 using BattleShip.UiHelper;
 
 public class TitlePanel : Panel

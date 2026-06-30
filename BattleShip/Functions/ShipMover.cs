@@ -43,18 +43,18 @@ public static class ShipMover
     }
     public static List<Cell> Rotate(List<Cell> cells)
     {
-        // Pivot (Drehpunkt)
+
         Cell pivot = cells[0];
 
         List<Cell> rotated = new List<Cell>();
 
         foreach (var c in cells)
         {
-            // relativ zum Pivot
+
             int relX = c.X - pivot.X;
             int relY = c.Y - pivot.Y;
 
-            // 90° Uhrzeigersinn: (x, y) -> (y, -x)
+
             int newX = pivot.X - relY;
             int newY = pivot.Y + relX;
 

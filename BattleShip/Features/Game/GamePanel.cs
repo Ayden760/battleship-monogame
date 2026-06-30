@@ -7,12 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGameGum;
 using BattleShip.Services;
 using MonoGameLibrary;
-
 namespace BattleShip.Features.Game;
 
-
 using BattleShip.UiHelper;
-using Gum.Forms.DefaultVisuals;
 
 public class GamePanel : Panel
 {

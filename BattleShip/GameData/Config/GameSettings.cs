@@ -1,13 +1,7 @@
-using System;
-using BattleShip.GameData;
-
 namespace BattleShip.GameData;
 
 public class GameSettings
 {
-
-
-
     //stores the number of ships of each ship size
     public int Two_tile { get; private set; } = 0;
     public int Three_tile { get; private set; } = 0;
@@ -27,10 +21,6 @@ public class GameSettings
     public bool DistanceMode { get; private set; } = false;
 
     public bool BonusShotOnHit { get; private set; } = false;
-
-
-
-
 
     public void Initialize(GameOptions gameOptions)
     {

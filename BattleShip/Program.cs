@@ -8,11 +8,6 @@ using BattleShip.Services;
 using BattleShip.GameObjects;
 using BattleShip.Functions;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
-using System;
-using System.IO;
-
-
 
 
 var services = new ServiceCollection();
@@ -63,10 +58,7 @@ services.AddSingleton<ShipSetter>();
 services.AddSingleton<AiShipSetter>();
 services.AddSingleton<ShipPlacer>();
 
-
-
 var serviceProvider = services.BuildServiceProvider();
-
 
 
 using (var scope = serviceProvider.CreateScope())
