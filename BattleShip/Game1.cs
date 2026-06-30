@@ -3,27 +3,24 @@ using Gum.Forms;
 using Gum.Forms.Controls;
 using MonoGameGum;
 using BattleShip.Features.GameOption;
-using BattleShip.GameData;
 using BattleShip.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using BattleShip.Features.Game;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 namespace BattleShip;
 
 public class Game1 : Core
 {
 
     private readonly IServiceProvider _serviceProvider;
-    private readonly GameSceneManager _sceneManager;
+
     private GameOptionController _gameOptionController;
 
-    public Game1(IServiceProvider serviceProvider, GameSceneManager sceneManager, GameOptionController optionController) : base("BattleShip", 1120, 960, false)
+    public Game1(IServiceProvider serviceProvider, GameOptionController optionController) : base("BattleShip", 1120, 960, false)
     {
         _gameOptionController = optionController;
         _serviceProvider = serviceProvider;
-        _sceneManager = sceneManager;
+
         Assets.Load(Content);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;

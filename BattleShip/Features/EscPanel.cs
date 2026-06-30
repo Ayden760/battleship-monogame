@@ -1,25 +1,17 @@
 using System;
-using Microsoft.Xna.Framework;
-using MonoGameLibrary;
 using Gum.Forms.Controls;
-using Microsoft.Xna.Framework.Graphics;
-using BattleShip.Services;
-using MonoGameGum;
+using Gum.DataTypes;
+using MonoGameGum.GueDeriving;
+
 namespace BattleShip.Features.GameOption;
 
 using BattleShip.UiHelper;
-using Gum.DataTypes;
-using Gum.Forms.DefaultVisuals;
-using MonoGameGum.GueDeriving;
 
 public class EscPanel : Panel
 {
 
     public event Action ResumeClicked;
     public event Action QuitClicked;
-
-
-
     public EscPanel()
     {
 

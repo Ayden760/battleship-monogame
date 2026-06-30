@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BattleShip.Functions;
+﻿using BattleShip.Functions;
 using BattleShip.GameData;
 using BattleShip.GameObjects;
 using BattleShip.Services;

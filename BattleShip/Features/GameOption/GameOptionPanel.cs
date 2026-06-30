@@ -4,15 +4,12 @@ using MonoGameLibrary;
 using MonoGameGum.GueDeriving;
 using Gum.Forms.Controls;
 using BattleShip.GameData;
-using BattleShip.Features.CreateShips;
 using Microsoft.Xna.Framework.Graphics;
-
 using BattleShip.Services;
 using MonoGameGum;
-
 namespace BattleShip.Features.GameOption;
 
-using System.Diagnostics;
+
 using BattleShip.UiHelper;
 
 public class GameOptionPanel : Panel
@@ -40,9 +37,6 @@ public class GameOptionPanel : Panel
 
     private Button _player2NameButton;
     private TextRuntime _player2Text;
-
-
-
 
     public GameOptionPanel(GameOptionController controller)
     {

@@ -5,7 +5,6 @@ using MonoGameLibrary.Input;
 using BattleShip.GameData;
 namespace BattleShip.Services;
 
-
 public class InputHandler
 {
 

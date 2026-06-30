@@ -1,5 +1,3 @@
-
-
 using BattleShip.GameData;
 using BattleShip.Functions;
 using System.Collections.Generic;
@@ -84,8 +82,6 @@ public static class FieldRenderer
         {
             foreach (Cell cell in shipBase.Location)
             {
-                //int pixelX = cell.X * tileSize;
-                //int pixelY = cell.Y * tileSize;
                 int pixelX = (cell.X + 1) * tileSize;
                 int pixelY = (cell.Y + 1) * tileSize;
                 Assets.B_CrossSprite.Draw(Core.SpriteBatch, new Vector2(pixelX, pixelY));
