@@ -16,9 +16,6 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 10.0.x
       - name: Accept Microsoft Fonts EULA
         run: |
          echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
