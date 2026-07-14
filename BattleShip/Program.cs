@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 var services = new ServiceCollection();
 var dbPath = GameDbContext.GetDatabasePath();
 services.AddDbContext<GameDbContext>(options =>
-    options.UseSqlite($"Data Source={dbPath}"), ServiceLifetime.Singleton);
+    options.UseSqlite($"Data Source={dbPath}"), ServiceLifetime.Scoped);
 //Game
 
 services.AddTransient<GameScene>();
