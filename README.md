@@ -21,8 +21,6 @@ Battleship MonoGame is a desktop implementation of the classic Battleship game b
 - 🏗️ Modular scene- and state-based architecture
 - 🧪 Unit-tested core game logic
 
-## 🖥️ Screenshots
-
 
 ## 🛠️ Tech Stack
 
@@ -157,8 +155,3 @@ This project was developed to demonstrate:
 - Unit testing
 - CI with GitHub Actions
 
-<div align="center">
-
-Made with ❤️ by [Ayden760]
-
-</div>
